@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.ZkMachineDao">
+    
+    <resultMap type="com.zk.cloudweb.entity.ZkMachine" id="ZkMachineResult">
+        <result property="mNumber"    column="m_number"    />
+        <result property="mName"    column="m_name"    />
+        <result property="id"    column="id"    />
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectZkMachineVo">
+        select id, m_number, m_name, create_time from zk_machine
+    </sql>
+
+<!--    <select id="selectZkMachineList" parameterType="com.zk.cloudweb.entity.ZkMachine" resultMap="ZkMachineResult">-->
+<!--        <include refid="selectZkMachineVo"/>-->
+<!--        <where>-->
+<!--            <if test="id != null  and id != ''">and id = #{id}</if>-->
+<!--            <if test="mNumber != null  and mNumber != ''"> and m_number = #{mNumber}</if>-->
+<!--            <if test="mName != null  and mName != ''"> and m_name = #{mName}</if>-->
+<!--        </where>-->
+<!--        <if test="limit !=null">-->
+<!--            limit #{limit},#{count}-->
+<!--        </if>-->
+<!--    </select>-->
+
+<!--    <select id="selectZkMachineListCount" parameterType="com.zk.cloudweb.entity.ZkMachine" resultType="int">-->
+<!--        select count(*) from zk_machine-->
+<!--       <where>-->
+<!--           <if test="id != null  and id != ''">and id = #{id}</if>-->
+<!--           <if test="mNumber != null  and mNumber != ''"> and m_number = #{mNumber}</if>-->
+<!--           <if test="mName != null  and mName != ''"> and m_name = #{mName}</if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+
+
+    <select id="selectZkMachine" parameterType="com.zk.cloudweb.entity.ZkMachine" resultMap="ZkMachineResult">
+        <include refid="selectZkMachineVo"/>
+        <where>
+            <if test="id != null  and id != ''">and id = #{id}</if>
+            <if test="mNumber != null  and mNumber != ''"> and m_number = #{mNumber}</if>
+            <if test="mName != null  and mName != ''"> and m_name = #{mName}</if>
+        </where>
+    </select>
+
+<!--    <select id="selectZkMachineById" parameterType="String" resultMap="ZkMachineResult">-->
+<!--        <include refid="selectZkMachineVo"/>-->
+<!--        where id = #{id}-->
+<!--    </select>-->
+        
+    <insert id="insertZkMachine" parameterType="com.zk.cloudweb.entity.ZkMachine">
+        insert into zk_machine
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="mNumber != null  and mNumber != ''">m_number,</if>
+            <if test="mName != null  and mName != ''">m_name,</if>
+            <if test="createTime !=null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="mNumber != null  and mNumber != ''">#{mNumber},</if>
+            <if test="mName != null  and mName != ''">#{mName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+<!--    <update id="updateZkMachine" parameterType="com.zk.cloudweb.entity.ZkMachine">-->
+<!--        update zk_machine-->
+<!--        <trim prefix="SET" suffixOverrides=",">-->
+<!--            <if test="title != null  and title != ''">title = #{title},</if>-->
+<!--            <if test="href != null  and href != ''">href = #{href},</if>-->
+<!--            <if test="target != null  and target != ''">target = #{target},</if>-->
+<!--        </trim>-->
+<!--        where id = #{id}-->
+<!--    </update>-->
+
+<!--    <delete id="deleteZkMachineById" parameterType="String">-->
+<!--        delete from zk_machine where id = #{id}-->
+<!--    </delete>-->
+
+<!--    <delete id="deleteZkMachineByIds" parameterType="String">-->
+<!--        delete from zk_machine where id in -->
+<!--        <foreach item="id" collection="array" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>-->
+<!--    </delete>-->
+    
+</mapper>

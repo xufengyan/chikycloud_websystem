@@ -1,0 +1,60 @@
+
+#??????
+server:
+  port: 8060
+spring:
+  application:
+    #???��???????
+    name: chikycloud_admin
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  datasource:
+    url: jdbc:mysql://localhost:3306/chikycloudweb?&allowMultiQueries=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+#    password: root
+    password: chikytech2018cavin
+
+
+mybatis:
+  #  typeAliasesPackage: com.jl.music.dao
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+# Shiro
+shiro:
+  user:
+    # ��¼��ַ
+    loginUrl: /login
+    # Ȩ����֤ʧ�ܵ�ַ
+    unauthorizedUrl: /unauth
+    # ��ҳ��ַ
+    indexUrl: /index
+    # ��֤�뿪��
+    captchaEnabled: true
+    # ��֤������ math ������� char �ַ�
+    captchaType: math
+  cookie:
+    # ����Cookie������ Ĭ�Ͽգ�����ǰ���ʵ�����
+    domain:
+    # ����cookie����Ч����·��
+    path: /
+    # ����HttpOnly����
+    httpOnly: true
+    # ����Cookie�Ĺ���ʱ�䣬��Ϊ��λ
+    maxAge: 30
+  session:
+    # Session��ʱʱ�䣬-1�����������ڣ�Ĭ��30���ӣ�
+    expireTime: 30
+    # ͬ��session�����ݿ�����ڣ�Ĭ��1���ӣ�
+    dbSyncPeriod: 1
+    # �����ü��һ��session����Ч�ԣ�Ĭ�Ͼ���10����
+    validationInterval: 10
+    # ͬһ���û����Ự��������2����˼��ͬһ���˺��������ͬʱ�����˵�¼��Ĭ��-1�����ƣ�
+    maxSession: -1
+    # �߳�֮ǰ��¼��/֮���¼���û���Ĭ���߳�֮ǰ��¼���û�
+    kickoutAfter: false
+
+netty:
+  port: 8899

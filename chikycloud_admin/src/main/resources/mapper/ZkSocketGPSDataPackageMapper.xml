@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.SocketGPSDataPackageDao">
+    
+    <resultMap type="com.zk.cloudweb.entity.socketLink.SocketGPSDataPackage" id="ZkSocketGPSDataPackageResult">
+        <result property="longitude"    column="longitude"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="rate" column="rate"/>
+        <result property="course" column="course"/>
+        <result property="id"    column="id"    />
+        <result property="measureTime" column="measure_time"/>
+        <result property="measureResId" column="measure_res_id"/>
+        <result property="machineNum" column="machine_num"/>
+    </resultMap>
+
+    <sql id="selectZkSocketGPSDataPackageVo">
+        select id, longitude, latitude,rate,course, measure_time,measure_res_id,machine_num from zk_measure_data
+    </sql>
+
+    
+    <select id="selectSocketGPSDataPackageList" parameterType="com.zk.cloudweb.entity.socketLink.SocketMeasurResult" resultMap="ZkSocketGPSDataPackageResult">
+        <include refid="selectZkSocketGPSDataPackageVo"/>
+            where  machine_num = #{machineNum}
+            <if test="startTime !=null and endTime !=null">
+                and measure_time between #{startTime} and #{endTime}
+            </if>
+            <if test="id != null and id != ''">
+                and measure_res_id = #{id}
+            </if>
+            order by measure_time
+    </select>
+
+    <select id="selectMachineMeasureLactionByDate" parameterType="com.zk.cloudweb.entity.socketLink.SocketMeasurResult" resultMap="ZkSocketGPSDataPackageResult">
+        <include refid="selectZkSocketGPSDataPackageVo"/>
+        where  machine_num = #{machineNum}
+        <if test="measureTime !=null ">
+            and measure_time = #{measureTime}
+        </if>
+    </select>
+    
+    <insert id="insertSocketGPSDataPackageList" parameterType="com.zk.cloudweb.entity.socketLink.SocketGPSDataPackage">
+        <foreach collection="list" item="item" index= "index" separator=";">
+            INSERT into zk_measure_data
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.id != null  and item.id != ''">id,</if>
+                <if test="item.longitude != null ">longitude,</if>
+                <if test="item.latitude != null ">latitude,</if>
+                <if test="item.rate != null ">rate,</if>
+                <if test="item.course != null ">course,</if>
+                <if test="item.measureTime !=null">measure_time,</if>
+                <if test="item.measureResId !=null and item.measureResId !='' ">measure_res_id,</if>
+                <if test="item.machineNum !=null and item.machineNum !='' ">machine_num,</if>
+            </trim>
+            VALUES
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.id != null  and item.id != ''">#{item.id},</if>
+                <if test="item.longitude != null ">#{item.longitude},</if>
+                <if test="item.latitude != null ">#{item.latitude},</if>
+                <if test="item.rate != null ">#{item.rate},</if>
+                <if test="item.course != null ">#{item.course},</if>
+                <if test="item.measureTime !=null">#{item.measureTime},</if>
+                <if test="item.measureResId !=null and item.measureResId !='' ">#{item.measureResId},</if>
+                <if test="item.machineNum !=null and item.machineNum !='' ">#{item.machineNum},</if>
+            </trim>
+        </foreach>
+
+    </insert>
+
+    <update id="updateSocketGPSDataPackageList" parameterType="com.zk.cloudweb.entity.socketLink.SocketGPSDataPackage">
+
+        <foreach collection="list" item="item" index= "index" separator=";">
+            update zk_measure_data
+            set measure_res_id = #{item.measureResId}
+            where  id = #{item.id}
+        </foreach>
+    </update>
+    
+
+
+<!--    <delete id="deleteZkSocketGPSDataPackageByIds" parameterType="String">-->
+<!--        delete from zk_socket_login where id in -->
+<!--        <foreach item="id" collection="array" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>-->
+<!--    </delete>-->
+    
+</mapper>

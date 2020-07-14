@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.ZkSocketLoginDao">
+    
+    <resultMap type="com.zk.cloudweb.entity.ZkSocketLogin" id="ZkSocketLoginResult">
+        <result property="machineName"    column="machine_name"    />
+        <result property="machineNum"    column="machine_num"    />
+        <result property="loginIp" column="login_ip"/>
+        <result property="loginType" column="login_type"/>
+        <result property="id"    column="id"    />
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectZkSocketLoginVo">
+        select id, machine_name, machine_num,login_ip,login_type, create_time from zk_socket_login
+    </sql>
+
+<!--    <select id="selectZkSocketLoginList" parameterType="com.zk.cloudweb.entity.ZkSocketLogin" resultMap="ZkSocketLoginResult">-->
+<!--        <include refid="selectZkSocketLoginVo"/>-->
+<!--        <where>-->
+<!--            <if test="id != null  and id != ''">and id = #{id}</if>-->
+<!--            <if test="machineName != null  and machineName != ''"> and machine_name = #{machineName}</if>-->
+<!--            <if test="machineNum != null  and machineNum != ''"> and machine_num = #{machineNum}</if>-->
+<!--        </where>-->
+<!--        <if test="limit !=null">-->
+<!--            limit #{limit},#{count}-->
+<!--        </if>-->
+<!--    </select>-->
+
+<!--    <select id="selectZkSocketLoginListCount" parameterType="com.zk.cloudweb.entity.ZkSocketLogin" resultType="int">-->
+<!--        select count(*) from zk_socket_login-->
+<!--       <where>-->
+<!--           <if test="id != null  and id != ''">and id = #{id}</if>-->
+<!--           <if test="machineName != null  and machineName != ''"> and machine_name = #{machineName}</if>-->
+<!--           <if test="machineNum != null  and machineNum != ''"> and machine_num = #{machineNum}</if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+
+
+    <select id="selectZkSocketLogin" parameterType="com.zk.cloudweb.entity.ZkSocketLogin" resultMap="ZkSocketLoginResult">
+        <include refid="selectZkSocketLoginVo"/>
+        <where>
+            <if test="id != null  and id != ''">and id = #{id}</if>
+            <if test="machineName != null  and machineName != ''"> and machine_name = #{machineName}</if>
+            <if test="machineNum != null  and machineNum != ''"> and machine_num = #{machineNum}</if>
+        </where>
+    </select>
+
+
+    <select id="selectOnLineZkSocketLogin" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultMap="ZkSocketLoginResult">
+        select sl.* from zk_socket_login sl
+        left join zk_machine m on m.m_number = sl.machine_num
+        left join zk_user_machine um on m.id = um.um_machine_id
+        where um.um_user_id = #{umUserId}
+        <if test="limit !=null">
+            limit #{limit},#{count}
+        </if>
+    </select>
+    <select id="selectOnLineZkSocketLoginCount" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultType="int">
+        select count(0) from zk_socket_login sl
+        left join zk_machine m on m.m_number = sl.machine_num
+        left join zk_user_machine um on m.id = um.um_machine_id
+        where um.um_user_id = #{umUserId}
+    </select>
+
+<!--    <select id="selectZkSocketLoginById" parameterType="String" resultMap="ZkSocketLoginResult">-->
+<!--        <include refid="selectZkSocketLoginVo"/>-->
+<!--        where id = #{id}-->
+<!--    </select>-->
+        
+    <insert id="insertZkSocketLogin" parameterType="com.zk.cloudweb.entity.ZkSocketLogin">
+        insert into zk_socket_login
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="machineName != null  and machineName != ''">machine_name,</if>
+            <if test="machineNum != null  and machineNum != ''">machine_num,</if>
+            <if test="loginIp != null  and loginIp != ''">login_ip,</if>
+
+            <if test="createTime !=null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="machineName != null  and machineName != ''">#{machineName},</if>
+            <if test="machineNum != null  and machineNum != ''">#{machineNum},</if>
+            <if test="loginIp != null  and loginIp != ''">#{loginIp},</if>
+
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <insert id="insertZkSocketLoginHistory" parameterType="com.zk.cloudweb.entity.ZkSocketLogin">
+        insert into zk_socket_login_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="machineName != null  and machineName != ''">machine_name,</if>
+            <if test="machineNum != null  and machineNum != ''">machine_num,</if>
+            <if test="loginIp != null  and loginIp != ''">login_ip,</if>
+            <if test="loginType != null">login_type,</if>
+
+            <if test="createTime !=null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="machineName != null  and machineName != ''">#{machineName},</if>
+            <if test="machineNum != null  and machineNum != ''">#{machineNum},</if>
+            <if test="loginIp != null  and loginIp != ''">#{loginIp},</if>
+            <if test="loginType != null">#{loginType},</if>
+
+            <if test="createTime != null ">#{createTime},</if>
+        </trim>
+    </insert>
+
+
+<!--    <update id="updateZkSocketLogin" parameterType="com.zk.cloudweb.entity.ZkSocketLogin">-->
+<!--        update zk_socket_login-->
+<!--        <trim prefix="SET" suffixOverrides=",">-->
+<!--            <if test="title != null  and title != ''">title = #{title},</if>-->
+<!--            <if test="href != null  and href != ''">href = #{href},</if>-->
+<!--            <if test="target != null  and target != ''">target = #{target},</if>-->
+<!--        </trim>-->
+<!--        where id = #{id}-->
+<!--    </update>-->
+
+    <delete id="delZkSocketLoginById" parameterType="String">
+        delete from zk_socket_login where id = #{id}
+    </delete>
+
+<!--    <delete id="deleteZkSocketLoginByIds" parameterType="String">-->
+<!--        delete from zk_socket_login where id in -->
+<!--        <foreach item="id" collection="array" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>-->
+<!--    </delete>-->
+    
+</mapper>

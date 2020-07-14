@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.UserHeadmenuMapper">
+    
+    <resultMap type="com.zk.cloudweb.entity.UserHeadmenu" id="UserHeadmenuResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="href"    column="href"    />
+        <result property="target"    column="target"    />
+        <result property="icon"    column="icon"    />
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectUserHeadmenuVo">
+        select id, title, href, target,icon,create_time from user_headmenu
+    </sql>
+
+    <select id="selectUserHeadmenuList" parameterType="com.zk.cloudweb.entity.UserHeadmenu" resultMap="UserHeadmenuResult">
+        <include refid="selectUserHeadmenuVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="href != null  and href != ''"> and href = #{href}</if>
+            <if test="target != null  and target != ''"> and target = #{target}</if>
+        </where>
+        <if test="limit !=null">
+            limit #{limit},#{count}
+        </if>
+    </select>
+
+    <select id="selectUserHeadmenuListCount" parameterType="com.zk.cloudweb.entity.UserHeadmenu" resultType="int">
+        select count(*) from user_headmenu
+       <where>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="href != null  and href != ''"> and href = #{href}</if>
+            <if test="target != null  and target != ''"> and target = #{target}</if>
+        </where>
+    </select>
+
+
+    <select id="selectUserHeadmenuById" parameterType="String" resultMap="UserHeadmenuResult">
+        <include refid="selectUserHeadmenuVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertUserHeadmenu" parameterType="com.zk.cloudweb.entity.UserHeadmenu">
+        insert into user_headmenu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="title != null  and title != ''">title,</if>
+            <if test="href != null  and href != ''">href,</if>
+            <if test="target != null  and target != ''">target,</if>
+            <if test="createTime !=null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="href != null  and href != ''">#{href},</if>
+            <if test="target != null  and target != ''">#{target},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserHeadmenu" parameterType="com.zk.cloudweb.entity.UserHeadmenu">
+        update user_headmenu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="href != null  and href != ''">href = #{href},</if>
+            <if test="target != null  and target != ''">target = #{target},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserHeadmenuById" parameterType="String">
+        delete from user_headmenu where id = #{id}
+    </delete>
+
+    <delete id="deleteUserHeadmenuByIds" parameterType="String">
+        delete from user_headmenu where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

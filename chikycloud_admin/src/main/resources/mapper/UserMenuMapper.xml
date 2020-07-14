@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.UserMenuMapper">
+    
+    <resultMap type="com.zk.cloudweb.entity.UserMenu" id="UserMenuResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="href"    column="href"    />
+        <result property="icon"    column="icon"    />
+        <result property="target"    column="target"    />
+        <result property="sercondarymenuId"    column="sercondarymenu_id"    />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <resultMap type="com.zk.cloudweb.entity.UserHeadmenu" id="UserHeadmenuResult">
+        <result property="id"    column="hid"    />
+        <result property="title"    column="htitle"    />
+        <result property="icon"    column="hicon"    />
+        <result property="href"    column="hhref"    />
+        <result property="target"    column="htarget"    />
+       <collection property="child" resultMap="UserSecondarymemuResult"/>
+    </resultMap>
+
+    <resultMap type="com.zk.cloudweb.entity.UserSecondarymemu" id="UserSecondarymemuResult">
+        <result property="id"    column="sid"    />
+        <result property="title"    column="stitle"    />
+        <result property="icon"    column="sicon"    />
+        <result property="target"    column="starget"    />
+        <result property="href"    column="shref"    />
+        <result property="headmenuId"    column="sheadmenu_id"    />
+        <collection property="child" resultMap="UserMenuResult"/>
+    </resultMap>
+
+    
+    <sql id="selectUserMenuVo">
+        select id, title, href , icon, target, sercondarymenu_id from user_menu
+    </sql>
+
+    <select id="selectALlMenu" parameterType="com.zk.cloudweb.entity.UserMenu" resultMap="UserHeadmenuResult">
+        select m.id,m.title,m.href,m.icon,m.target
+        ,s.title stitle,s.href shref,s.icon sicon,s.target starget
+        ,h.title htitle,h.href hhref,h.icon hicon,h.target htarget
+        from user_menu m
+        left join user_secondarymenu s on m.sercondarymenu_id = s.id
+        left join user_headmenu h on h.id = s.headmenu_id
+        where m.id = #{id}
+        order by htitle
+    </select>
+
+
+    <select id="selectALlMenuList" parameterType="com.zk.cloudweb.entity.UserMenu" resultType="Map">
+        select m.id,m.title,m.href,m.icon,m.target,m.create_time,m.sercondarymenu_id
+        ,s.title stitle,s.href shref,s.icon sicon,s.target starget
+        ,h.title htitle,h.href hhref,h.icon hicon,h.target htarget,h.id headmenu_id
+        from user_menu m
+        left join user_secondarymenu s on m.sercondarymenu_id = s.id
+        left join user_headmenu h on h.id = s.headmenu_id
+        <where>
+            <if test="id != null and id != ''">and m.id = #{id}</if>
+            <if test="title != null  and title != ''"> and m.title like concat('%', #{title}, '%')</if>
+            <if test="href != null  and href != ''"> and m.href = #{href}</if>
+            <if test="sercondarymenuId != null  and sercondarymenuId != ''"> and m.sercondarymenu_id like concat('%', #{sercondarymenuId}, '%')</if>
+        </where>
+        order by htitle
+        <if test="limit !=null">
+            limit #{limit},#{count}
+        </if>
+
+    </select>
+
+    <select id="selectALlMenuListCount" parameterType="com.zk.cloudweb.entity.UserMenu" resultType="int">
+        select count(0)
+        from user_menu m
+        left join user_secondarymenu s on m.sercondarymenu_id = s.id
+        left join user_headmenu h on h.id = s.headmenu_id
+        <where>
+            <if test="id != null and id != ''">and m.id = #{id}</if>
+            <if test="title != null  and title != ''"> and m.title like concat('%', #{title}, '%')</if>
+            <if test="href != null  and href != ''"> and m.href = #{href}</if>
+            <if test="sercondarymenuId != null  and sercondarymenuId != ''"> and m.sercondarymenu_id like concat('%', #{sercondarymenuId}, '%')</if>
+        </where>
+    </select>
+
+
+
+    <select id="selectUserMenuList" parameterType="com.zk.cloudweb.entity.UserMenu" resultMap="UserMenuResult">
+        <include refid="selectUserMenuVo"/>
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="href != null  and href != ''"> and href = #{href}</if>
+            <if test="icon != null  and icon != ''"> and icon like concat('%', #{icon}, '%')</if>
+            <if test="target != null  and target != ''"> and target = #{target}</if>
+            <if test="sercondarymenuId != null  and sercondarymenuId != ''"> and sercondarymenu_id like concat('%', #{sercondarymenuId}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectUserMenuById" parameterType="String" resultMap="UserMenuResult">
+        <include refid="selectUserMenuVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertUserMenu" parameterType="com.zk.cloudweb.entity.UserMenu">
+        insert into user_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="title != null  and title != ''">title,</if>
+            <if test="href != null  and href != ''">href,</if>
+            <if test="icon != null  and icon != ''">icon, </if>
+            <if test="target != null  and target != ''"> target,</if>
+            <if test="sercondarymenuId != null  and sercondarymenuId != ''"> sercondarymenu_id,</if>
+            <if test="createTime !=null">create_time,</if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="href != null  and href != ''">#{href},</if>
+            <if test="icon != null  and icon != ''">#{icon}, </if>
+            <if test="target != null  and target != ''"> #{target},</if>
+            <if test="sercondarymenuId != null  and sercondarymenuId != ''"> #{sercondarymenuId},</if>
+            <if test="createTime != null  ">#{createTime},</if>
+
+        </trim>
+    </insert>
+
+    <update id="updateUserMenu" parameterType="com.zk.cloudweb.entity.UserMenu">
+        update user_menu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="href != null  and href != ''">href = #{href},</if>
+            <if test="icon != null  and icon != ''">icon = #{icon}, </if>
+            <if test="target != null  and target != ''"> target = #{target},</if>
+            <if test="sercondarymenuId != null  and sercondarymenuId != ''"> sercondarymenu_id = #{sercondarymenuId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserMenuById" parameterType="String">
+        delete from user_menu where id = #{id}
+    </delete>
+
+    <delete id="deleteUserMenuByIds" parameterType="String">
+        delete from user_menu where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

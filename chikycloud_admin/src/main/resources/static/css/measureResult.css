@@ -1,0 +1,206 @@
+html {width:100%;height: 100%;margin:0;font-family:"微软雅黑";background-color: #ffffff;}
+#allmap {width: 100% !important;height: 100% !important;overflow: hidden;margin:0;font-family:"微软雅黑";}
+#resultmap {width: 100% !important;height: 100% !important;overflow: hidden;margin:0;font-family:"微软雅黑";}
+
+/*.BMap_mask{width: 100% !important;height: 100% !important;}*/
+#measure_result p{
+    margin: 0px;
+}
+.table_s {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    font-size: 8px
+}
+.table_s table{
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+.table_s table tr{
+    height: 30px;
+    /*width: 300px;*/
+}
+.table_s table tr:hover{
+    background-color: #f5efef;
+}
+.table_s table tr td {
+    border: 1px solid #e1e1e1;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 70%;
+}
+.on_tr{
+    background-color: #f5efef;
+}
+.buttons{
+    display:block;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+    /*分别是什么意思：*/
+    text-overflow:ellipsis;
+    /*表示文本超出用省略号代替*/
+    white-space:nowrap;
+    /*表示文本不换行；*/
+    overflow:hidden;
+    width: 100px;
+    margin: 10px auto;
+}
+.container{
+    width: 95%;
+    height: 96%;
+    /* min-width: 1200px !important; */
+    /*padding-right: 2px !important;*/
+    /*padding-left: 2px !important;*/
+    /*margin-left: 0px !important;*/
+    /*margin-right: 0px !important;*/
+}
+
+@media (min-width: 1200px){
+    .container {
+        width: 95% !important;
+    }
+}
+@media (max-width: 1200px){
+    .container {
+        width: 1200px !important;
+    }
+    .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9{
+        padding-right: 0px !important;
+    }
+}
+@media (min-width: 992px){
+    .container {
+        width: 1200px;
+    }
+    /*.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9{*/
+    /*    padding-right: 0px !important;*/
+    /*}*/
+    /*.table_s {*/
+    /*    width: 230px;*/
+    /*}*/
+}
+@media (min-width: 768px){
+    .container {
+        width: 1200px;
+    }
+    /*.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9{*/
+    /*    padding-right: 0px !important;*/
+    /*}*/
+    /*.table_s {*/
+    /*    width: 230px;*/
+    /*}*/
+}
+
+/* 最小宽度1460 */
+@media screen and (min-width: 1460px) and (max-width: 2300px) {
+    .zkfont-size{
+        font-size: 22px;
+    }
+    .row{
+        margin-right: -80px !important;
+        margin-left: -70px !important;
+    }
+}
+/* 宽度在 1200 ~ 1024 范围*/
+@media screen and (min-width: 1024px) and (max-width: 1460px) {
+    .zkfont-size{
+        font-size: 18px;
+    }
+    .row{
+        margin-right: -35px !important;
+        margin-left: -55px !important;
+    }
+    .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9{
+        padding-right: 0px !important;
+    }
+    .table_s {
+        width: 230px;
+    }
+}
+/* 宽度在 1024 ~ 900 范围*/
+@media screen and (min-width: 900px) and (max-width: 1024px) {
+    .zkfont-size{
+        font-size: 16px;
+    }
+    .row{
+        margin-right: -15px !important;
+        margin-left: -15px !important;
+    }
+    .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9{
+        padding-right: 0px !important;
+    }
+    .table_s {
+        width: 230px;
+    }
+}
+/* 宽度在 900 ~ 1768 范围*/
+@media screen and (min-width: 768px) and (max-width: 900px) {
+    .zkfont-size{
+        font-size: 14px;
+    }
+    .row{
+        margin-right: -15px !important;
+        margin-left: -15px !important;
+    }
+    .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9{
+        padding-right: 0px !important;
+    }
+    .table_s {
+        width: 230px;
+    }
+}
+/* 最大宽度 768*/
+@media screen and (max-width: 768px){
+    .zkfont-size{
+        font-size: 12px;
+    }
+    .row{
+        margin-right: -15px !important;
+        margin-left: -15px !important;
+    }
+}
+
+/*.zkfont-size{*/
+/*    font-size: 22px;*/
+/*}*/
+.row{
+    height: 100%;
+}
+.showMap{
+    height: 100%;
+}
+.loadBox{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgb(0, 0, 0, 0.3);
+    z-index: 99;
+    display: none;
+}
+.loadContent{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.loadImg{
+    margin: auto;
+    display: block;
+    width: 35px;
+    height: 35px;
+    animation:turn 1.5s linear infinite;
+}
+@keyframes turn{
+    0%{-webkit-transform:rotate(0deg);}
+    25%{-webkit-transform:rotate(90deg);}
+    50%{-webkit-transform:rotate(180deg);}
+    75%{-webkit-transform:rotate(270deg);}
+    100%{-webkit-transform:rotate(360deg);}
+}
+.loadText{
+    font-size:14px;
+}

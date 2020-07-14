@@ -1,0 +1,446 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "page/welcome-1.html?t=1"
+  },
+  "logoInfo": {
+    "title": "学校",
+    "image": "images/logo.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "个人",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "主页模板",
+          "href": "",
+          "icon": "fa fa-home",
+          "target": "_self",
+          "child": [
+            {
+              "title": "主页一",
+              "href": "page/welcome-1.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "主页二",
+              "href": "page/welcome-2.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "主页三",
+              "href": "page/welcome-3.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "菜单管理",
+          "href": "page/menu.html",
+          "icon": "fa fa-window-maximize",
+          "target": "_self"
+        },
+        {
+          "title": "系统设置",
+          "href": "page/setting.html",
+          "icon": "fa fa-gears",
+          "target": "_self"
+        },
+        {
+          "title": "表格示例",
+          "href": "page/table.html",
+          "icon": "fa fa-file-text",
+          "target": "_self"
+        },
+        {
+          "title": "表单示例",
+          "href": "",
+          "icon": "fa fa-calendar",
+          "target": "_self",
+          "child": [
+            {
+              "title": "普通表单",
+              "href": "page/form.html",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "分步表单",
+              "href": "page/form-step.html",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "登录模板",
+          "href": "",
+          "icon": "fa fa-flag-o",
+          "target": "_self",
+          "child": [
+            {
+              "title": "登录-1",
+              "href": "page/login-1.html",
+              "icon": "fa fa-stumbleupon-circle",
+              "target": "_blank"
+            },
+            {
+              "title": "登录-2",
+              "href": "page/login-2.html",
+              "icon": "fa fa-viacoin",
+              "target": "_blank"
+            }
+          ]
+        },
+        {
+          "title": "异常页面",
+          "href": "",
+          "icon": "fa fa-home",
+          "target": "_self",
+          "child": [
+            {
+              "title": "404页面",
+              "href": "page/404.html",
+              "icon": "fa fa-hourglass-end",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "其它界面",
+          "href": "",
+          "icon": "fa fa-snowflake-o",
+          "target": "",
+          "child": [
+            {
+              "title": "按钮示例",
+              "href": "page/button.html",
+              "icon": "fa fa-snowflake-o",
+              "target": "_self"
+            },
+            {
+              "title": "弹出层",
+              "href": "page/layer.html",
+              "icon": "fa fa-shield",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "学员",
+      "icon": "fa fa-lemon-o",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "图标列表",
+          "href": "page/icon.html",
+          "icon": "fa fa-dot-circle-o",
+          "target": "_self"
+        },
+        {
+          "title": "图标选择",
+          "href": "page/icon-picker.html",
+          "icon": "fa fa-adn",
+          "target": "_self"
+        },
+        {
+          "title": "颜色选择",
+          "href": "page/color-select.html",
+          "icon": "fa fa-dashboard",
+          "target": "_self"
+        },
+        {
+          "title": "下拉选择",
+          "href": "page/table-select.html",
+          "icon": "fa fa-angle-double-down",
+          "target": "_self"
+        },
+        {
+          "title": "文件上传",
+          "href": "page/upload.html",
+          "icon": "fa fa-arrow-up",
+          "target": "_self"
+        },
+        {
+          "title": "富文本编辑器",
+          "href": "page/editor.html",
+          "icon": "fa fa-edit",
+          "target": "_self"
+        },
+        {
+          "title": "省市县区选择器",
+          "href": "page/area.html",
+          "icon": "fa fa-rocket",
+          "target": "_self"
+        }
+      ]
+    },
+    {
+      "title": "班级",
+      "icon": "fa fa-slideshare",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "多级菜单",
+          "href": "",
+          "icon": "fa fa-meetup",
+          "target": "",
+          "child": [
+            {
+              "title": "按钮1",
+              "href": "page/button.html?v=1",
+              "icon": "fa fa-calendar",
+              "target": "_self",
+              "child": [
+                {
+                  "title": "按钮2",
+                  "href": "page/button.html?v=2",
+                  "icon": "fa fa-snowflake-o",
+                  "target": "_self",
+                  "child": [
+                    {
+                      "title": "按钮3",
+                      "href": "page/button.html?v=3",
+                      "icon": "fa fa-snowflake-o",
+                      "target": "_self"
+                    },
+                    {
+                      "title": "表单4",
+                      "href": "page/form.html?v=1",
+                      "icon": "fa fa-calendar",
+                      "target": "_self"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "失效菜单",
+          "href": "page/error.html",
+          "icon": "fa fa-superpowers",
+          "target": "_self"
+        }
+      ]
+    },
+    {
+      "title": "个人信息",
+      "href": "",
+      "icon": "fa fa-home",
+      "target": "_self",
+      "child": [
+        {
+          "title": "个人中心",
+          "href": "",
+          "icon": "fa fa-meetup",
+          "target": "",
+          "child": [
+            {
+              "title": "查看个人信息",
+              "href": "employee/getEmployeeHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },{
+              "title": "修改个人信息",
+              "href": "employee/updatePersonalHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },{
+              "title": "查看辅导员信息",
+              "href": "overtime/getOvertimeListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },{
+              "title": "请假申请",
+              "href": "lea/getLeaHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },{
+              "title": "查看请假记录",
+              "href": "lea/getLeaListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+
+        }
+      ]
+    },
+    {
+      "title": "学员管理",
+      "href": "",
+      "icon": "fa fa-home",
+      "target": "_self",
+      "child": [
+        {
+          "title": "学员管理",
+          "href": "",
+          "icon": "fa fa-meetup",
+          "target": "",
+          "child": [
+            {
+              "title": "在校学员管理",
+              "href": "employee/getEmployeeListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },{
+              "title": "毕业学员管理",
+              "href": "employee/getGraduateEmployeeListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },{
+              "title": "学员调动记录",
+              "href": "stutransfer/getStutransferListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+        },{
+          "title": "考勤管理",
+          "href": "",
+          "icon": "fa fa-meetup",
+          "target": "",
+          "child": [
+            {
+              "title": "考勤记录",
+              "href": "checkwork/getCheckworkListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },{
+              "title": "辅导管理",
+              "href": "overtime/getOvertimeListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+        },{
+          "title": "请假管理",
+          "href": "",
+          "icon": "fa fa-meetup",
+          "target": "",
+          "child": [
+            {
+              "title": "未批准列表",
+              "href": "lea/getNoLeaListAllHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },{
+              "title": "已批准列表",
+              "href": "lea/getOnLeaListAllHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },{
+              "title": "请假记录",
+              "href": "lea/getLeaListAllHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "班级管理",
+      "href": "",
+      "icon": "fa fa-home",
+      "target": "_self",
+      "child": [
+        {
+          "title": "班级",
+          "href": "",
+          "icon": "fa fa-meetup",
+          "target": "",
+          "child": [
+            {
+              "title": "班级管理",
+              "href": "department/getDepartmentListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },{
+              "title": "职位管理",
+              "href": "position/getPositionListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+
+        }
+      ]
+    },
+    {
+      "title": "招聘",
+      "href": "",
+      "icon": "fa fa-home",
+      "target": "_self",
+      "child": [
+        {
+          "title": "招聘信息",
+          "href": "",
+          "icon": "fa fa-meetup",
+          "target": "",
+          "child": [
+            {
+              "title": "招聘管理",
+              "href": "company/getCompanyListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "招聘信息",
+              "href": "company/getCompanyAndDeliveryListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },{
+              "title": "已投递信息",
+              "href": "delivery/getDeliveryListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+
+        }
+      ]
+    },
+    {
+      "title": "数据分析",
+      "href": "",
+      "icon": "fa fa-home",
+      "target": "_self",
+      "child": [
+        {
+          "title": "数据信息",
+          "href": "",
+          "icon": "fa fa-meetup",
+          "target": "",
+          "child": [
+            {
+              "title": "学员数据",
+              "href": "company/getCompanyListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "考勤数据",
+              "href": "company/getCompanyAndDeliveryListHtml",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+
+        }
+      ]
+    }
+  ]
+}

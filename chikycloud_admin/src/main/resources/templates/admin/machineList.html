@@ -1,0 +1,173 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>设备列表</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" lay-filter="secondarymenu"  onsubmit="return false;">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备ID</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="mNumber" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="addUserMachine"> 绑定设备 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="zkMachine" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="selectRoleMenu">测量列表</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="selectMeasureLocation">测量位置</a>
+        </script>
+
+    </div>
+</div>
+
+<script >
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+
+        table.render({
+            elem: '#zkMachine',
+            id:'zkMachine',
+            url: '../zkMachine/getZkMachineList',
+            toolbar: '#toolbarDemo',
+            title: '设备列表',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [
+                [
+                    {type: "checkbox", width: 50},
+                    {type: 'numbers', title: '序号', width: 50 ,totalRowText: '合计'},
+                    {field: 'mname', width: 180, title: '设备名称'},
+                    {field: 'mnumber', width: 180, title: '设备编号'},
+                    {field: 'createTime', width: 160, title: '绑定时间',templet:'<div>{{ layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss") }}</div>'},
+                    {title: '操作', Width: 150, toolbar: '#currentTableBar'}
+                ]
+            ],
+            limits: [10, 15, 20, 25, 50, 100],
+            limit: 15,
+            page: true,
+            // skin: 'line'
+        });
+
+        //搜索
+        var $ = layui.jquery, active = {
+            reload: function (data) {
+                var obj = new Object();
+                obj['mNumber'] = data.mNumber;
+                table.reload('zkMachine', {
+                    method: 'post',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    },
+                    where: obj
+                })
+            }
+        }
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+
+        /**
+         * toolbar事件监听
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'addUserMachine') {   // 监听添加操作
+                var content = miniPage.getHrefContent('zkMachine/addZkMachineHtml');
+                var openWH = miniPage.getOpenWidthHeight();
+
+                var index = layer.open({
+                    title: '绑定设备',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: [openWH[0] + 'px', openWH[1] + 'px'],
+                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
+                    content: content,
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+
+        });
+
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'selectRoleMenu') {
+
+                var content = miniPage.getHrefContent('ZKSocketMeasureResult/getSocketMeasureResultListHtml?machineNum='+data.mnumber);
+                // var content = miniPage.getHrefContent('overtime/updateOvertimeHtml');
+
+                var openWH = miniPage.getOpenWidthHeight();
+                var index = layer.open({
+                    title: '查看测量列表',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: [openWH[0]+200 + 'px', openWH[1]+100 + 'px'],
+                    // offset: [0 + 'px', 0 + 'px'],
+                    content: content,
+                });
+                $(window).on("resize2", function () {
+                    layer.full(index);
+                });
+                return false;
+            } else if (obj.event === 'selectMeasureLocation') {
+                var content = miniPage.getHrefContent('zkMachine/getMachineLocationHtml?mnumber='+data.mnumber);
+                // var content = miniPage.getHrefContent('overtime/updateOvertimeHtml');
+                var openWH = miniPage.getOpenWidthHeight();
+                var index = layer.open({
+                    title: '查看测量位置',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: [openWH[0] + 'px', openWH[1]+100 + 'px'],
+                    offset: [ 0 + 'px', openWH[3]+'px'],
+                    content: content,
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            }
+        });
+
+    });
+
+
+    function brush() {
+        layui.use(['table'],function () {
+            var table = layui.table;
+            table.reload('zkMachine', {})
+        })
+
+    }
+</script>

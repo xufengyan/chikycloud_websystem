@@ -1,0 +1,194 @@
+<!--<div class="layuimini-container layuimini-page-anim">-->
+    <div class="layuimini-main" style="height: 100%">
+        <fieldset class="table-search-fieldset">
+            <legend>设备列表</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" lay-filter="secondarymenu"  onsubmit="return false;">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">测量时间</label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" name = "machineNum" id = "machineNum">
+                                <input type="text" name="measureTime" id="measureTime" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <div style="width: 100%;height: 800px; ">
+            <div id="allmap" ></div>
+        </div>
+    </div>
+<!--</div>-->
+
+<script>
+    bdiduMap(null, null);
+    function bdiduMap(longitude,latitude) {
+        if (longitude!=null&&latitude!=null){
+            var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+            var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+            var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL});
+            // var listLast = list.length-1;
+            // 百度地图API功能
+            var map = new BMap.Map("allmap");    // 创建Map实例
+            // map.centerAndZoom(new BMap.Point(list[parseInt(list.length/6)].Long,list[parseInt(list.length/4)].Lat), 13);  // 初始化地图,设置中心点坐标和地图级别
+            map.addControl(top_left_control);
+            map.addControl(top_left_navigation);
+            map.addControl(top_right_navigation);
+            map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+            // map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+            map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+            map.enableContinuousZoom();
+            setTimeout(drawIcon,500);
+            var pointArray = new Array();
+            pointArray.push(new BMap.Point(longitude,latitude))
+
+            // for (var i =0;i<measureds.length;i++){
+            // }
+
+            var viewPort = map.getViewport(pointArray)
+            map.centerAndZoom(viewPort.center, viewPort.zoom);
+
+            var carMk;
+
+            //设置起点和终点坐标
+            function drawIcon(){
+                if(carMk){
+                    map.removeOverlay(carMk);
+                }
+                carMk2 = new BMap.Marker(
+                    new BMap.Point(longitude,latitude)//起始点的经纬度
+                );
+                map.addOverlay(carMk2);
+
+                // carMk = new BMap.Marker(
+                //     new BMap.Point(list[listLast].Long,list[listLast].Lat)//终点的经纬度
+                // );
+                // map.addOverlay(carMk);
+
+            }
+        }else {
+            var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+            var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+            var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL});
+            var map = new BMap.Map("allmap");    // 创建Map实例
+            map.centerAndZoom(new BMap.Point(103.404, 34.915),5);
+            // map.addControl(new BMapGL.MapTypeControl());   //添加地图类型控件
+            map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+            // map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+            map.enableContinuousZoom();
+            map.addControl(top_left_control);
+            map.addControl(top_left_navigation);
+        }
+
+
+
+    }
+
+    
+
+
+
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate
+            , $ = layui.jquery
+            , miniPage = layui.miniPage;
+        var mnumber = "[[${mnumber}]]";
+        $("#machineNum").val(mnumber);
+        function toolMsgAndClose(msg) {
+            // if(isEmpty(msg))
+            // {
+            msg = "成功";
+            // }
+            layer.closeAll();
+            layer.msg(msg, {icon: 1});
+        }
+        var getFormatDate = function(ndate) {
+            var date = ndate.split("T")[0];
+            return date;
+        }
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        //日期时间选择器
+        laydate.render({
+            elem: '#measureTime'
+            ,type: 'datetime'
+        });
+
+        var parentIndex = layer.index;
+        //监听提交
+        form.on('submit(data-search-btn)', function (data) {
+            data.field.measureTime = GetTimeByTimeStr(data.field.measureTime);
+            debugger
+            $.ajax({
+                url:"../ZkScoketGPSDataPackage/getMachineMeasureLocation",
+                type:'post',
+                // dataType: 'html',
+                data:JSON.stringify(data.field),
+                dataType:'json',
+                contentType : 'application/json',
+                // dataType : 'json',
+                // contentType: 'application/json;charset=UTF-8',
+                success:function (data) {
+                    debugger
+                    if (data.data!=null){
+                        bdiduMap(data.data.longitude,data.data.latitude);
+                    }
+                    //关闭弹框
+                    // toolMsgAndClose();
+                    // window.parent.brush();
+                    return false;
+                },
+                error:function () {
+                    alert("数据传递错误，请刷新页面");
+                }
+            })
+            // layer.close(parentIndex);
+            return false;
+        })
+
+
+        function GetTimeByTimeStr(dateString) {
+            var timeArr = dateString.split(" ");
+            var d = timeArr[0].split("-");
+            var t = timeArr[1].split(":");
+            return new Date(d[0], d[1] - 1, d[2], t[0], t[1], t[2]);
+        }
+
+        // form.on('submit(returnBtn)', function (data) {
+        //     layer.close(parentIndex);
+        //     return true;
+        // })
+
+
+        //表单初始赋值
+        // form.val('example', {
+        //     "username": "贤心" // "name": "value"
+        //     , "password": "123456"
+        //     , "interest": 1
+        //     , "like[write]": true //复选框选中状态
+        //     , "close": true //开关状态
+        //     , "sex": "女"
+        //     , "desc": "我爱 layui"
+        // })
+        $("#returnBtn").click(function () {
+            layer.closeAll();
+        })
+    })
+
+
+
+
+</script>

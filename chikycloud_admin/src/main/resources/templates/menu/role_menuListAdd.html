@@ -1,0 +1,181 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>权限列表</legend>
+<!--            <div style="margin: 10px 10px 10px 10px">-->
+<!--                <form class="layui-form layui-form-pane" lay-filter="secondarymenu"  onsubmit="return false;">-->
+<!--                    <div class="layui-form-item">-->
+<!--                        <div class="layui-inline">-->
+<!--                            <label class="layui-form-label" style="width: 300px">[[${roleName}]]</label>-->
+<!--                            &lt;!&ndash;                            <div class="layui-input-inline">&ndash;&gt;-->
+<!--                            <input type="hidden" id="roleId" name="roleId" value=[[${roleId}]]>-->
+<!--                            &lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+        </fieldset>
+
+        <script type="text/html" id="addRoleMenuToolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="addMenu"> 确认添加 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="addRoleMenu" lay-filter="addRoleMenuCurrentTableFilter"></table>
+
+        <!--        <script type="text/html" id="currentTableBar">-->
+        <!--            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>-->
+        <!--            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>-->
+        <!--        </script>-->
+
+    </div>
+</div>
+
+<script >
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+        function toolMsgAndClose(msg) {
+            // if(isEmpty(msg))
+            // {
+            msg = "成功";
+            // }
+            layer.closeAll();
+            layer.msg(msg, {icon: 1});
+        }
+        table.render({
+            elem: '#addRoleMenu',
+            id:'addRoleMenu',
+            url: '../roleMenu/getNORoleMenuList',
+            toolbar: '#addRoleMenuToolbar',
+            title: '权限菜单列表',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            where: {
+                roleId: "[[${roleId}]]",
+            },
+            cols: [
+                [
+                    {type: "checkbox", width: 50},
+                    {type: 'numbers', title: '序号', width: 50 ,totalRowText: '合计'},
+                    {field: 'title', width: 120, title: '菜单名称'},
+                    {field: 'href', width: 180, title: '菜单地址'},
+                    {field: 'createTime', width: 120, title: '创建时间'},
+                    // {title: '操作', Width: 150, toolbar: '#currentTableBar'}
+                ]
+            ],
+            limits: [10, 15, 20, 25, 50, 100],
+            limit: 15,
+            page: true,
+            // skin: 'line'
+        });
+
+        //搜索
+        var $ = layui.jquery, active = {
+            reload: function (data) {
+                var obj = new Object();
+                obj['title'] = data.title;
+                table.reload('roleMenu', {
+                    method: 'post',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    },
+                    where: obj
+                })
+            }
+        }
+
+
+        /**
+         * toolbar事件监听
+         */
+        table.on('toolbar(addRoleMenuCurrentTableFilter)', function (obj) {
+            //获取表单选中的数值
+            var checkStatus = table.checkStatus(obj.config.id);
+            var data = checkStatus.data;
+            if (obj.event === 'addMenu') {   // 监听添加操作
+                if (data.length>0){
+                    var menuId = [];
+                    data.forEach(function (item,index){
+                        menuId.push(""+item.id);
+                    })
+                    var resDate = new Object();
+                    resDate["menuIdarr"] =""+menuId;
+                    resDate["roleId"] = "[[${roleId}]]";
+                    debugger
+                    $.ajax({
+                        url:"../roleMenu/addRoleMenuByArr",
+                        type:'post',
+                        // dataType: 'html',
+                        data:resDate,
+                        dataType:'json',
+                        // contentType : 'application/json',
+                        success:function (data) {
+                            toolMsgAndClose();
+                            window.parent.brush();
+                        },
+                        error:function () {
+                            alert("数据传递错误，请刷新页面");
+                        }
+                    });
+
+
+                }else {
+                    alert("请选者需要添加的权限")
+                }
+
+            }
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(addRoleMenuCurrentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+
+        // table.on('tool(currentTableFilter)', function (obj) {
+        //     var data = obj.data;
+        //     if (obj.event === 'edit') {
+        //         var content = miniPage.getHrefContent('headmenu/updateHeadmenuHtml?id='+data.id);
+        //         // var content = miniPage.getHrefContent('overtime/updateOvertimeHtml');
+        //
+        //         var openWH = miniPage.getOpenWidthHeight();
+        //         var index = layer.open({
+        //             title: '编辑菜单',
+        //             type: 1,
+        //             shade: 0.2,
+        //             maxmin:true,
+        //             shadeClose: true,
+        //             area: [openWH[0] + 'px', openWH[1] + 'px'],
+        //             offset: [openWH[2] + 'px', openWH[3] + 'px'],
+        //             content: content,
+        //         });
+        //         $(window).on("resize", function () {
+        //             layer.full(index);
+        //         });
+        //         return false;
+        //     } else if (obj.event === 'delete') {
+        //         layer.confirm('真的删除行么', function (index) {
+        //             obj.del();
+        //             layer.close(index);
+        //         });
+        //     }
+        // });
+
+    });
+
+
+    function brush() {
+        layui.use(['table'],function () {
+            var table = layui.table;
+            table.reload('roleMenu', {})
+        })
+
+    }
+</script>

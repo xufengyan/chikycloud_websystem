@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.SocketMeasureResultDao">
+    
+    <resultMap type="com.zk.cloudweb.entity.socketLink.SocketMeasurResult" id="ZkSocketMeasurResultResult">
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="surplusArea" column="surplus_area"/>
+        <result property="measureArea" column="measure_area"/>
+        <result property="id"    column="id"    />
+        <result property="measureJourney" column="measure_journey"/>
+        <result property="cumulativeArea" column="cumulative_area"/>
+        <result property="cumulativeTime" column="cumulative_time"/>
+        <result property="totalWeight" column="total_weight"/>
+        <result property="machineNum" column="machine_num"/>
+
+    </resultMap>
+
+    <sql id="selectZkSocketMeasurResultVo">
+        select id, start_time, end_time,surplus_area,measure_area, measure_journey,cumulative_area,cumulative_time,total_weight,machine_num from zk_measure_result
+    </sql>
+
+
+
+    <select id="selectSocketMeasurResultList" parameterType="com.zk.cloudweb.entity.socketLink.SocketMeasurResult" resultMap="ZkSocketMeasurResultResult">
+        <include refid="selectZkSocketMeasurResultVo"/>
+        <where>
+            <if test="id != null  and id != ''">and id=#{id}</if>
+            <if test="startTime != null ">and start_time = #{startTime}</if>
+            <if test="endTime != null ">and end_time = #{endTime}</if>
+            <if test="machineNum !=null and machineNum !='' ">and machine_num = #{machineNum}</if>
+        </where>
+        order by start_time
+    </select>
+<!--    <select id="selectSocketMeasurResultList" parameterType="com.zk.cloudweb.entity.socketLink.SocketMeasurResult" resultMap="ZkSocketMeasurResultResult">-->
+<!--        <include refid="selectZkSocketMeasurResultVo"/>-->
+<!--        <where>-->
+<!--            <if test="startTime !=null and endTime!=null">-->
+<!--                measure_time between #{startTime} and #{endTime}-->
+<!--            </if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+<!--    -->
+<!--    -->
+<!--    <insert id="insertSocketMeasurResultList" parameterType="com.zk.cloudweb.entity.socketLink.SocketMeasurResult">-->
+<!--        INSERT into zk_measure_data-->
+<!--        <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--            <if test="id != null  and id != ''">id,</if>-->
+<!--            <if test="longitude != null ">longitude,</if>-->
+<!--            <if test="latitude != null ">latitude,</if>-->
+<!--            <if test="rate != null ">rate,</if>-->
+<!--            <if test="course != null ">course,</if>-->
+<!--            <if test="measureTime !=null">measure_time,</if>-->
+<!--            <if test="measureResId !=null and measureResId !='' ">measure_res_id,</if>-->
+<!--            <if test="machineNum !=null and machineNum !='' ">machine_num,</if>-->
+<!--        </trim>-->
+<!--        VALUES-->
+<!--        <foreach collection="list" item="item" separator=",">-->
+<!--            <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--                <if test="item.id != null  and item.id != ''">#{item.id},</if>-->
+<!--                <if test="item.longitude != null ">#{item.longitude},</if>-->
+<!--                <if test="item.latitude != null ">#{item.latitude},</if>-->
+<!--                <if test="item.rate != null ">#{item.rate},</if>-->
+<!--                <if test="item.course != null ">#{item.course},</if>-->
+<!--                <if test="item.measureTime !=null">#{item.measureTime},</if>-->
+<!--                <if test="item.measureResId !=null and item.measureResId !='' ">#{item.measureResId},</if>-->
+<!--                <if test="item.machineNum !=null and item.machineNum !='' ">#{item.machineNum},</if>-->
+<!--            </trim>-->
+<!--        </foreach>-->
+
+<!--    </insert>-->
+
+<!--    <update id="updateSocketMeasurResultList" parameterType="com.zk.cloudweb.entity.socketLink.SocketMeasurResult">-->
+<!--        update zk_measure_data-->
+<!--        set measure_res_id = #{measureResId}-->
+<!--        where  machine_num = #{machineNum}-->
+<!--    </update>-->
+<!--    -->
+
+    <insert id="insertSocketMeasureResult" parameterType="com.zk.cloudweb.entity.socketLink.SocketMeasurResult">
+        insert into zk_measure_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+            <if test="surplusArea != null ">surplus_area,</if>
+            <if test="measureArea != null ">measure_area,</if>
+            <if test="measureJourney !=null">measure_journey,</if>
+            <if test="cumulativeArea !=null ">cumulative_area,</if>
+            <if test="cumulativeTime !=null ">cumulative_time,</if>
+            <if test="totalWeight !=null ">total_weight,</if>
+            <if test="machineNum !=null and machineNum !='' ">machine_num,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="surplusArea != null ">#{surplusArea},</if>
+            <if test="measureArea != null ">#{measureArea},</if>
+            <if test="measureJourney !=null">#{measureJourney},</if>
+            <if test="cumulativeArea !=null ">#{cumulativeArea},</if>
+            <if test="cumulativeTime !=null ">#{cumulativeTime},</if>
+            <if test="totalWeight !=null ">#{totalWeight},</if>
+            <if test="machineNum !=null and machineNum !='' ">#{machineNum},</if>
+        </trim>
+    </insert>
+<!--    <delete id="deleteZkSocketMeasurResultByIds" parameterType="String">-->
+<!--        delete from zk_socket_login where id in -->
+<!--        <foreach item="id" collection="array" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>-->
+<!--    </delete>-->
+    
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.ZkUserMachineMapper">
+    
+    <resultMap type="com.zk.cloudweb.entity.ZkUserMachine" id="ZkUserMachineResult">
+        <result property="id"    column="id"    />
+        <result property="umUserId"    column="um_user_id"    />
+        <result property="umMachineId"    column="um_machine_id"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+    <resultMap type="com.zk.cloudweb.entity.ZkMachine" id="ZkMachineResult">
+        <result property="mNumber"    column="m_number"    />
+        <result property="mName"    column="m_name"    />
+        <result property="id"    column="id"    />
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <sql id="selectZkUserMachineVo">
+        select id, um_user_id, um_machine_id, create_time from zk_user_machine
+    </sql>
+
+    <select id="selectZkUserMachineList" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultMap="ZkUserMachineResult">
+        <include refid="selectZkUserMachineVo"/>
+        <where>  
+            <if test="umUserId != null  and umUserId != ''"> and um_user_id = #{umUserId}</if>
+            <if test="umMachineId != null  and umMachineId != ''"> and um_machine_id = #{umMachineId}</if>
+        </where>
+    </select>
+
+
+    <select id="selectZkUserMachineByPage" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultMap="ZkMachineResult">
+        select m.* from zk_machine m
+        left join zk_user_machine um on um.um_machine_id = m.id
+        <where>
+            <if test="umUserId !=null and umUserId !=''">
+               and um.um_user_id = #{umUserId}
+            </if>
+            <if test="umMachineId !=null and umMachineId !='' ">
+               and um.um_machine_id = #{umMachineId}
+            </if>
+        </where>
+        <if test="limit !=null">
+            limit #{limit},#{count}
+        </if>
+    </select>
+
+    <select id="selectZkUserMachineByPageCount" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultType="int">
+        select count(0) from zk_machine m
+        left join zk_user_machine um on um.um_machine_id = m.id
+        <where>
+            <if test="umUserId !=null and umUserId !=''">
+                and um.um_user_id = #{umUserId}
+            </if>
+            <if test="umMachineId !=null and umMachineId !='' ">
+                and um.um_machine_id = #{umMachineId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectZkUserMachineByEntity" parameterType="com.zk.cloudweb.entity.ZkMachine" resultMap="ZkMachineResult">
+        select um.* from zk_machine m
+        left join zk_user_machine um on um.um_machine_id = m.id
+        <where>
+            <if test="mNumber !=null and mNumber !=''">
+                and m.m_number = #{mNumber}
+            </if>
+            <if test="mName !=null and mName !='' ">
+                and m.m_name = #{mName}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectZkUserMachineById" parameterType="String" resultMap="ZkUserMachineResult">
+        <include refid="selectZkUserMachineVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertZkUserMachine" parameterType="com.zk.cloudweb.entity.ZkUserMachine">
+        insert into zk_user_machine
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="umUserId != null  and umUserId != ''">um_user_id,</if>
+            <if test="umMachineId != null  and umMachineId != ''">um_machine_id,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="umUserId != null  and umUserId != ''">#{umUserId},</if>
+            <if test="umMachineId != null  and umMachineId != ''">#{umMachineId},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZkUserMachine" parameterType="com.zk.cloudweb.entity.ZkUserMachine">
+        update zk_user_machine
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="umUserId != null  and umUserId != ''">um_user_id = #{umUserId},</if>
+            <if test="umMachineId != null  and umMachineId != ''">um_machine_id = #{umMachineId},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteZkUserMachineById" parameterType="String">
+        delete from zk_user_machine where id = #{id}
+    </delete>
+
+    <delete id="deleteZkUserMachineByIds" parameterType="String">
+        delete from zk_user_machine where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

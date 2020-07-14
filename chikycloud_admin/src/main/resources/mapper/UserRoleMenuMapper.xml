@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.UserRoleMenuMapper">
+    
+    <resultMap type="com.zk.cloudweb.entity.UserRoleMenu" id="UserRoleMenuResult">
+        <result property="id"    column="id"    />
+        <result property="menuId"    column="menu_id"    />
+        <result property="roleId"    column="role_id"    />
+    </resultMap>
+
+    <sql id="selectUserRoleMenuVo">
+        select id, menu_id, role_id from user_role_menu
+    </sql>
+
+    <select id="selectUserRoleMenuList" parameterType="com.zk.cloudweb.entity.UserRoleMenu" resultMap="UserRoleMenuResult">
+        <include refid="selectUserRoleMenuVo"/>
+        <where>  
+            <if test="menuId != null  and menuId != ''"> and menu_id = #{menuId}</if>
+            <if test="roleId != null  and roleId != ''"> and role_id = #{roleId}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserRoleMenuById" parameterType="String" resultMap="UserRoleMenuResult">
+        <include refid="selectUserRoleMenuVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertUserRoleMenu" parameterType="com.zk.cloudweb.entity.UserRoleMenu">
+        insert into user_role_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="menuId != null  and menuId != ''">menu_id,</if>
+            <if test="roleId != null  and roleId != ''">role_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="menuId != null  and menuId != ''">#{menuId},</if>
+            <if test="roleId != null  and roleId != ''">#{roleId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserRoleMenu" parameterType="com.zk.cloudweb.entity.UserRoleMenu">
+        update user_role_menu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="menuId != null  and menuId != ''">menu_id = #{menuId},</if>
+            <if test="roleId != null  and roleId != ''">role_id = #{roleId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserRoleMenuById" parameterType="String">
+        delete from user_role_menu where id = #{id}
+    </delete>
+    <delete id="deleteUserRoleMenuByRM" parameterType="com.zk.cloudweb.entity.UserRoleMenu">
+        delete from user_role_menu
+        where menu_id = #{menuId} and role_id = #{roleId}
+    </delete>
+    <delete id="deleteUserRoleMenuByIds" parameterType="String">
+        delete from user_role_menu where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

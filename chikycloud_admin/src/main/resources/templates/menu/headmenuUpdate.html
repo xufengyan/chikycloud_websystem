@@ -1,0 +1,130 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main" style="height: 100%">
+        <form class="layui-form" style="width: 60%;margin: auto;height: 100%"  lay-filter="example" id="example" onsubmit="return false;">
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">菜单名称：</label>
+                    <div class="layui-input-inline">
+                        <input type="hidden" name="id">
+                        <input type="text" name="title" lay-verify="required" autocomplete="off" class="layui-input"  >
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form.-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="updateBtn">确认修改</button>
+                    <button class="layui-btn" lay-submit="" id="returnBtn">返回</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate
+            , $ = layui.jquery
+            , miniPage = layui.miniPage;
+
+        function toolMsgAndClose(msg) {
+            // if(isEmpty(msg))
+            // {
+            msg = "成功";
+            // }
+            layer.closeAll();
+            layer.msg(msg, {icon: 1});
+        }
+        var getFormatDate = function(ndate) {
+            var date = ndate.split("T")[0];
+            return date;
+        }
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        //日期
+        laydate.render({
+            elem: '#birthday'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+        var sdata = new Object();
+        sdata['id'] = "[[${id}]]";
+        $.ajax({
+            url:"../headmenu/getHeadmenu",
+            type:'post',
+            // dataType: 'html',
+            data: sdata,
+            async: true,
+            dataType:'json',
+            // contentType: 'application/json;charset=UTF-8',
+            success:function (data) {
+                form.val('example', {
+                    "id" : data.data.id
+                    , "title": ""+data.data.title // "name": "value"
+                })
+            },
+            error:function () {
+                alert("数据传递错误，请刷新页面");
+            }
+        });
+        var parentIndex = layer.index;
+        //监听提交
+        form.on('submit(updateBtn)', function (data) {
+
+            $.ajax({
+                url:"../headmenu/updateHeadmenu",
+                type:'post',
+                // dataType: 'html',
+                data:JSON.stringify(data.field),
+                dataType:'json',
+                contentType : 'application/json',
+                // dataType : 'json',
+                // contentType: 'application/json;charset=UTF-8',
+                success:function (data) {
+                    //关闭弹框
+                    toolMsgAndClose();
+                    window.parent.brush();
+                    return false;
+                },
+                error:function () {
+                    alert("数据传递错误，请刷新页面");
+                }
+            })
+            layer.close(parentIndex);
+            return false;
+        })
+
+
+        // form.on('submit(returnBtn)', function (data) {
+        //     layer.closeAll();
+        //     return false;
+        // })
+
+
+        //表单初始赋值
+        // form.val('example', {
+        //     "username": "贤心" // "name": "value"
+        //     , "password": "123456"
+        //     , "interest": 1
+        //     , "like[write]": true //复选框选中状态
+        //     , "close": true //开关状态
+        //     , "sex": "女"
+        //     , "desc": "我爱 layui"
+        // })
+
+        $("#returnBtn").click(function () {
+            layer.closeAll();
+        })
+    })
+
+
+</script>

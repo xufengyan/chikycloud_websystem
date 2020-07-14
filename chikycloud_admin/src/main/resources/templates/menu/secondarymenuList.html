@@ -1,0 +1,201 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>下拉菜单列表</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" lay-filter="secondarymenuform" id="secondarymenuform" onsubmit="return false;">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">头部菜单：</label>
+                            <div class="layui-input-block">
+                                <select name="headmenuId" id="headmenuId" lay-filter="aihao"  >
+                                        <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">下拉菜单</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="title" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加下拉菜单 </button>
+                <!--                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
+            </div>
+        </script>
+
+        <table class="layui-hide" id="secondarymenu" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
+    </div>
+</div>
+
+<script >
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+
+        $.ajax({
+            url:"../headmenu/getHeadmenuList",
+            type:'post',
+            // dataType: 'html',
+            // data:data.f,
+            async: true,
+            dataType:'json',
+            contentType: 'application/json;charset=UTF-8',
+            success:function (data) {
+
+                var dh="<option selected></option>";
+                for (var i = 0;i<data.data.length;i++){
+                    dh+="<option value="+data.data[i].id+">"+data.data[i].title+"</option>"
+                }
+                $("#secondarymenuform #headmenuId").html(dh);
+                form.render('select','secondarymenuform');
+            },
+            error:function () {
+                alert("数据传递错误，请刷新页面");
+            }
+        });
+
+        table.render({
+            elem: '#secondarymenu',
+            id:'secondarymenu',
+            url: '../secondarymenu/getSecondarymenuList',
+            toolbar: '#toolbarDemo',
+            title: '下拉菜单列表',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [
+                [
+                    {type: "checkbox", width: 50},
+                    {type: 'numbers', title: '序号', width: 50 ,totalRowText: '合计'},
+                    {field: 'htitle', width: 120, title: '头部菜单名称'},
+                    {field: 'title', width: 120, title: '下拉菜单名称'},
+                    {field: 'icon', width: 120, title: '菜单标签'},
+                    {field: 'create_time', width: 180, title: '创建时间',templet:'<div>{{ layui.util.toDateString(d.create_time, "yyyy-MM-dd HH:mm:ss") }}</div>'},
+                    {title: '操作', Width: 150, toolbar: '#currentTableBar'}
+                ]
+            ],
+            limits: [10, 15, 20, 25, 50, 100],
+            limit: 15,
+            page: true,
+            // skin: 'line'
+        });
+
+        //搜索
+        var $ = layui.jquery, active = {
+            reload: function (data) {
+                var obj = new Object();
+                obj['headmenuId'] = data.headmenuId;
+                obj['title'] = data.title;
+                table.reload('secondarymenu', {
+                    method: 'post',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    },
+                    where: obj
+                })
+            }
+        }
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            var result = data.field;
+            active.reload(result);
+
+        });
+        /**
+         * toolbar事件监听
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {   // 监听添加操作
+                var content = miniPage.getHrefContent('secondarymenu/addSecondarymenuHtml');
+                var openWH = miniPage.getOpenWidthHeight();
+
+                var index = layer.open({
+                    title: '添加菜单',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: [openWH[0] + 'px', openWH[1] + 'px'],
+                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
+                    content: content,
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            } else if (obj.event === 'delete') {  // 监听删除操作
+                var checkStatus = table.checkStatus('currentTableId')
+                    , data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                var content = miniPage.getHrefContent('secondarymenu/updateSecondarymenuHtml?id='+data.id+'&headmenuId='+data.headmenu_id);
+                // var content = miniPage.getHrefContent('overtime/updateOvertimeHtml');
+                var openWH = miniPage.getOpenWidthHeight();
+                var index = layer.open({
+                    title: '编辑菜单',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: [openWH[0] + 'px', openWH[1] + 'px'],
+                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
+                    content: content,
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            }
+        });
+
+    });
+
+
+    function brush() {
+        layui.use(['table'],function () {
+            var table = layui.table;
+            table.reload('secondarymenu', {})
+        })
+
+    }
+</script>

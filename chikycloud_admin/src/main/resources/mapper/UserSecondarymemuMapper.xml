@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.UserSecondarymemuMapper">
+    
+    <resultMap type="com.zk.cloudweb.entity.UserSecondarymemu" id="UserSecondarymemuResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="icon"    column="icon"    />
+        <result property="target"    column="target"    />
+        <result property="href"    column="href"    />
+        <result property="headmenuId"    column="headmenu_id"    />
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectUserSecondarymemuVo">
+        select id, title, icon, target, href, headmenu_id,create_time from user_secondarymenu
+    </sql>
+
+    <select id="selectUserSecondarymemuList" parameterType="com.zk.cloudweb.entity.UserSecondarymemu" resultMap="UserSecondarymemuResult">
+        <include refid="selectUserSecondarymemuVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="icon != null  and icon != ''"> and icon = #{icon}</if>
+            <if test="target != null  and target != ''"> and target = #{target}</if>
+            <if test="href != null  and href != ''"> and href = #{href}</if>
+            <if test="headmenuId != null and headmenuId != ''"> and headmenu_id = #{headmenuId}</if>
+        </where>
+    </select>
+
+    <select id="selectHeadSecondaryList" parameterType="com.zk.cloudweb.entity.UserSecondarymemu" resultType="Map">
+        select s.*,h.title htitle from user_secondarymenu s
+        left join user_headmenu h on h.id = s.headmenu_id
+        <where>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="icon != null  and icon != ''"> and icon = #{icon}</if>
+            <if test="target != null  and target != ''"> and target = #{target}</if>
+            <if test="href != null  and href != ''"> and href = #{href}</if>
+            <if test="headmenuId != null and headmenuId != ''"> and headmenu_id = #{headmenuId}</if>
+        </where>
+        <if test="limit !=null">
+            limit #{limit},#{count}
+        </if>
+    </select>
+    <select id="selectHeadSecondaryListCount" parameterType="com.zk.cloudweb.entity.UserSecondarymemu" resultType="int">
+        select count(0) from user_secondarymenu s
+        left join user_headmenu h on h.id = s.headmenu_id
+        <where>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="icon != null  and icon != ''"> and icon = #{icon}</if>
+            <if test="target != null  and target != ''"> and target = #{target}</if>
+            <if test="href != null  and href != ''"> and href = #{href}</if>
+            <if test="headmenuId != null and headmenuId != ''"> and headmenu_id = #{headmenuId}</if>
+        </where>
+    </select>
+
+    <select id="selectUserSecondarymemuById" parameterType="String" resultMap="UserSecondarymemuResult">
+        <include refid="selectUserSecondarymemuVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertUserSecondarymemu" parameterType="com.zk.cloudweb.entity.UserSecondarymemu">
+        insert into user_secondarymenu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="title != null  and title != ''">title,</if>
+            <if test="icon != null  and icon != ''">icon,</if>
+            <if test="target != null  and target != ''">target,</if>
+            <if test="href != null  and href != ''">href,</if>
+            <if test="headmenuId != null and headmenuId != ''">headmenu_id,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="icon != null  and icon != ''">#{icon},</if>
+            <if test="target != null  and target != ''">#{target},</if>
+            <if test="href != null  and href != ''">#{href},</if>
+            <if test="headmenuId != null and headmenuId != ''">#{headmenuId},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateUserSecondarymemu" parameterType="com.zk.cloudweb.entity.UserSecondarymemu">
+        update user_secondarymenu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="icon != null  and icon != ''">icon = #{icon},</if>
+            <if test="target != null  and target != ''">target = #{target},</if>
+            <if test="href != null  and href != ''">href = #{href},</if>
+            <if test="headmenuId != null ">headmenu_id = #{headmenuId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserSecondarymemuById" parameterType="String">
+        delete from user_secondarymenu where id = #{id}
+    </delete>
+
+    <delete id="deleteUserSecondarymemuByIds" parameterType="String">
+        delete from user_secondarymenu where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
