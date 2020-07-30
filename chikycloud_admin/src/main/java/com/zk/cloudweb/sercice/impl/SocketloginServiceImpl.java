@@ -1,6 +1,5 @@
 package com.zk.cloudweb.sercice.impl;
 
-import com.zk.cloudweb.dao.ZkMachineDao;
 import com.zk.cloudweb.dao.ZkSocketLoginDao;
 import com.zk.cloudweb.entity.ZkMachine;
 import com.zk.cloudweb.entity.ZkSocketLogin;
@@ -10,7 +9,6 @@ import com.zk.cloudweb.entity.socketLink.Socketlogin;
 import com.zk.cloudweb.sercice.ISocketloginService;
 import com.zk.cloudweb.sercice.IZkMachineService;
 import com.zk.cloudweb.util.Tool;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

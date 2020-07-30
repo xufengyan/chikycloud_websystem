@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2020/6/10 9:54
  */
 @Data
-public class ZkSocketLogin extends BaseEntity{
+public class ZkSocketLogin extends BaseEntity {
     //设备名称
     private String machineName;
     //设备终端ID

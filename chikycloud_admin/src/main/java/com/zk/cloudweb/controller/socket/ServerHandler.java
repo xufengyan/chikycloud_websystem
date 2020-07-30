@@ -21,7 +21,6 @@ import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
@@ -37,7 +36,7 @@ import java.util.List;
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     //日志
-    private static Logger logger = LoggerFactory.getLogger(ServerHandler.class);
+    private static Logger logger = LoggerFactory.getLogger(com.zk.cloudweb.controller.socket.ServerHandler.class);
 
     //想当于session
     public static final AttributeKey<DeviceSession> KEY = AttributeKey.valueOf("ZK_SOCKET_IO");
@@ -95,6 +94,26 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             return;
         }
 
+        switch(socketPackage.getPackageType()){
+            case "00":
+                //语句
+                break; //可选
+            case "01":
+                //语句
+                break; //可选
+            case "02":
+                //语句
+                break;
+            case "03":
+                //语句
+                break;
+            case "04":
+                break;
+            case "0B":
+                break;
+            default : //可选
+                //语句
+        }
         if (socketPackage!=null){
             System.out.println("数据包类型："+socketPackage.getPackageType());
             if("00".equals(socketPackage.getPackageType())){//登录包

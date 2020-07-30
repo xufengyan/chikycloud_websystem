@@ -93,7 +93,7 @@ public class UserSecondarymenuController {
      */
     @RequestMapping("/addSecondarymenu")
     @ResponseBody
-    public Result addSecondarymenu(@RequestBody(required = true)UserSecondarymemu userSecondarymemu){
+    public Result addSecondarymenu(@RequestBody(required = true) UserSecondarymemu userSecondarymemu){
 
         int res = userSecondarymemuService.insertUserSecondarymemu(userSecondarymemu);
 

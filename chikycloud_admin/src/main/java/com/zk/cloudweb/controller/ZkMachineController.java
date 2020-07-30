@@ -6,15 +6,12 @@ import com.zk.cloudweb.entity.ZkSocketLogin;
 import com.zk.cloudweb.entity.ZkUserMachine;
 import com.zk.cloudweb.sercice.ISocketloginService;
 import com.zk.cloudweb.sercice.IZkMachineService;
-import com.zk.cloudweb.sercice.IZkSocketLoginService;
 import com.zk.cloudweb.sercice.IZkUserMachineService;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
 import com.zk.cloudweb.util.getShiroUser;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;

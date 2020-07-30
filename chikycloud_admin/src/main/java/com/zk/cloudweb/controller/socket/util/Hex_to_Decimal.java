@@ -118,8 +118,8 @@ public class Hex_to_Decimal {
         String data = "";//数据包
         String checkSum = "";
         String stopBit = "";
-        start = Hex_to_Decimal.strToHexStr(socketPackage.getStartNum());
-        num = Hex_to_Decimal.towHex16ToSmall(Hex_to_Decimal.intToHex16(socketPackage.getSerialNum()));
+        start = com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.strToHexStr(socketPackage.getStartNum());
+        num = com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.towHex16ToSmall(com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.intToHex16(socketPackage.getSerialNum()));
         type = socketPackage.getPackageType();
 //        if (lenghtHexStr.length()==2){
 //            lenghtHexStr = "00 "+lenghtHexStr;
@@ -136,19 +136,19 @@ public class Hex_to_Decimal {
             for (int i = 0;i<8;i++){
                 data += "00"+" ";
             }
-            lenghtHexStr =  Hex_to_Decimal.towHex16ToSmall(Hex_to_Decimal.intToHex16(8));
+            lenghtHexStr =  com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.towHex16ToSmall(com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.intToHex16(8));
         }else{
             for (int i = 0;i<4;i++){
                 data += "00"+" ";
             }
-            lenghtHexStr =  Hex_to_Decimal.towHex16ToSmall(Hex_to_Decimal.intToHex16(4));
+            lenghtHexStr =  com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.towHex16ToSmall(com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.intToHex16(4));
 
         }
         /**
          * 计算返回机器时的crc值
          */
-        byte [] hexByte = Hex_to_Decimal.hex2Bytes(data.replaceAll(" ",""));
-        checkSum = Hex_to_Decimal.towHex16ToSmall(Hex_to_Decimal.intToHex16(CRC16Util.calcCrc16(hexByte)))+" ";
+        byte [] hexByte = com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.hex2Bytes(data.replaceAll(" ",""));
+        checkSum = com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.towHex16ToSmall(com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.intToHex16(CRC16Util.calcCrc16(hexByte)))+" ";
 //        checkSum = socketPackage.getCheckSum();
         stopBit = socketPackage.getStopBit();
         String resultStr = start+" "+num+" "+type+" "+lenghtHexStr+" "+data+checkSum+stopBit;

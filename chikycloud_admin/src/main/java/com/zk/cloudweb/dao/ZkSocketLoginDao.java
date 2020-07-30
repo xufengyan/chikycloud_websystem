@@ -1,6 +1,5 @@
 package com.zk.cloudweb.dao;
 
-import com.zk.cloudweb.entity.ZkMachine;
 import com.zk.cloudweb.entity.ZkSocketLogin;
 import com.zk.cloudweb.entity.ZkUserMachine;
 import org.springframework.stereotype.Component;

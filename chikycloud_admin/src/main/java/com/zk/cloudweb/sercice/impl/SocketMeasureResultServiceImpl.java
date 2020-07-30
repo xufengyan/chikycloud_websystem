@@ -60,4 +60,9 @@ public class SocketMeasureResultServiceImpl implements ISocketMeasureResultServi
         return socketMeasureResultDao.selectSocketMeasurResultList(socketMeasurResult);
     }
 
+    @Override
+    public SocketMeasurResult selectSocketMeasurResult(SocketMeasurResult socketMeasurResult) {
+        return socketMeasureResultDao.selectSocketMeasurResult(socketMeasurResult);
+    }
+
 }

@@ -34,6 +34,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by start_time
     </select>
+
+    <select id="selectSocketMeasurResult" parameterType="com.zk.cloudweb.entity.socketLink.SocketMeasurResult" resultMap="ZkSocketMeasurResultResult">
+        <include refid="selectZkSocketMeasurResultVo"/>
+        <where>
+            <if test="id != null  and id != ''">and id=#{id}</if>
+            <if test="startTime != null ">and start_time = #{startTime}</if>
+            <if test="endTime != null ">and end_time = #{endTime}</if>
+            <if test="machineNum !=null and machineNum !='' ">and machine_num = #{machineNum}</if>
+        </where>
+    </select>
+
 <!--    <select id="selectSocketMeasurResultList" parameterType="com.zk.cloudweb.entity.socketLink.SocketMeasurResult" resultMap="ZkSocketMeasurResultResult">-->
 <!--        <include refid="selectZkSocketMeasurResultVo"/>-->
 <!--        <where>-->

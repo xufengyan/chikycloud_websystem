@@ -3,7 +3,6 @@ package com.zk.cloudweb.entity.socketLink;
 import com.zk.cloudweb.entity.BaseEntity;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class SocketMeasurResult extends BaseEntity {
     //累计作业时间
     private float cumulativeTime;
 
-    //总重量
+    //深松深度
     private float totalWeight;
 
     //设备终端id

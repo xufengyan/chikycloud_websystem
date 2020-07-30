@@ -229,17 +229,24 @@
             data :obj,
             success : function(res) {
                 debugger
-                // var coordinate = res.data;
-                // coordinate = JSON.parse(coordinate);
-                bdiduMap(res.data);
-                MeasurementPatten(res.data);
-                // var mea = "<p>时间："+date(coordinate[0].meas_date)+"</p>\n" +
-                //     "                <p>面积："+coordinate[0].meas_area+"平方米</p>\n" +
-                //     "                <p>&nbsp;   &nbsp;   &nbsp; "+coordinate[0].meas_munum+"亩</p>\n" +
-                //     "                <p>曲线："+coordinate[0].curve+"米</p>\n" +
-                //     "                <p>直线："+coordinate[0].line+"米</p>";
-                // $("#measure_result").html(mea);
-                //
+                var coordinate = res.data;
+                var coordinate2 = res.data2;
+                if (res.code==0){
+                    bdiduMap(res.data);
+                    MeasurementPatten(res.data);
+                }else {
+                    alert(res.msg);
+                }
+
+                var mea = "<p>时间："+date(coordinate2.startTime)+"</p>\n" +
+                    "                <p>面积："+coordinate2.measureArea+"亩</p>\n" +
+                    // "                <p>&nbsp;   &nbsp;   &nbsp; "+coordinate[0].meas_munum+"亩</p>\n" +
+                    "                <p>路程："+coordinate2.measureJourney+"米</p>\n" +
+                    // "                <p>直线："+coordinate[0].line+"米</p>";
+                    "                <p>深松深度："+coordinate2.totalWeight+"com</p>"
+                $("#measure_result").html(mea);
+
+
                 // $("#exportKMLValue").val(zid);
                 // $("#exportCADValue").val(zid);
                 // $("#exportExcelValue").val(zid);

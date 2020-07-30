@@ -8,7 +8,7 @@ import lombok.Data;
  * @date 2020/6/10 9:50
  */
 @Data
-public class ZkMachine extends BaseEntity{
+public class ZkMachine extends BaseEntity {
     //机器名称
     private String mName;
 

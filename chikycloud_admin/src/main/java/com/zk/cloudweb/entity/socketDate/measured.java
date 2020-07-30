@@ -1,6 +1,5 @@
 package com.zk.cloudweb.entity.socketDate;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.zk.cloudweb.entity.BaseEntity;
 import lombok.Data;
 

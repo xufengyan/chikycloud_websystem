@@ -168,9 +168,9 @@ public class CRC16Util {
 	// 测试
 	public static void main(String[] args) {
 		// 0x02 05 00 03 FF 00 , crc16=7C 09
-		int crc = CRC16Util.calcCrc16(new byte[] { 0x01, 0x06, 0x00, 0x00,
+		int crc = com.zk.cloudweb.controller.socket.util.CRC16Util.calcCrc16(new byte[] { 0x01, 0x06, 0x00, 0x00,
 				0x00, 0x01 });
-		int crc2 = CRC16Util.calcCrc16(new byte[] { 0x01, 0x06, 0x20, 0x01,
+		int crc2 = com.zk.cloudweb.controller.socket.util.CRC16Util.calcCrc16(new byte[] { 0x01, 0x06, 0x20, 0x01,
 				0x00, 0x01 });
 		String str = "010600000001";
 		String str2 = "010620010001";
@@ -183,8 +183,8 @@ public class CRC16Util {
 		// for(int i=0;i<bstr2.length;i++){
 		// System.out.println(i+"="+bstr2[i]);
 		// }
-		System.out.println(String.format("0x%04x", CRC16Util.calcCrc16(bstr)));
-		System.out.println(String.format("0x%04x", CRC16Util.calcCrc16(bstr2)));
+		System.out.println(String.format("0x%04x", com.zk.cloudweb.controller.socket.util.CRC16Util.calcCrc16(bstr)));
+		System.out.println(String.format("0x%04x", com.zk.cloudweb.controller.socket.util.CRC16Util.calcCrc16(bstr2)));
 		System.out.println(String.format("%04x", crc));
 		System.out.println(String.format("0x%04x", crc2));
 	}

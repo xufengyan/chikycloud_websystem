@@ -1,8 +1,6 @@
 package com.zk.cloudweb.sercice;
 
-import com.zk.cloudweb.entity.ZkMachine;
 import com.zk.cloudweb.entity.ZkSocketLogin;
-import com.zk.cloudweb.entity.ZkUserMachine;
 
 /**
  * 登录表service

@@ -1,11 +1,9 @@
 package com.zk.cloudweb.entity.socketLink;
 
 import com.zk.cloudweb.entity.BaseEntity;
-import com.zk.cloudweb.entity.socketDate.measuredGPS;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * socket测量GPS数据包

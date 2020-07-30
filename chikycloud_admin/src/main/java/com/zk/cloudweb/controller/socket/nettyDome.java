@@ -3,10 +3,6 @@ package com.zk.cloudweb.controller.socket;
 import com.zk.cloudweb.controller.socket.util.Hex_to_Decimal;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 /**
  * @author xf
@@ -73,18 +69,18 @@ public class nettyDome {
      * @param s
      * @param radix
      * @return
-     * @throws NumberFormatException
+     * @throws com.zk.cloudweb.controller.socket.NumberFormatException
      */
-    public static long parseLong(String s, int radix) throws NumberFormatException {
+    public static long parseLong(String s, int radix) throws com.zk.cloudweb.controller.socket.NumberFormatException {
         if (s == null) {
-            throw new NumberFormatException("null");
+            throw new com.zk.cloudweb.controller.socket.NumberFormatException("null");
         }
 
         if (radix < Character.MIN_RADIX) {
-            throw new NumberFormatException("radix " + radix + " less than Character.MIN_RADIX");
+            throw new com.zk.cloudweb.controller.socket.NumberFormatException("radix " + radix + " less than Character.MIN_RADIX");
         }
         if (radix > Character.MAX_RADIX) {
-            throw new NumberFormatException("radix " + radix + " greater than Character.MAX_RADIX");
+            throw new com.zk.cloudweb.controller.socket.NumberFormatException("radix " + radix + " greater than Character.MAX_RADIX");
         }
 
         long result = 0;
@@ -101,10 +97,10 @@ public class nettyDome {
                     negative = true;
                     limit = Long.MIN_VALUE;
                 } else if (firstChar != '+')
-                    throw NumberFormatException.forInputString(s);
+                    throw com.zk.cloudweb.controller.socket.NumberFormatException.forInputString(s);
 
                 if (len == 1) // Cannot have lone "+" or "-"
-                    throw NumberFormatException.forInputString(s);
+                    throw com.zk.cloudweb.controller.socket.NumberFormatException.forInputString(s);
                 i++;
             }
             multmin = limit / radix;
@@ -112,19 +108,19 @@ public class nettyDome {
                 // Accumulating negatively avoids surprises near MAX_VALUE
                 digit = Character.digit(s.charAt(i++), radix);
                 if (digit < 0) {
-                    throw NumberFormatException.forInputString(s);
+                    throw com.zk.cloudweb.controller.socket.NumberFormatException.forInputString(s);
                 }
                 if (result < multmin) {
-                    throw NumberFormatException.forInputString(s);
+                    throw com.zk.cloudweb.controller.socket.NumberFormatException.forInputString(s);
                 }
                 result *= radix;
                 if (result < limit + digit) {
-                    throw NumberFormatException.forInputString(s);
+                    throw com.zk.cloudweb.controller.socket.NumberFormatException.forInputString(s);
                 }
                 result -= digit;
             }
         } else {
-            throw NumberFormatException.forInputString(s);
+            throw com.zk.cloudweb.controller.socket.NumberFormatException.forInputString(s);
         }
         return negative ? result : -result;
     }
@@ -146,8 +142,8 @@ class NumberFormatException extends IllegalArgumentException {
         super(s);
     }
 
-    static NumberFormatException forInputString(String s) {
-        return new NumberFormatException("For input string: \"" + s + "\"");
+    static com.zk.cloudweb.controller.socket.NumberFormatException forInputString(String s) {
+        return new com.zk.cloudweb.controller.socket.NumberFormatException("For input string: \"" + s + "\"");
     }
 
 

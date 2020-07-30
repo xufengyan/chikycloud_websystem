@@ -2,7 +2,6 @@ package com.zk.cloudweb.sercice.impl;
 
 import com.zk.cloudweb.dao.ZkSocketLoginDao;
 import com.zk.cloudweb.entity.ZkSocketLogin;
-import com.zk.cloudweb.entity.ZkUserMachine;
 import com.zk.cloudweb.sercice.IZkSocketLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

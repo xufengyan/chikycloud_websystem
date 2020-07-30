@@ -8,14 +8,12 @@ import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author xf
@@ -102,7 +100,7 @@ public class UserRoleMenuController {
      */
     @RequestMapping("/addRoleMenuByArr")
     @ResponseBody
-    public Result addRoleMenuByArr( String [] menuIdarr, String roleId){
+    public Result addRoleMenuByArr(String [] menuIdarr, String roleId){
         for (String s : menuIdarr) {
             UserRoleMenu userRoleMenu = new UserRoleMenu();
             userRoleMenu.setMenuId(s);
@@ -122,7 +120,7 @@ public class UserRoleMenuController {
      */
     @RequestMapping("/delRoleMenuByArr")
     @ResponseBody
-    public Result delRoleMenuByArr( String [] menuIdarr, String roleId){
+    public Result delRoleMenuByArr(String [] menuIdarr, String roleId){
         for (String s : menuIdarr) {
             UserRoleMenu userRoleMenu = new UserRoleMenu();
             userRoleMenu.setMenuId(s);

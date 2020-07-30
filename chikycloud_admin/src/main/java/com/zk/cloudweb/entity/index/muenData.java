@@ -1,6 +1,5 @@
 package com.zk.cloudweb.entity.index;
 
-import com.zk.cloudweb.entity.BaseEntity;
 import com.zk.cloudweb.entity.UserHeadmenu;
 import lombok.Data;
 
@@ -13,7 +12,7 @@ import java.util.List;
  */
 @Data
 public class muenData {
-   private homeInfo homeInfo;
-   private logoInfo logoInfo;
+   private com.zk.cloudweb.entity.index.homeInfo homeInfo;
+   private com.zk.cloudweb.entity.index.logoInfo logoInfo;
    private List<UserHeadmenu> menuInfo;
 }
