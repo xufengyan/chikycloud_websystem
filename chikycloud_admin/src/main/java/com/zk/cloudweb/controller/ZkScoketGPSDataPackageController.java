@@ -1,6 +1,5 @@
 package com.zk.cloudweb.controller;
 
-import com.zk.cloudweb.entity.socketDate.measured;
 import com.zk.cloudweb.entity.socketLink.SocketGPSDataPackage;
 import com.zk.cloudweb.entity.socketLink.SocketMeasurResult;
 import com.zk.cloudweb.sercice.ISocketGPSDataPackageService;
@@ -29,7 +28,8 @@ public class ZkScoketGPSDataPackageController {
     @Autowired
     private ISocketGPSDataPackageService socketGPSDataPackageService;
 
-
+    @Autowired
+    private ISocketMeasureResultService socketMeasureResultService;
 
 
 
@@ -56,17 +56,22 @@ public class ZkScoketGPSDataPackageController {
     @ResponseBody
     public Result getMachineMeasureGPSData(SocketMeasurResult socketMeasurResult){
         DecimalFormat df = new DecimalFormat("#.0000000");
-        List<SocketGPSDataPackage> socketGPSDataPackages = socketGPSDataPackageService.selectSocketGPSDataPackageList(socketMeasurResult);
-        libgeodesy_ct libgeodesy_ct = new libgeodesy_ct();
-        for (SocketGPSDataPackage socketGPSDataPackage : socketGPSDataPackages) {
-            if (socketGPSDataPackage.getLatitude()!=0&&socketGPSDataPackage.getLongitude()!=0) {
-                libgeodesy_ct.libgeodesy_wgs84_to_mars(Double.parseDouble(""+socketGPSDataPackage.getLatitude()), Double.parseDouble(""+socketGPSDataPackage.getLongitude()));
-                socketGPSDataPackage.setLatitude(Float.parseFloat(df.format(libgeodesy_ct.getBd09_lat())));
-                socketGPSDataPackage.setLongitude(Float.parseFloat(df.format(libgeodesy_ct.getBd09_lon())));
+        Result result = null;
+        if ((null!=socketMeasurResult.getId()&&""!=socketMeasurResult.getId())||(null!=socketMeasurResult.getMachineNum()&&""!=socketMeasurResult.getMachineNum())){
+            List<SocketGPSDataPackage> socketGPSDataPackages = socketGPSDataPackageService.selectSocketGPSDataPackageList(socketMeasurResult);
+            SocketMeasurResult measurResult = socketMeasureResultService.selectSocketMeasurResult(socketMeasurResult);
+            libgeodesy_ct libgeodesy_ct = new libgeodesy_ct();
+            for (SocketGPSDataPackage socketGPSDataPackage : socketGPSDataPackages) {
+                if (socketGPSDataPackage.getLatitude()!=0&&socketGPSDataPackage.getLongitude()!=0) {
+                    libgeodesy_ct.libgeodesy_wgs84_to_mars(Double.parseDouble(""+socketGPSDataPackage.getLatitude()), Double.parseDouble(""+socketGPSDataPackage.getLongitude()));
+                    socketGPSDataPackage.setLatitude(Float.parseFloat(df.format(libgeodesy_ct.getBd09_lat())));
+                    socketGPSDataPackage.setLongitude(Float.parseFloat(df.format(libgeodesy_ct.getBd09_lon())));
+                }
             }
+            result =new Result(ResultEnum.OK,socketGPSDataPackages,measurResult,true);
+        }else {
+            result = new Result(ResultEnum.PARAMETER_ERROR);
         }
-        Result result =new Result(ResultEnum.OK,socketGPSDataPackages,true);
-
         return result;
     }
 

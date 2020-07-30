@@ -1,20 +1,27 @@
 
-#??????
+#开发环境配置
 server:
   port: 8060
 spring:
   application:
-    #???��???????
+    #服务名称
     name: chikycloud_admin
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  #数据库配置
   datasource:
     url: jdbc:mysql://localhost:3306/chikycloudweb?&allowMultiQueries=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
     username: root
-#    password: root
-    password: chikytech2018cavin
+    password: root
+#    password: chikytech2018cavin
+  #------redis
+  redis:
+    host: 39.96.7.233
+    port: 6379
+    password: 123456
+    database: 0
 
 
 mybatis:
@@ -25,35 +32,35 @@ mybatis:
 # Shiro
 shiro:
   user:
-    # ��¼��ַ
+    # 登录地址
     loginUrl: /login
-    # Ȩ����֤ʧ�ܵ�ַ
+    # 权限认证失败地址
     unauthorizedUrl: /unauth
-    # ��ҳ��ַ
+    # 首页
     indexUrl: /index
-    # ��֤�뿪��
+    # 验证码开关
     captchaEnabled: true
-    # ��֤������ math ������� char �ַ�
+    # 验证码类型 math 数组计算 char 字符
     captchaType: math
   cookie:
-    # ����Cookie������ Ĭ�Ͽգ�����ǰ���ʵ�����
+    # 设置Cookie的域名 默认空，即当前访问的域名
     domain:
-    # ����cookie����Ч����·��
+    # 设置cookie的有效访问路径
     path: /
-    # ����HttpOnly����
+    # 设置HttpOnly属性
     httpOnly: true
-    # ����Cookie�Ĺ���ʱ�䣬��Ϊ��λ
+    # 设置Cookie的过期时间，天为单位
     maxAge: 30
   session:
-    # Session��ʱʱ�䣬-1�����������ڣ�Ĭ��30���ӣ�
+    # Session超时时间，-1代表永不过期（默认30分钟）
     expireTime: 30
-    # ͬ��session�����ݿ�����ڣ�Ĭ��1���ӣ�
+    # ͬ同步session到数据库的周期（默认1分钟）
     dbSyncPeriod: 1
-    # �����ü��һ��session����Ч�ԣ�Ĭ�Ͼ���10����
+    # 相隔多久检查一次session的有效性，默认就是10分钟
     validationInterval: 10
-    # ͬһ���û����Ự��������2����˼��ͬһ���˺��������ͬʱ�����˵�¼��Ĭ��-1�����ƣ�
+    # 同一个用户最大会话数，比如2的意思是同一个账号允许最多同时两个人登录（默认-1不限制）
     maxSession: -1
-    # �߳�֮ǰ��¼��/֮���¼���û���Ĭ���߳�֮ǰ��¼���û�
+    # 踢出之前登录的/之后登录的用户，默认踢出之前登录的用户
     kickoutAfter: false
 
 netty:

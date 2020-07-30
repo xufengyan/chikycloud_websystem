@@ -112,7 +112,7 @@ public class Analysis {
      * 处理GPS测量数据
      * @param data
      */
-    public static List<SocketGPSDataPackage> socket_gps_data(String data,String machineNum){
+    public static List<SocketGPSDataPackage> socket_gps_data(String data, String machineNum){
         //5A 4B 43 54 03 00 04 6F 00 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 C0 89 0C 5E 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 06 B4 E8 5E 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 09 B4 E8 5E 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0A B4 E8 5E 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0B B4 E8 5E 00 00 00 00 48 A1 0D 0A
         System.out.println("测量数据包："+data);
         String [] dataArr = data.split(" ");
@@ -166,7 +166,7 @@ public class Analysis {
      * @param data
      * @return
      */
-    public static SocketMeasurResult socket_measure_result(String data,String machineNum){
+    public static SocketMeasurResult socket_measure_result(String data, String machineNum){
         System.out.println(data);
         String [] dataArr = data.split(" ");
         //开始测量时间秒数
@@ -189,7 +189,7 @@ public class Analysis {
         //累计作业时间
         float cumulativeTime = Hex_to_Decimal.hexToFloat(dataArr[27]+dataArr[26]+dataArr[25]+dataArr[24]);
 
-        //总重量
+        //深松深度
         float totalWeight = Hex_to_Decimal.hexToFloat(dataArr[31]+dataArr[30]+dataArr[29]+dataArr[28]);
 
         SocketMeasurResult socketMeasurResult = new SocketMeasurResult();

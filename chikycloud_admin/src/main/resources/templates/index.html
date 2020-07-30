@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="utf-8">
-    <title>致开科技云端系统</title>
+    <title>ChikyCloud</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="renderer" content="webkit">
@@ -75,7 +75,7 @@
                             <hr>
                         </dd>
                         <dd>
-                            <a href="/logout" class="login-out">退出登录</a>
+                            <a href="javascript:;" class="login-out">退出登录</a>
                         </dd>
                     </dl>
                 </li>
@@ -160,7 +160,7 @@
 
         $('.login-out').on("click", function () {
             layer.msg('退出登录成功', function () {
-                window.location = '../page/login-1.html';
+                window.location = '/logout';
             });
         });
     });

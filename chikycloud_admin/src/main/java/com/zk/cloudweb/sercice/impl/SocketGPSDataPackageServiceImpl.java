@@ -1,14 +1,18 @@
 package com.zk.cloudweb.sercice.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.zk.cloudweb.dao.SocketGPSDataPackageDao;
 import com.zk.cloudweb.entity.socketLink.SocketGPSDataPackage;
 import com.zk.cloudweb.entity.socketLink.SocketMeasurResult;
 import com.zk.cloudweb.sercice.ISocketGPSDataPackageService;
+import com.zk.cloudweb.util.RedisKey;
+import com.zk.cloudweb.util.RedisUtil;
 import com.zk.cloudweb.util.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * @author xf
@@ -21,6 +25,9 @@ public class SocketGPSDataPackageServiceImpl implements ISocketGPSDataPackageSer
     @Autowired
     SocketGPSDataPackageDao socketGPSDataPackageDao;
 
+
+    @Autowired
+    RedisUtil redisUtil;
     /**
      * 批量添加测量数据
      * @param socketGPSDataPackages
@@ -53,7 +60,37 @@ public class SocketGPSDataPackageServiceImpl implements ISocketGPSDataPackageSer
      */
     @Override
     public List<SocketGPSDataPackage> selectSocketGPSDataPackageList(SocketMeasurResult socketMeasurResult) {
-        return socketGPSDataPackageDao.selectSocketGPSDataPackageList(socketMeasurResult);
+        List<SocketGPSDataPackage> socketGPSDataPackages = new ArrayList<>();
+
+        Jedis jedis = null;
+        try {
+            jedis = redisUtil.getJedis();
+            //查询redis缓存中是否存在当前测量数据
+            String resData =jedis.get(RedisKey.MEASURDATAKEY +":"+ socketMeasurResult.getMachineNum()+":"+socketMeasurResult.getId());
+            //判断当前数据是否在缓存中
+            if (null!=resData){
+                socketGPSDataPackages = JSON.parseArray(resData,SocketGPSDataPackage.class);
+
+            }else {
+                socketGPSDataPackages = socketGPSDataPackageDao.selectSocketGPSDataPackageList(socketMeasurResult);
+                String dataStr = null;
+                if (socketGPSDataPackages.size()>0){
+                    dataStr = JSON.toJSONString(socketGPSDataPackages);
+                    //将数据放入redis里面
+                    jedis.set(RedisKey.MEASURDATAKEY+":"+socketMeasurResult.getMachineNum() +":"+socketMeasurResult.getId(),dataStr);
+
+                }else {
+                    jedis.set(RedisKey.MEASURDATAKEY+":"+socketMeasurResult.getMachineNum() +":"+socketMeasurResult.getId(),dataStr);
+                    jedis.expire(RedisKey.MEASURDATAKEY+":"+socketMeasurResult.getMachineNum() +":"+socketMeasurResult.getId(),60);
+                }
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            jedis.close();
+        }
+        return socketGPSDataPackages;
     }
 
     /**
