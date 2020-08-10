@@ -65,4 +65,14 @@ public class SocketMeasureResultServiceImpl implements ISocketMeasureResultServi
         return socketMeasureResultDao.selectSocketMeasurResult(socketMeasurResult);
     }
 
+    @Override
+    public int deleteSocketMeasurById(String id) {
+        return socketMeasureResultDao.deleteSocketMeasurById(id);
+    }
+
+    @Override
+    public int updateSocketMeasurResult(SocketMeasurResult socketMeasurResult) {
+        return socketMeasureResultDao.updateSocketMeasurResult(socketMeasurResult);
+    }
+
 }

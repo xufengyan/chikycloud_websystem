@@ -61,4 +61,20 @@ public class ZKSocketMeasureResultController {
         Result result = new Result(ResultEnum.OK,socketMeasurResults,true);
         return result;
     }
+
+
+    /**
+     * 删除测量结果
+     * @param socketMeasurResult
+     * @return
+     */
+    @RequestMapping("/deleteSocketMeasureResultById")
+    @ResponseBody
+    public Result deleteSocketMeasureResultById(SocketMeasurResult socketMeasurResult){
+//        List<SocketGPSDataPackage> socketGPSDataPackages  = socketGPSDataPackageService.selectSocketGPSDataPackageList(socketMeasurResult);
+        socketMeasurResult.setDelType(1);
+        int res = socketMeasureResultService.updateSocketMeasurResult(socketMeasurResult);
+        Result result = new Result(ResultEnum.OK,true);
+        return result;
+    }
 }

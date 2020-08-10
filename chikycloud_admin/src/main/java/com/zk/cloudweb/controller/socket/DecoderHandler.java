@@ -47,7 +47,7 @@ public class DecoderHandler extends ByteToMessageDecoder {
 //            String strGBK = URLEncoder.encode(msg, "GBK");
 //            System.out.println(strGBK);
 //            String strUTF8 = URLDecoder.decode(msg, "UTF-8");
-            System.out.println("接收的数据："+msg);
+//            System.out.println("接收的数据："+msg);
 //            String [] msgArrt = msg.split(" ");
             out.add(result);
         }

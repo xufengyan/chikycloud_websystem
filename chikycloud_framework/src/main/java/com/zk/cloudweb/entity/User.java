@@ -19,7 +19,7 @@ public class User extends BaseEntity
     /** $column.columnComment */
     private String id;
 
-    /** 电话 */
+    /** 用户名 */
     private String uName;
 
     /** 密码 */

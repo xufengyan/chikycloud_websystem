@@ -10,10 +10,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="uTel"    column="u_tel"    />
         <result property="uPassword"    column="u_password"    />
         <result property="roleId"    column="role_id"    />
+        <result property="createTime" column="create_time"/>
+
     </resultMap>
 
     <sql id="selectUserVo">
-        select id, u_name, u_tel, u_password, role_id from zk_user
+        select id, u_name, u_tel, u_password, role_id,create_time from zk_user
     </sql>
 
     <select id="selectUserList" parameterType="com.zk.cloudweb.entity.User" resultMap="UserResult">
@@ -24,7 +26,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="uPassword != null  and uPassword != ''"> and u_password = #{uPassword}</if>
             <if test="roleId != null  and roleId != ''"> and role_id = #{roleId}</if>
         </where>
-        limit #{limit},#{count}
+        <if test="limit!=null">
+            limit #{limit},#{count}
+        </if>
     </select>
     <select id="selectUserListCount" parameterType="com.zk.cloudweb.entity.User" resultType="int">
         select count(*) from zk_user
@@ -57,23 +61,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null  and id != ''">id,</if>
             <if test="uName != null  and uName != ''">u_name,</if>
-            <if test="phone != null  and phone != ''">phone,</if>
-            <if test="password != null  and password != ''">password,</if>
-            <if test="email != null  and email != ''">email,</if>
-            <if test="birthday != null ">birthday,</if>
-            <if test="image != null  and image != ''">image,</if>
+<!--            <if test="phone != null  and phone != ''">phone,</if>-->
+            <if test="uPassword != null  and uPassword != ''">u_password,</if>
+<!--            <if test="email != null  and email != ''">email,</if>-->
+<!--            <if test="birthday != null ">birthday,</if>-->
+<!--            <if test="image != null  and image != ''">image,</if>-->
             <if test="roleId != null  and roleId != ''">role_id,</if>
+           <if test="createTime!=null">create_time,</if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null  and id != ''">#{id},</if>
             <if test="uName != null  and uName != ''">#{uName},</if>
-            <if test="phone != null  and phone != ''">#{phone},</if>
-            <if test="password != null  and password != ''">#{password},</if>
-            <if test="email != null  and email != ''">#{email},</if>
-            <if test="birthday != null ">#{birthday},</if>
-            <if test="image != null  and image != ''">#{image},</if>
+<!--            <if test="phone != null  and phone != ''">#{phone},</if>-->
+            <if test="uPassword != null  and uPassword != ''">#{uPassword},</if>
+<!--            <if test="email != null  and email != ''">#{email},</if>-->
+<!--            <if test="birthday != null ">#{birthday},</if>-->
+<!--            <if test="image != null  and image != ''">#{image},</if>-->
             <if test="roleId != null  and roleId != ''">#{roleId},</if>
+            <if test="createTime!=null">#{createTime},</if>
 
         </trim>
     </insert>

@@ -1,6 +1,6 @@
 <div class="layuimini-container layuimini-page-anim">
     <div class="layuimini-main" style="height: 100%">
-        <form class="layui-form" style="width: 60%;margin: auto;height: 100%" lay-filter="menuformUpdate" id="menuformUpdate" onsubmit="return false;">
+        <form class="layui-form layui-form-pane" style="width: 60%;margin: auto;height: 100%" lay-filter="menuformUpdate" id="menuformUpdate" onsubmit="return false;">
 
             <div class="layui-form-item ">
                 <div class="layui-inline layui-form" lay-filter="headmenuIdUpdate">
@@ -58,14 +58,7 @@
             , $ = layui.jquery
             , miniPage = layui.miniPage;
 
-        function toolMsgAndClose(msg) {
-            // if(isEmpty(msg))
-            // {
-            msg = "成功";
-            // }
-            layer.closeAll();
-            layer.msg(msg, {icon: 1});
-        }
+
         var getFormatDate = function(ndate) {
             var date = ndate.split("T")[0];
             return date;
@@ -85,64 +78,40 @@
 
         var headmenuId = "[[${headmenuId}]]"
         var sercondarymenuId = "[[${sercondarymenuId}]]"
-        $.ajax({
-            url:"../headmenu/getHeadmenuList",
-            type:'post',
-            // dataType: 'html',
-            // data:data.f,
-            async: true,
-            dataType:'json',
-            contentType: 'application/json;charset=UTF-8',
-            success:function (data) {
-
-                let dh="";
-                var obj = new Object();
-                for (var i = 0;i<data.data.length;i++){
-                    if (data.data[i].id == headmenuId) {
-                        dh+="<option selected value="+data.data[i].id+">"+data.data[i].title+"</option>"
-                        obj.value = data.data[i].id;
-                    }else {
-                        dh+="<option value="+data.data[i].id+">"+data.data[i].title+"</option>"
-                    }
+        ajaxNOParam("headmenu/getHeadmenuList",function (data) {
+            let dh="";
+            var obj = new Object();
+            for (var i = 0;i<data.data.length;i++){
+                if (data.data[i].id == headmenuId) {
+                    dh+="<option selected value="+data.data[i].id+">"+data.data[i].title+"</option>"
+                    obj.value = data.data[i].id;
+                }else {
+                    dh+="<option value="+data.data[i].id+">"+data.data[i].title+"</option>"
                 }
-                $("#menuformUpdate #headmenuIdUpdate").html(dh);
-                form.render('select','headmenuIdUpdate');
-                getsecondarymenuAjax(obj);
-            },
-            error:function () {
-                alert("数据传递错误，请刷新页面");
             }
-        });
+            $("#menuformUpdate #headmenuIdUpdate").html(dh);
+            form.render('select','headmenuIdUpdate');
+            getsecondarymenuAjax(obj);
+        })
 
 
         function getsecondarymenuAjax(data){
             var obj = new Object();
             obj['headmenuId'] = data.value;
-            $.ajax({
-                url:"../secondarymenu/getSecondarymenuList",
-                type:'post',
-                // dataType: 'html',
-                data:obj,
-                async: true,
-                dataType:'json',
-                // contentType: 'application/json;charset=UTF-8',
-                success:function (data) {
 
-                    let dh="";
-                    for (var i = 0;i<data.data.length;i++){
-                        if (data.data[i].id == sercondarymenuId){
-                            dh+="<option selected value="+data.data[i].id+">"+data.data[i].title+"</option>"
-                        }else {
-                            dh+="<option value="+data.data[i].id+">"+data.data[i].title+"</option>"
-                        }
+            ajaxResult("secondarymenu/getSecondarymenuList",obj,function (data) {
+
+                let dh="";
+                for (var i = 0;i<data.data.length;i++){
+                    if (data.data[i].id == sercondarymenuId){
+                        dh+="<option selected value="+data.data[i].id+">"+data.data[i].title+"</option>"
+                    }else {
+                        dh+="<option value="+data.data[i].id+">"+data.data[i].title+"</option>"
                     }
-                    $("#menuformUpdate #sercondarymenuIdUpdate").html(dh);
-                    form.render('select','sercondarymenuIdUpdate');
-                },
-                error:function () {
-                    alert("数据传递错误，请刷新页面");
                 }
-            });
+                $("#menuformUpdate #sercondarymenuIdUpdate").html(dh);
+                form.render('select','sercondarymenuIdUpdate');
+            })
 
 
         }
@@ -155,69 +124,28 @@
 
         var sdata = new Object();
         sdata['id'] = "[[${id}]]";
-        $.ajax({
-            url:"../menu/getMenu",
-            type:'post',
-            // dataType: 'html',
-            data: sdata,
-            async: true,
-            dataType:'json',
-            // contentType: 'application/json;charset=UTF-8',
-            success:function (data) {
-                form.val('menuformUpdate', {
-                    "id" : data.data.id
-                    , "title": ""+data.data.title // "name": "value"
-                    , "href" : data.data.href
-                })
-            },
-            error:function () {
-                alert("数据传递错误，请刷新页面");
-            }
+        ajaxResult("menu/getMenu",sdata,function (data) {
+            form.val('menuformUpdate', {
+                "id" : data.data.id
+                , "title": ""+data.data.title // "name": "value"
+                , "href" : data.data.href
+            })
         });
+
 
         var parentIndex = layer.index;
         //监听提交
         form.on('submit(updateBtn)', function (data) {
-            $.ajax({
-                url:"../menu/updateMenu",
-                type:'post',
-                // dataType: 'html',
-                data:JSON.stringify(data.field),
-                dataType:'json',
-                contentType : 'application/json',
-                // dataType : 'json',
-                // contentType: 'application/json;charset=UTF-8',
-                success:function (data) {
-                    //关闭弹框
-                    toolMsgAndClose();
-                    window.parent.brush();
-                    return false;
-                },
-                error:function () {
-                    alert("数据传递错误，请刷新页面");
-                }
+            ajaxLayuiFrom("menu/updateMenu",data,function (res) {
+                toolMsgAndClose();
+                window.parent.brush();
+                return false;
             })
+
             layer.close(parentIndex);
             return false;
         })
 
-
-        // form.on('submit(returnBtn)', function (data) {
-        //     layer.closeAll();
-        //     return false;
-        // })
-
-
-        //表单初始赋值
-        // form.val('example', {
-        //     "username": "贤心" // "name": "value"
-        //     , "password": "123456"
-        //     , "interest": 1
-        //     , "like[write]": true //复选框选中状态
-        //     , "close": true //开关状态
-        //     , "sex": "女"
-        //     , "desc": "我爱 layui"
-        // })
 
         $("#returnBtn").click(function () {
             layer.closeAll();

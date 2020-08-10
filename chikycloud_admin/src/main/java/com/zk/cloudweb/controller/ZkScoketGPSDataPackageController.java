@@ -41,8 +41,8 @@ public class ZkScoketGPSDataPackageController {
     @RequestMapping("/getMachineMeasureLocation")
     @ResponseBody
     public Result getMachineMeasureLocation(@RequestBody(required = true) SocketGPSDataPackage socketGPSDataPackage){
-        SocketGPSDataPackage gpsDataPackage = socketGPSDataPackageService.selectMachineMeasureLactionByDate(socketGPSDataPackage);
-        Result result = new Result(ResultEnum.OK,gpsDataPackage,true);
+        List<SocketGPSDataPackage> gpsDataPackages = socketGPSDataPackageService.selectMachineMeasureLactionByDate(socketGPSDataPackage);
+        Result result = new Result(ResultEnum.OK,gpsDataPackages.get(0),true);
         return result;
     }
 

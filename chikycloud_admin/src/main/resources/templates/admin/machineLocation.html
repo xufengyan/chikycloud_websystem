@@ -91,9 +91,6 @@
 
     }
 
-    
-
-
 
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form
@@ -131,30 +128,16 @@
         //监听提交
         form.on('submit(data-search-btn)', function (data) {
             data.field.measureTime = GetTimeByTimeStr(data.field.measureTime);
-            debugger
-            $.ajax({
-                url:"../ZkScoketGPSDataPackage/getMachineMeasureLocation",
-                type:'post',
-                // dataType: 'html',
-                data:JSON.stringify(data.field),
-                dataType:'json',
-                contentType : 'application/json',
-                // dataType : 'json',
-                // contentType: 'application/json;charset=UTF-8',
-                success:function (data) {
-                    debugger
-                    if (data.data!=null){
-                        bdiduMap(data.data.longitude,data.data.latitude);
-                    }
-                    //关闭弹框
-                    // toolMsgAndClose();
-                    // window.parent.brush();
-                    return false;
-                },
-                error:function () {
-                    alert("数据传递错误，请刷新页面");
+            ajaxLayuiFrom("ZkScoketGPSDataPackage/getMachineMeasureLocation",data,function (data) {
+                if (data.data!=null){
+                    bdiduMap(data.data.longitude,data.data.latitude);
                 }
+                //关闭弹框
+                // toolMsgAndClose();
+                // window.parent.brush();
+                return false;
             })
+
             // layer.close(parentIndex);
             return false;
         })
@@ -167,22 +150,6 @@
             return new Date(d[0], d[1] - 1, d[2], t[0], t[1], t[2]);
         }
 
-        // form.on('submit(returnBtn)', function (data) {
-        //     layer.close(parentIndex);
-        //     return true;
-        // })
-
-
-        //表单初始赋值
-        // form.val('example', {
-        //     "username": "贤心" // "name": "value"
-        //     , "password": "123456"
-        //     , "interest": 1
-        //     , "like[write]": true //复选框选中状态
-        //     , "close": true //开关状态
-        //     , "sex": "女"
-        //     , "desc": "我爱 layui"
-        // })
         $("#returnBtn").click(function () {
             layer.closeAll();
         })

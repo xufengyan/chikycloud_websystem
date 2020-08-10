@@ -36,7 +36,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectZkSocketGPSDataPackageVo"/>
         where  machine_num = #{machineNum}
         <if test="measureTime !=null ">
-            and measure_time = #{measureTime}
+            and measure_time <![CDATA[>=]]> DATE_SUB(#{measureTime},INTERVAL 5 MINUTE)
+            and measure_time <![CDATA[<]]> DATE_ADD(#{measureTime},INTERVAL 5 MINUTE)
         </if>
     </select>
     

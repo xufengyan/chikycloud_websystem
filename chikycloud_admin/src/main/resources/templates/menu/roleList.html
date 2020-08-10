@@ -32,7 +32,7 @@
 
         <script type="text/html" id="currentTableBar">
             <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="selectRoleMenu">查看权限</a>
-            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">添加权限</a>
+<!--            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">添加权限</a>-->
         </script>
 
     </div>
@@ -60,7 +60,7 @@
                 [
                     {type: "checkbox", width: 50},
                     {type: 'numbers', title: '序号', width: 50 ,totalRowText: '合计'},
-                    {field: 'roleName', width: 120, title: '菜单名称'},
+                    {field: 'roleName', width: 120, title: '角色名称'},
                     {field: 'createTime', width: 120, title: '创建时间'},
                     {title: '操作', Width: 150, toolbar: '#currentTableBar'}
                 ]
@@ -92,21 +92,9 @@
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'selectRoleMenu') {   // 查看角色拥有的权限
-                var content = miniPage.getHrefContent('role/getRoleHtml?id = '+obj.id+'&roleName='+obj.roleName);
-                var openWH = miniPage.getOpenWidthHeight();
-                var index = layer.open({
-                    title: '查看权限',
-                    type: 1,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: [openWH[0] + 'px', openWH[1] + 'px'],
-                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
-                    content: content,
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
+                layuiWindowsOpen("查看权限",'role/getRoleHtml?id = '+obj.id+'&roleName='+obj.roleName,miniPage);
+
+
             } else if (obj.event === 'delete') {  // 监听删除操作
                 var checkStatus = table.checkStatus('currentTableId')
                     , data = checkStatus.data;
@@ -125,23 +113,8 @@
             var data = obj.data;
             if (obj.event === 'selectRoleMenu') {
 
-                var content = miniPage.getHrefContent('roleMenu/getRoleMenuListHtml?roleId='+data.id+'&roleName='+data.roleName);
-                // var content = miniPage.getHrefContent('overtime/updateOvertimeHtml');
+                layuiWindowsOpen("查看权限",'roleMenu/getRoleMenuListHtml?roleId='+data.id+'&roleName='+data.roleName,miniPage);
 
-                var openWH = miniPage.getOpenWidthHeight();
-                var index = layer.open({
-                    title: '查看权限',
-                    type: 1,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: [openWH[0] + 'px', openWH[1] + 'px'],
-                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
-                    content: content,
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
                 return false;
             } else if (obj.event === 'delete') {
                 layer.confirm('真的删除行么', function (index) {

@@ -1,6 +1,7 @@
 package com.zk.cloudweb.shiro.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import com.zk.cloudweb.shiro.LogoutFilter;
 import com.zk.cloudweb.shiro.realm.UserRealm;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -9,7 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.apache.shiro.mgt.SecurityManager;
 
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
@@ -118,14 +121,14 @@ public class ShiroConfig {
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
 
-//        Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
+        Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
 //        filters.put("onlineSession", onlineSessionFilter());
 //        filters.put("syncOnlineSession", syncOnlineSessionFilter());
 //        filters.put("captchaValidate", captchaValidateFilter());
 //        filters.put("kickout", kickoutSessionFilter());
         // 注销成功，则跳转到指定页面
-//        filters.put("logout", logoutFilter());
-//        shiroFilterFactoryBean.setFilters(filters);
+        filters.put("logout", logoutFilter());
+        shiroFilterFactoryBean.setFilters(filters);
 
         // 所有请求需要认证
 //        filterChainDefinitionMap.put("/**", "user,kickout,onlineSession,syncOnlineSession");
@@ -137,16 +140,16 @@ public class ShiroConfig {
     }
 
 
-//    /**
-//     * 退出过滤器
-//     */
-//    public LogoutFilter logoutFilter()
-//    {
-//        LogoutFilter logoutFilter = new LogoutFilter();
+    /**
+     * 退出过滤器
+     */
+    public LogoutFilter logoutFilter()
+    {
+        LogoutFilter logoutFilter = new LogoutFilter();
 //        logoutFilter.setCacheManager(getEhCacheManager());
-//        logoutFilter.setLoginUrl(loginUrl);
-//        return logoutFilter;
-//    }
+        logoutFilter.setLoginUrl(loginUrl);
+        return logoutFilter;
+    }
 //    /**
 //     * 同一个用户多设备登录限制
 //     */

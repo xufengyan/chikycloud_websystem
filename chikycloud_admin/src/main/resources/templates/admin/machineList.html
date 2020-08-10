@@ -32,6 +32,8 @@
         <script type="text/html" id="currentTableBar">
             <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="selectRoleMenu">测量列表</a>
             <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="selectMeasureLocation">测量位置</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="deleteMachine">删除设备</a>
+
         </script>
 
     </div>
@@ -96,22 +98,8 @@
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'addUserMachine') {   // 监听添加操作
-                var content = miniPage.getHrefContent('zkMachine/addZkMachineHtml');
-                var openWH = miniPage.getOpenWidthHeight();
+                layuiWindowsOpen("绑定设备","zkMachine/addZkMachineHtml",miniPage);
 
-                var index = layer.open({
-                    title: '绑定设备',
-                    type: 1,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: [openWH[0] + 'px', openWH[1] + 'px'],
-                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
-                    content: content,
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
             }
 
         });
@@ -157,7 +145,22 @@
                     layer.full(index);
                 });
                 return false;
+            } else if (obj.event === 'deleteMachine'){
+
+                var resobj = new Object();
+                resobj['id'] = data.id;
+                layer.confirm('删除设备后将无法查询该设备的所有信息', function(index){
+                    ajaxResult("zkMachine/deleteUserMachineById",resobj,function (res) {
+                        toolMsgAndClose();
+                        obj.del();
+                    })
+                    layer.close(index);
+                });
+
+
+
             }
+
         });
 
     });

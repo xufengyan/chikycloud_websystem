@@ -30,4 +30,16 @@ public interface ISocketMeasureResultService {
      * @return
      */
     SocketMeasurResult selectSocketMeasurResult(SocketMeasurResult socketMeasurResult);
+
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
+    int deleteSocketMeasurById(String id);
+
+    /**
+     * 修改
+     */
+    int updateSocketMeasurResult(SocketMeasurResult socketMeasurResult);
 }

@@ -8,9 +8,9 @@
                         <table >
                             <thead>
                             <tr>
-                                <td>测量时间</td>
-                                <td align="right">测量结果</td>
-                                <td></td>
+                                <td style="width: 60%">测量时间</td>
+                                <td style="width: 20%">结果</td>
+                                <td style="width: 150px">操作</td>
                             </tr>
                             </thead>
                         </table>
@@ -209,26 +209,21 @@
     /**
      * 点击切换地图图形
      */
+    var zk_zid="";
     function trClick(resultId,n) {
-        var trs = $(".table_s table tr").parent().find('tr');
-        if (trs.hasClass('on_tr')){
-            trs.removeClass('on_tr');
-        }
-        $(trs[n+1]).addClass('on_tr');
+        if (resultId!=zk_zid){
+            zk_zid=resultId;
+            var trs = $(".table_s table tr").parent().find('tr');
+            if (trs.hasClass('on_tr')){
+                trs.removeClass('on_tr');
+            }
+            $(trs[n+1]).addClass('on_tr');
 
-        var obj = new Object();
-        obj['id'] = resultId;
-        obj['machineNum'] = $("#machineNum").val();
-        debugger
-        $.ajax({
-            url : "../ZkScoketGPSDataPackage/getMachineMeasureGPSData",
-            type : "POST",
-            // contentType : 'application/json',
-            async: true,
-            dataType:'json',
-            data :obj,
-            success : function(res) {
-                debugger
+            var obj = new Object();
+            obj['id'] = resultId;
+            obj['machineNum'] = $("#machineNum").val();
+            debugger
+            ajaxResult("ZkScoketGPSDataPackage/getMachineMeasureGPSData",obj,function (res) {
                 var coordinate = res.data;
                 var coordinate2 = res.data2;
                 if (res.code==0){
@@ -243,18 +238,22 @@
                     // "                <p>&nbsp;   &nbsp;   &nbsp; "+coordinate[0].meas_munum+"亩</p>\n" +
                     "                <p>路程："+coordinate2.measureJourney+"米</p>\n" +
                     // "                <p>直线："+coordinate[0].line+"米</p>";
-                    "                <p>深松深度："+coordinate2.totalWeight+"com</p>"
+                    "                <p>深松深度："+coordinate2.totalWeight+"cm</p>"
                 $("#measure_result").html(mea);
 
 
                 // $("#exportKMLValue").val(zid);
                 // $("#exportCADValue").val(zid);
                 // $("#exportExcelValue").val(zid);
+            })
 
-            }
-        });
-
+        }else {
+            return;
+        }
     }
+
+
+
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form
             , layer = layui.layer
@@ -266,46 +265,23 @@
         $("#machineNum").val(machineNum);
         var sdata = new Object();
         sdata['machineNum'] = machineNum;
-        $.ajax({
-            url:"../ZKSocketMeasureResult/getSocketMeasureResultList",
-            type:'post',
-            // dataType: 'html',
-            data: sdata,
-            async: true,
-            dataType:'json',
-            // contentType: 'application/json;charset=UTF-8',
-            success:function (data) {
-                var res = data.data;
-                var trHtml = "";
-                if (res.length>0){
-                    for (var i =0 ;i<res.length;i++){
-                        trHtml+="<tr onclick='trClick(\"" + res[i].id + "\","+i+")'>\n" +
-                            "                <td>" + date(res[i].startTime) + "</td>\n" +
-                            "                <td align=\"right\">" + res[i].measureArea + "亩</td>" +
-                            "                <td></td>\n" +
-                            "            </tr>"
+        ajaxResult("ZKSocketMeasureResult/getSocketMeasureResultList",sdata,function (data) {
+            var res = data.data;
+            var trHtml = "";
+            if (res.length>0){
+                for (var i =0 ;i<res.length;i++){
+                    trHtml+="<tr id='remtr_"+i+"' ondblclick='trClick(\"" + res[i].id + "\","+i+")'>\n" +
 
-                    }
-                    $("#table_d").html(trHtml);
+                        "                <td style=\"width: 60%\">" + date(res[i].startTime) + "</td>\n" +
+                        "                <td style=\"width: 20%\" align=\"right\">" + res[i].measureArea + "亩</td>" +
+                        "                <td style=\"width: 150px\"><button onclick='removeClick(\"" + res[i].id+"\","+i+" )' class='delBtn' >删除</button></td>\n" +
+                        "            </tr>"
+
                 }
-
-            },
-            error:function () {
-                alert("数据传递错误，请刷新页面");
+                $("#table_d").html(trHtml);
             }
-        });
-        function toolMsgAndClose(msg) {
-            // if(isEmpty(msg))
-            // {
-            msg = "成功";
-            // }
-            layer.closeAll();
-            layer.msg(msg, {icon: 1});
-        }
-        var getFormatDate = function(ndate) {
-            var date = ndate.split("T")[0];
-            return date;
-        }
+        })
+
         /**
          * 初始化表单，要加上，不然刷新部分组件可能会不加载
          */
@@ -317,60 +293,25 @@
             ,type: 'datetime'
         });
 
-        var parentIndex = layer.index;
-        //监听提交
-        form.on('submit(data-search-btn)', function (data) {
-            data.field.measureTime = GetTimeByTimeStr(data.field.measureTime);
-            debugger
-            $.ajax({
-                url:"../ZkScoketGPSDataPackage/getMachineMeasureLocation",
-                type:'post',
-                // dataType: 'html',
-                data:JSON.stringify(data.field),
-                dataType:'json',
-                contentType : 'application/json',
-                // dataType : 'json',
-                // contentType: 'application/json;charset=UTF-8',
-                success:function (data) {
-                    //关闭弹框
-                    // toolMsgAndClose();
-                    window.parent.brush();
-                    return false;
-                },
-                error:function () {
-                    alert("数据传递错误，请刷新页面");
-                }
-            })
-            // layer.close(parentIndex);
-            return false;
-        })
-
-
-        function GetTimeByTimeStr(dateString) {
-            var timeArr = dateString.split(" ");
-            var d = timeArr[0].split("-");
-            var t = timeArr[1].split(":");
-            return new Date(d[0], d[1] - 1, d[2], t[0], t[1], t[2]);
-        }
-
-        // form.on('submit(returnBtn)', function (data) {
-        //     layer.close(parentIndex);
-        //     return true;
-        // })
-
-
-        //表单初始赋值
-        // form.val('example', {
-        //     "username": "贤心" // "name": "value"
-        //     , "password": "123456"
-        //     , "interest": 1
-        //     , "like[write]": true //复选框选中状态
-        //     , "close": true //开关状态
-        //     , "sex": "女"
-        //     , "desc": "我爱 layui"
-        // })
         $("#returnBtn").click(function () {
             layer.closeAll();
         })
+
     })
+    function removeClick(resultId,n){
+        layui.use(['form', 'layedit', 'laydate'], function () {
+            var layer = layui.layer
+            // this.remove();
+            var resobj = new Object();
+            resobj['id'] = resultId;
+            layer.confirm('删除该记录后将无法查询该测量结果，是否删除', function(index){
+                    ajaxResult("ZKSocketMeasureResult/deleteSocketMeasureResultById",resobj,function (res) {
+                        //删除页面上对应的数据
+                        $("#remtr_"+n).remove();
+                        toolMsgAndCloseNocpm();
+                        layer.close(index);
+                    })
+                })
+        });
+    }
 </script>

@@ -94,86 +94,124 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             return;
         }
 
-        switch(socketPackage.getPackageType()){
-            case "00":
-                //语句
-                break; //可选
-            case "01":
-                //语句
-                break; //可选
-            case "02":
-                //语句
-                break;
-            case "03":
-                //语句
-                break;
-            case "04":
-                break;
-            case "0B":
-                break;
-            default : //可选
-                //语句
-        }
+
         if (socketPackage!=null){
             System.out.println("数据包类型："+socketPackage.getPackageType());
-            if("00".equals(socketPackage.getPackageType())){//登录包
-                //判断当前设备是否登录过
-                if(deviceSession.getSocketlogin()==null){
-                    //获取客户端的ip和端口
-                    InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
-                    String clientIP = insocket.getAddress().getHostAddress();
-                    int clientPort = insocket.getPort();
-                    socketPackage.setClientIP(clientIP+":"+clientPort);
-                    //解析登陆数据包
-                    Socketlogin socketlogin = Analysis.socket_login_data(socketPackage.getData());
-                    //将设备信息和登录信息保存到数据库
-                    String id =  socketloginService.insertSocketlogin(socketPackage,socketlogin);
-                    socketlogin.setId(id);
-                    deviceSession.setSocketlogin(socketlogin);
-                }
-                deviceSession.setHeartbeatNum(0);
-                System.out.println("登录包");
-            }else if("01".equals(socketPackage.getPackageType())){//心跳包
-                //判断如果服务器
-                System.out.println("心跳包");
+            switch(socketPackage.getPackageType()){
+                case "00":
+                    //判断当前设备是否登录过
+                    if(deviceSession.getSocketlogin()==null){
+                        //获取客户端的ip和端口
+                        InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
+                        String clientIP = insocket.getAddress().getHostAddress();
+                        int clientPort = insocket.getPort();
+                        socketPackage.setClientIP(clientIP+":"+clientPort);
+                        //解析登陆数据包
+                        Socketlogin socketlogin = Analysis.socket_login_data(socketPackage.getData());
+                        //将设备信息和登录信息保存到数据库
+                        String id =  socketloginService.insertSocketlogin(socketPackage,socketlogin);
+                        socketlogin.setId(id);
+                        deviceSession.setSocketlogin(socketlogin);
+                    }
+                    deviceSession.setHeartbeatNum(0);
+                    System.out.println("登录包");
+                    break;
+                case "01":
+                    System.out.println("心跳包");
+                    deviceSession.setHeartbeatNum(0);
+                    break;
+                case "02":
+                    //获取到处理过的测量结果
+                    SocketMeasurResult socketMeasurResult = Analysis.socket_measure_result(socketPackage.getData(),deviceSession.getSocketlogin().getTerminalID().replaceAll(" ",""));
+                    //将测量结果包保存到数据库
+                    if(socketMeasurResult!=null){
+                        socketMeasureResultService.insertSocketMeasureResult(socketMeasurResult);
+                    }
+                    System.out.println("测量结果包");
+                    deviceSession.setHeartbeatNum(0);
+                    break;
+                case "03":
+                    deviceSession.setHeartbeatNum(0);
 
-                deviceSession.setHeartbeatNum(0);
-
-            }else if("02".equals(socketPackage.getPackageType())){//测量结果包
-                //获取到处理过的测量结果
-                SocketMeasurResult socketMeasurResult = Analysis.socket_measure_result(socketPackage.getData(),deviceSession.getSocketlogin().getTerminalID().replaceAll(" ",""));
-                //将测量结果包保存到数据库
-                if(socketMeasurResult!=null){
-                    socketMeasureResultService.insertSocketMeasureResult(socketMeasurResult);
-                }
-                System.out.println("测量结果包");
-                deviceSession.setHeartbeatNum(0);
-            } else if ("03".equals(socketPackage.getPackageType())){
-
-                deviceSession.setHeartbeatNum(0);
-
-                System.out.println("设备信息包");
+                    System.out.println("设备信息包");
+                    break;
+                case "04":
+                    //获取到处理过的测量数据
+                    List<SocketGPSDataPackage> socketGPSDataPackages = Analysis.socket_gps_data(socketPackage.getData(),deviceSession.getSocketlogin().getTerminalID().replaceAll(" ",""));
+                    //将测量数据保存到数据库
+                    if (socketGPSDataPackages.size()>0){
+                        socketGPSDataPackageService.insertSocketGPSDataPackageList(socketGPSDataPackages);
+                    }
+                    System.out.println("测量数据包");
+                    deviceSession.setHeartbeatNum(0);
+                    break;
+                case "0B":
+                    System.out.println("结果不处理");
+                    deviceSession.setHeartbeatNum(0);
+                    break;
+                default : //可选
+                    System.out.println("类型不存在，准备关闭连接..................");
+                    closeClient(ctx);
+                    return;
             }
-            else if("04".equals(socketPackage.getPackageType())){//GPS数据包
-                System.out.println(socketPackage.getData());
-                //获取到处理过的测量数据
-                List<SocketGPSDataPackage> socketGPSDataPackages = Analysis.socket_gps_data(socketPackage.getData(),deviceSession.getSocketlogin().getTerminalID().replaceAll(" ",""));
-                //将测量数据保存到数据库
-                if (socketGPSDataPackages.size()>0){
-                    socketGPSDataPackageService.insertSocketGPSDataPackageList(socketGPSDataPackages);
-                }
-                System.out.println("测量数据包");
-                deviceSession.setHeartbeatNum(0);
-
-            }else if ("0B".equals(socketPackage.getPackageType())){
-                System.out.println("结果不处理");
-                deviceSession.setHeartbeatNum(0);
-
-            } else {
-                System.out.println("类型不存在，准备关闭连接..................");
-                closeClient(ctx);
-                return;
-            }
+//            if("00".equals(socketPackage.getPackageType())){//登录包
+//                //判断当前设备是否登录过
+//                if(deviceSession.getSocketlogin()==null){
+//                    //获取客户端的ip和端口
+//                    InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
+//                    String clientIP = insocket.getAddress().getHostAddress();
+//                    int clientPort = insocket.getPort();
+//                    socketPackage.setClientIP(clientIP+":"+clientPort);
+//                    //解析登陆数据包
+//                    Socketlogin socketlogin = Analysis.socket_login_data(socketPackage.getData());
+//                    //将设备信息和登录信息保存到数据库
+//                    String id =  socketloginService.insertSocketlogin(socketPackage,socketlogin);
+//                    socketlogin.setId(id);
+//                    deviceSession.setSocketlogin(socketlogin);
+//                }
+//                deviceSession.setHeartbeatNum(0);
+//                System.out.println("登录包");
+//            }else if("01".equals(socketPackage.getPackageType())){//心跳包
+//                //判断如果服务器
+//                System.out.println("心跳包");
+//
+//                deviceSession.setHeartbeatNum(0);
+//
+//            }else if("02".equals(socketPackage.getPackageType())){//测量结果包
+//                //获取到处理过的测量结果
+//                SocketMeasurResult socketMeasurResult = Analysis.socket_measure_result(socketPackage.getData(),deviceSession.getSocketlogin().getTerminalID().replaceAll(" ",""));
+//                //将测量结果包保存到数据库
+//                if(socketMeasurResult!=null){
+//                    socketMeasureResultService.insertSocketMeasureResult(socketMeasurResult);
+//                }
+//                System.out.println("测量结果包");
+//                deviceSession.setHeartbeatNum(0);
+//            } else if ("03".equals(socketPackage.getPackageType())){
+//
+//                deviceSession.setHeartbeatNum(0);
+//
+//                System.out.println("设备信息包");
+//            }
+//            else if("04".equals(socketPackage.getPackageType())){//GPS数据包
+//                System.out.println(socketPackage.getData());
+//                //获取到处理过的测量数据
+//                List<SocketGPSDataPackage> socketGPSDataPackages = Analysis.socket_gps_data(socketPackage.getData(),deviceSession.getSocketlogin().getTerminalID().replaceAll(" ",""));
+//                //将测量数据保存到数据库
+//                if (socketGPSDataPackages.size()>0){
+//                    socketGPSDataPackageService.insertSocketGPSDataPackageList(socketGPSDataPackages);
+//                }
+//                System.out.println("测量数据包");
+//                deviceSession.setHeartbeatNum(0);
+//
+//            }else if ("0B".equals(socketPackage.getPackageType())){
+//                System.out.println("结果不处理");
+//                deviceSession.setHeartbeatNum(0);
+//
+//            } else {
+//                System.out.println("类型不存在，准备关闭连接..................");
+//                closeClient(ctx);
+//                return;
+//            }
         }
         deviceSession.setSocketPackage(socketPackage);
         ctx.channel().attr(KEY).set(deviceSession);

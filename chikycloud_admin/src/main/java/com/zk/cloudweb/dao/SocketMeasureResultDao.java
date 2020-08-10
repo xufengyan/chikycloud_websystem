@@ -29,4 +29,18 @@ public interface SocketMeasureResultDao {
      * @return
      */
     SocketMeasurResult selectSocketMeasurResult(SocketMeasurResult socketMeasurResult);
+
+    /**
+     * 删除测量结果
+     * @param id
+     * @return
+     */
+    int deleteSocketMeasurById(String id);
+
+    /**
+     * 修改测量结果
+     * @param socketMeasurResult
+     * @return
+     */
+    int updateSocketMeasurResult(SocketMeasurResult socketMeasurResult);
 }

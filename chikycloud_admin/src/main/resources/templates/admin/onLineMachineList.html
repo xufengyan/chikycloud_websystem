@@ -49,7 +49,7 @@
             id:'zkMachine',
             url: '../zkMachine/getOnLineZkMachineLoginList',
             toolbar: '#toolbarDemo',
-            title: '设备列表',
+            title: '在线设备列表',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
                 layEvent: 'LAYTABLE_TIPS',
@@ -91,63 +91,6 @@
         table.on('checkbox(currentTableFilter)', function (obj) {
             console.log(obj)
         });
-
-        /**
-         * toolbar事件监听
-         */
-        table.on('toolbar(currentTableFilter)', function (obj) {
-            if (obj.event === 'addUserMachine') {   // 监听添加操作
-                var content = miniPage.getHrefContent('zkMachine/addZkMachineHtml');
-                var openWH = miniPage.getOpenWidthHeight();
-
-                var index = layer.open({
-                    title: '绑定设备',
-                    type: 1,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: [openWH[0] + 'px', openWH[1] + 'px'],
-                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
-                    content: content,
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
-            }
-
-        });
-
-
-        // table.on('tool(currentTableFilter)', function (obj) {
-        //     var data = obj.data;
-        //     if (obj.event === 'selectRoleMenu') {
-        //
-        //         var content = miniPage.getHrefContent('roleMenu/getRoleMenuListHtml?roleId='+data.id+'&roleName='+data.roleName);
-        //         // var content = miniPage.getHrefContent('overtime/updateOvertimeHtml');
-        //
-        //         var openWH = miniPage.getOpenWidthHeight();
-        //         var index = layer.open({
-        //             title: '查看权限',
-        //             type: 1,
-        //             shade: 0.2,
-        //             maxmin:true,
-        //             shadeClose: true,
-        //             area: [openWH[0] + 'px', openWH[1] + 'px'],
-        //             offset: [openWH[2] + 'px', openWH[3] + 'px'],
-        //             content: content,
-        //         });
-        //         $(window).on("resize", function () {
-        //             layer.full(index);
-        //         });
-        //         return false;
-        //     } else if (obj.event === 'delete') {
-        //         layer.confirm('真的删除行么', function (index) {
-        //             obj.del();
-        //             layer.close(index);
-        //         });
-        //     }
-        // });
-
     });
 
 

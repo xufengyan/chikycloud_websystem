@@ -55,27 +55,16 @@
             table = layui.table,
             miniPage = layui.miniPage;
 
-        $.ajax({
-            url:"../headmenu/getHeadmenuList",
-            type:'post',
-            // dataType: 'html',
-            // data:data.f,
-            async: true,
-            dataType:'json',
-            contentType: 'application/json;charset=UTF-8',
-            success:function (data) {
 
-                var dh="<option selected></option>";
-                for (var i = 0;i<data.data.length;i++){
-                    dh+="<option value="+data.data[i].id+">"+data.data[i].title+"</option>"
-                }
-                $("#secondarymenuform #headmenuId").html(dh);
-                form.render('select','secondarymenuform');
-            },
-            error:function () {
-                alert("数据传递错误，请刷新页面");
+        ajaxNOParam("headmenu/getHeadmenuList",function (data) {
+            var dh="<option selected></option>";
+            for (var i = 0;i<data.data.length;i++){
+                dh+="<option value="+data.data[i].id+">"+data.data[i].title+"</option>"
             }
-        });
+            $("#secondarymenuform #headmenuId").html(dh);
+            form.render('select','secondarymenuform');
+        })
+
 
         table.render({
             elem: '#secondarymenu',
@@ -132,22 +121,8 @@
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {   // 监听添加操作
-                var content = miniPage.getHrefContent('secondarymenu/addSecondarymenuHtml');
-                var openWH = miniPage.getOpenWidthHeight();
+                layuiWindowsOpen("添加菜单",'secondarymenu/addSecondarymenuHtml',miniPage);
 
-                var index = layer.open({
-                    title: '添加菜单',
-                    type: 1,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: [openWH[0] + 'px', openWH[1] + 'px'],
-                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
-                    content: content,
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
             } else if (obj.event === 'delete') {  // 监听删除操作
                 var checkStatus = table.checkStatus('currentTableId')
                     , data = checkStatus.data;
@@ -163,22 +138,8 @@
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
-                var content = miniPage.getHrefContent('secondarymenu/updateSecondarymenuHtml?id='+data.id+'&headmenuId='+data.headmenu_id);
-                // var content = miniPage.getHrefContent('overtime/updateOvertimeHtml');
-                var openWH = miniPage.getOpenWidthHeight();
-                var index = layer.open({
-                    title: '编辑菜单',
-                    type: 1,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: [openWH[0] + 'px', openWH[1] + 'px'],
-                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
-                    content: content,
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
+                layuiWindowsOpen("编辑菜单",'secondarymenu/updateSecondarymenuHtml?id='+data.id+'&headmenuId='+data.headmenu_id,miniPage);
+
                 return false;
             } else if (obj.event === 'delete') {
                 layer.confirm('真的删除行么', function (index) {

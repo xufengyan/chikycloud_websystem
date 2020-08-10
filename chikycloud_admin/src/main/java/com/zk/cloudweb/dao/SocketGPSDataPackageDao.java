@@ -19,5 +19,5 @@ public interface SocketGPSDataPackageDao {
 
     List<SocketGPSDataPackage> selectSocketGPSDataPackageList(SocketMeasurResult socketMeasurResult);
 
-    SocketGPSDataPackage selectMachineMeasureLactionByDate(SocketGPSDataPackage socketGPSDataPackage);
+    List<SocketGPSDataPackage> selectMachineMeasureLactionByDate(SocketGPSDataPackage socketGPSDataPackage);
 }

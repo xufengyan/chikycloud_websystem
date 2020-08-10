@@ -37,5 +37,5 @@ public interface ISocketGPSDataPackageService {
      * @param socketGPSDataPackage
      * @return
      */
-    SocketGPSDataPackage selectMachineMeasureLactionByDate(SocketGPSDataPackage socketGPSDataPackage);
+    List<SocketGPSDataPackage> selectMachineMeasureLactionByDate(SocketGPSDataPackage socketGPSDataPackage);
 }

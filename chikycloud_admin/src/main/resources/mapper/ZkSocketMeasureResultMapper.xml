@@ -31,6 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="startTime != null ">and start_time = #{startTime}</if>
             <if test="endTime != null ">and end_time = #{endTime}</if>
             <if test="machineNum !=null and machineNum !='' ">and machine_num = #{machineNum}</if>
+            and del_type = 0
         </where>
         order by start_time
     </select>
@@ -42,6 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="startTime != null ">and start_time = #{startTime}</if>
             <if test="endTime != null ">and end_time = #{endTime}</if>
             <if test="machineNum !=null and machineNum !='' ">and machine_num = #{machineNum}</if>
+            and del_type = 0
         </where>
     </select>
 
@@ -84,12 +86,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!--    </insert>-->
 
-<!--    <update id="updateSocketMeasurResultList" parameterType="com.zk.cloudweb.entity.socketLink.SocketMeasurResult">-->
-<!--        update zk_measure_data-->
-<!--        set measure_res_id = #{measureResId}-->
-<!--        where  machine_num = #{machineNum}-->
-<!--    </update>-->
-<!--    -->
+    <update id="updateSocketMeasurResult" parameterType="com.zk.cloudweb.entity.socketLink.SocketMeasurResult">
+        update zk_measure_result
+        <set >
+            <trim suffixOverrides=",">
+                <if test="delType!=null">
+                    del_type = #{delType},
+                </if>
+            </trim>
+        </set>
+        where  id = #{id}
+    </update>
+
 
     <insert id="insertSocketMeasureResult" parameterType="com.zk.cloudweb.entity.socketLink.SocketMeasurResult">
         insert into zk_measure_result
@@ -118,6 +126,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="machineNum !=null and machineNum !='' ">#{machineNum},</if>
         </trim>
     </insert>
+    <delete id="deleteSocketMeasurById" parameterType="String">
+        delete from zk_measure_result where id = #{id}
+    </delete>
 <!--    <delete id="deleteZkSocketMeasurResultByIds" parameterType="String">-->
 <!--        delete from zk_socket_login where id in -->
 <!--        <foreach item="id" collection="array" open="(" separator="," close=")">-->

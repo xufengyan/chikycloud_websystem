@@ -1,23 +1,35 @@
 <div class="layuimini-container layuimini-page-anim">
-    <div class="layuimini-main" style="height: 100%">
-        <form class="layui-form layui-form-pane" style="padding-left: 40%"  lay-filter="example" id="example" onsubmit="return false;">
+    <div class="layuimini-main" >
+        <form class="layui-form layui-form-pane" style="padding-left: 40%"  lay-filter="menuformAdd" id="menuformAdd" onsubmit="return false;">
 
             <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">设备名称：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="mName" lay-verify="required" autocomplete="off" class="layui-input"  >
+                <div class="layui-inline " >
+                    <label class="layui-form-label">用户名：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="uName" lay-verify="required" autocomplete="off" class="layui-input"  >
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">设备编号：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="mNumber" lay-verify="required" autocomplete="off" class="layui-input"  >
+                <div class="layui-inline " >
+                    <label class="layui-form-label">密码：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="uPassword" lay-verify="required" autocomplete="off" class="layui-input"  >
                     </div>
                 </div>
             </div>
+
+            <div class="layui-form-item ">
+                <div class="layui-inline layui-form" lay-filter="selectRole">
+                    <label class="layui-form-label">用户角色：</label>
+                    <div class="layui-input-inline">
+                        <select name="roleId" id="roleId" lay-filter="aihao"  >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="layui-form.-item">
                 <div class="layui-input-block">
@@ -53,7 +65,6 @@
         /**
          * 初始化表单，要加上，不然刷新部分组件可能会不加载
          */
-        form.render();
 
         //日期
         laydate.render({
@@ -63,22 +74,32 @@
             elem: '#inTime'
         });
 
+        ajaxNOParam("role/getRoleLsit",function (data) {
+            let dh="<option selected></option>";
+            for (var i = 0;i<data.data.length;i++){
+                dh+="<option value="+data.data[i].id+">"+data.data[i].roleName+"</option>"
+            }
+            $("#roleId").html(dh);
+            form.render('select','selectRole');
+        })
 
         var parentIndex = layer.index;
         //监听提交
         form.on('submit(updateBtn)', function (data) {
-
-            ajaxLayuiFromParamMax("zkMachine/addZkMachine",data,function (res) {
+            ajaxLayuiFromParamMax("user/addUser",data,function (data) {
                 toolMsgAndClose();
                 window.parent.brush();
                 return false;
             })
-
-
             layer.close(parentIndex);
             return false;
-        })
+        });
 
+
+        // form.on('submit(returnBtn)', function (data) {
+        //     layer.close(parentIndex);
+        //     return true;
+        // })
 
         $("#returnBtn").click(function () {
             layer.closeAll();

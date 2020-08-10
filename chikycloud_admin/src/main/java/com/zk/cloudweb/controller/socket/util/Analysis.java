@@ -86,7 +86,12 @@ public class Analysis {
         String keepByte = "";
         for (int i = 0; i < dataArr.length; i++) {
             if (i<8){//获取终端ID
-                terminalID += dataArr[i]+" ";
+                if (i==0){
+                    String [] idstr = dataArr[i].split("");
+                    terminalID+= idstr[1]+" ";
+                }else {
+                    terminalID += dataArr[i]+" ";
+                }
             } else if(8<=i&&i<9){//获取终端类型
                 terminalType = dataArr[i];
             } else if(9<=i&&i<11){//获取开机后的登录次数
@@ -134,12 +139,12 @@ public class Analysis {
             float course = Hex_to_Decimal.hexToFloat(dataArr[(i*21+2)+16]+dataArr[(i*21+2)+15]+dataArr[(i*21+2)+14]+dataArr[(i*21+2)+13]);
             //时间戳=秒数
 
-            System.out.println("测量时间戳："+dataArr[(i*21+2)+20]+dataArr[(i*21+2)+19]+dataArr[(i*21+2)+18]+dataArr[(i*21+2)+17]);
+//            System.out.println("测量时间戳："+dataArr[(i*21+2)+20]+dataArr[(i*21+2)+19]+dataArr[(i*21+2)+18]+dataArr[(i*21+2)+17]);
             Integer dataM = null;
             try {
                  dataM = Hex_to_Decimal.hexToInteger(dataArr[(i*21+2)+20]+dataArr[(i*21+2)+19]+dataArr[(i*21+2)+18]+dataArr[(i*21+2)+17]);
             }catch (Exception e){
-                System.out.println(e);
+                System.out.println("时间错误："+e);
             }
             //测量时间
             if ("01".equals(GPSType)&&dataM!=null){

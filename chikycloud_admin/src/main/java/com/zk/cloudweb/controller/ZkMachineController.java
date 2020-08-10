@@ -12,6 +12,7 @@ import com.zk.cloudweb.util.Result;
 import com.zk.cloudweb.util.getShiroUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -114,7 +115,7 @@ public class ZkMachineController {
         zkUserMachine.setUmUserId(user.getId());
         //查询当前用户的在线设备
        List<ZkSocketLogin> zkSocketLogin = socketLoginService.selectOnLineZkSocketLogin(zkUserMachine);
-        int count = socketLoginService.selectOnLineZkSocketLoginCount(zkUserMachine);
+       int count = socketLoginService.selectOnLineZkSocketLoginCount(zkUserMachine);
 
         Result result = new Result(ResultEnum.OK,zkSocketLogin,true);
         result.setCount(count);
@@ -162,7 +163,23 @@ public class ZkMachineController {
     }
 
 
+    /**
+     * 删除用户绑定设备
+     * @param zkMachine
+     * @return
+     */
+    @RequestMapping("/deleteUserMachineById")
+    @ResponseBody
+    public Result deleteUserMachineById(ZkMachine zkMachine){
 
+        ZkUserMachine zkUserMachine = new ZkUserMachine();
+        zkUserMachine.setUmMachineId(zkMachine.getId());
+        List<ZkUserMachine> zkUserMachines = zkUserMachineService.selectZkUserMachineList(zkUserMachine);
+        zkUserMachineService.deleteZkUserMachineById(zkUserMachines.get(0).getId());
+
+        Result result = new Result(ResultEnum.OK,true);
+        return result;
+    }
 
 
 

@@ -40,14 +40,7 @@
             form = layui.form,
             table = layui.table,
             miniPage = layui.miniPage;
-        function toolMsgAndClose(msg) {
-            // if(isEmpty(msg))
-            // {
-            msg = "移除成功";
-            // }
-            // layer.closeAll();
-            layer.msg(msg, {icon: 1});
-        }
+
         table.render({
             elem: '#roleMenu',
             id:'roleMenu',
@@ -68,7 +61,7 @@
                     {type: 'numbers', title: '序号', width: 50 ,totalRowText: '合计'},
                     {field: 'title', width: 120, title: '菜单名称'},
                     {field: 'href', width: 180, title: '菜单地址'},
-                    {field: 'createTime', width: 120, title: '创建时间'},
+                    {field: 'createTime', width: 180, title: '创建时间',templet:'<div>{{ layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss") }}</div>'},
                     // {title: '操作', Width: 150, toolbar: '#currentTableBar'}
                 ]
             ],
@@ -101,21 +94,8 @@
             var checkStatus = table.checkStatus(obj.config.id);
             var data = checkStatus.data;
             if (obj.event === 'add') {   // 监听添加操作
-                var content = miniPage.getHrefContent('roleMenu/getRoleMenuListAddHtml?roleId='+"[[${roleId}]]");
-                var openWH = miniPage.getOpenWidthHeight();
-                var index = layer.open({
-                    title: '添加权限',
-                    type: 1,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: [openWH[0] + 'px', openWH[1] + 'px'],
-                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
-                    content: content,
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
+                layuiWindowsOpen("添加权限",'roleMenu/getRoleMenuListAddHtml?roleId='+"[[${roleId}]]",miniPage);
+
             } else if (obj.event === 'deleteMenu') {  // 监听删除操作
                 if (data.length>0){
                     var menuId = [];
@@ -126,22 +106,11 @@
                     resDate["menuIdarr"] =""+menuId;
                     resDate["roleId"] = "[[${roleId}]]";
                     debugger
-                    $.ajax({
-                        url:"../roleMenu/delRoleMenuByArr",
-                        type:'post',
-                        // dataType: 'html',
-                        data:resDate,
-                        dataType:'json',
-                        // contentType : 'application/json',
-                        success:function (data) {
-                            toolMsgAndClose();
-                            checkStatus.data.del();
-                            // window.parent.brush();
-                        },
-                        error:function () {
-                            alert("数据传递错误，请刷新页面");
-                        }
-                    });
+                    ajaxResult("roleMenu/delRoleMenuByArr",resDate,function (res) {
+                        toolMsgAndClose();
+                        checkStatus.data.del();
+                    })
+
                 }else {
                     alert("请选者需要添加的权限")
                 }
@@ -153,35 +122,6 @@
         table.on('checkbox(roleMenuCurrentTableFilter)', function (obj) {
             console.log(obj)
         });
-
-        // table.on('tool(currentTableFilter)', function (obj) {
-        //     var data = obj.data;
-        //     if (obj.event === 'edit') {
-        //         var content = miniPage.getHrefContent('headmenu/updateHeadmenuHtml?id='+data.id);
-        //         // var content = miniPage.getHrefContent('overtime/updateOvertimeHtml');
-        //
-        //         var openWH = miniPage.getOpenWidthHeight();
-        //         var index = layer.open({
-        //             title: '编辑菜单',
-        //             type: 1,
-        //             shade: 0.2,
-        //             maxmin:true,
-        //             shadeClose: true,
-        //             area: [openWH[0] + 'px', openWH[1] + 'px'],
-        //             offset: [openWH[2] + 'px', openWH[3] + 'px'],
-        //             content: content,
-        //         });
-        //         $(window).on("resize", function () {
-        //             layer.full(index);
-        //         });
-        //         return false;
-        //     } else if (obj.event === 'delete') {
-        //         layer.confirm('真的删除行么', function (index) {
-        //             obj.del();
-        //             layer.close(index);
-        //         });
-        //     }
-        // });
 
     });
 

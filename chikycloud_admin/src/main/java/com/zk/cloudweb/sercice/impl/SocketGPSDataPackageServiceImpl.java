@@ -73,7 +73,7 @@ public class SocketGPSDataPackageServiceImpl implements ISocketGPSDataPackageSer
 
             }else {
                 socketGPSDataPackages = socketGPSDataPackageDao.selectSocketGPSDataPackageList(socketMeasurResult);
-                String dataStr = null;
+                String dataStr = "";
                 if (socketGPSDataPackages.size()>0){
                     dataStr = JSON.toJSONString(socketGPSDataPackages);
                     //将数据放入redis里面
@@ -97,7 +97,7 @@ public class SocketGPSDataPackageServiceImpl implements ISocketGPSDataPackageSer
      * 根据时间查询当前设备的位置
      */
     @Override
-    public SocketGPSDataPackage selectMachineMeasureLactionByDate(SocketGPSDataPackage socketGPSDataPackage) {
+    public List<SocketGPSDataPackage> selectMachineMeasureLactionByDate(SocketGPSDataPackage socketGPSDataPackage) {
         return socketGPSDataPackageDao.selectMachineMeasureLactionByDate(socketGPSDataPackage);
     }
 }

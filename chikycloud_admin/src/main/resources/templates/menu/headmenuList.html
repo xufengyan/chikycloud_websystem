@@ -62,7 +62,7 @@
                     {type: 'numbers', title: '序号', width: 50 ,totalRowText: '合计'},
                     {field: 'title', width: 120, title: '菜单名称'},
                     // {field: 'icon', width: 120, title: '菜单标签'},
-                    {field: 'createTime', width: 120, title: '创建时间'},
+                    {field: 'createTime', width: 180, title: '创建时间',templet:'<div>{{ layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss") }}</div>'},
                     {title: '操作', Width: 150, toolbar: '#currentTableBar'}
                 ]
             ],
@@ -93,22 +93,7 @@
              */
             table.on('toolbar(currentTableFilter)', function (obj) {
                 if (obj.event === 'add') {   // 监听添加操作
-                    var content = miniPage.getHrefContent('headmenu/addHeadmenuHtml');
-                    var openWH = miniPage.getOpenWidthHeight();
-
-                    var index = layer.open({
-                        title: '添加菜单',
-                        type: 1,
-                        shade: 0.2,
-                        maxmin:true,
-                        shadeClose: true,
-                        area: [openWH[0] + 'px', openWH[1] + 'px'],
-                        offset: [openWH[2] + 'px', openWH[3] + 'px'],
-                        content: content,
-                    });
-                    $(window).on("resize", function () {
-                        layer.full(index);
-                    });
+                    layuiWindowsOpen("添加菜单",'headmenu/addHeadmenuHtml',miniPage)
                 } else if (obj.event === 'delete') {  // 监听删除操作
                     var checkStatus = table.checkStatus('currentTableId')
                         , data = checkStatus.data;
@@ -124,23 +109,8 @@
             table.on('tool(currentTableFilter)', function (obj) {
                 var data = obj.data;
                 if (obj.event === 'edit') {
-                    var content = miniPage.getHrefContent('headmenu/updateHeadmenuHtml?id='+data.id);
-                    // var content = miniPage.getHrefContent('overtime/updateOvertimeHtml');
+                    layuiWindowsOpen("编辑菜单",'headmenu/updateHeadmenuHtml?id='+data.id,miniPage);
 
-                    var openWH = miniPage.getOpenWidthHeight();
-                    var index = layer.open({
-                        title: '编辑菜单',
-                        type: 1,
-                        shade: 0.2,
-                        maxmin:true,
-                        shadeClose: true,
-                        area: [openWH[0] + 'px', openWH[1] + 'px'],
-                        offset: [openWH[2] + 'px', openWH[3] + 'px'],
-                        content: content,
-                    });
-                    $(window).on("resize", function () {
-                        layer.full(index);
-                    });
                     return false;
                 } else if (obj.event === 'delete') {
                     layer.confirm('真的删除行么', function (index) {

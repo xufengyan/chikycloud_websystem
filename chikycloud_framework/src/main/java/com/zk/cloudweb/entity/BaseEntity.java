@@ -15,11 +15,13 @@ public class BaseEntity {
     private String id;
     //每页显示条数
     private Integer limit;
-
+    //条数
     private Integer count;
-
+    //页数
     private Integer page;
 
+    //创建时间
     private Date createTime;
-
+    //删除标识
+    private Integer delType;
 }

@@ -1,6 +1,6 @@
 <div class="layuimini-container layuimini-page-anim">
     <div class="layuimini-main" style="height: 100%">
-        <form class="layui-form" style="width: 60%;margin: auto;height: 100%"   id="secondarymenuAdd" onsubmit="return false;">
+        <form class="layui-form layui-form-pane" style="width: 60%;margin: auto;height: 100%"   id="secondarymenuAdd" onsubmit="return false;">
 
 
             <div class="layui-form-item">
@@ -23,17 +23,6 @@
                 </div>
             </div>
 
-<!--            <div class="layui-form-item">-->
-<!--                <label class="layui-form-label">菜单标签：</label>-->
-<!--                <div class="layui-input-block">-->
-<!--                    <select name="type" lay-filter="aihao"  >-->
-<!--                        <option value=""></option>-->
-<!--                        <option value="事假">事假</option>-->
-<!--                        <option value="病假" selected="">病假</option>-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
-
             <div class="layui-form.-item">
                 <div class="layui-input-block">
                     <button class="layui-btn" lay-submit="" lay-filter="updateBtn">确认添加</button>
@@ -54,17 +43,6 @@
             , miniPage = layui.miniPage;
 
 
-
-
-
-        function toolMsgAndClose(msg) {
-            // if(isEmpty(msg))
-            // {
-            msg = "成功";
-            // }
-            layer.closeAll();
-            layer.msg(msg, {icon: 1});
-        }
         var getFormatDate = function(ndate) {
             var date = ndate.split("T")[0];
             return date;
@@ -84,72 +62,32 @@
         form.render();
 
 
-        $.ajax({
-            url:"../headmenu/getHeadmenuList",
-            type:'post',
-            // dataType: 'html',
-            // data:data.f,
-            async: true,
-            dataType:'json',
-            contentType: 'application/json;charset=UTF-8',
-            success:function (data) {
 
-                var dh="";
-                for (var i = 0;i<data.data.length;i++){
-                    dh+="<option value="+data.data[i].id+">"+data.data[i].title+"</option>"
-                }
-                $("#secondarymenuAdd #headmenuId").html(dh);
-                form.render('select','secondarymenuAdd');
-            },
-            error:function () {
-                alert("数据传递错误，请刷新页面");
+        ajaxNOParam("headmenu/getHeadmenuList",function (data) {
+            var dh="";
+            for (var i = 0;i<data.data.length;i++){
+                dh+="<option value="+data.data[i].id+">"+data.data[i].title+"</option>"
             }
-        });
+            $("#secondarymenuAdd #headmenuId").html(dh);
+            form.render('select','secondarymenuAdd');
+        })
+
 
         var parentIndex = layer.index;
         //监听提交
         form.on('submit(updateBtn)', function (data) {
 
-            $.ajax({
-                url:"../secondarymenu/addSecondarymenu",
-                type:'post',
-                // dataType: 'html',
-                data:JSON.stringify(data.field),
-                dataType:'json',
-                contentType : 'application/json',
-                // dataType : 'json',
-                // contentType: 'application/json;charset=UTF-8',
-                success:function (data) {
-                    //关闭弹框
-                    toolMsgAndClose();
-                    window.parent.brush();
-                    return false;
-                },
-                error:function () {
-                    alert("数据传递错误，请刷新页面");
-                }
+            ajaxLayuiFrom("secondarymenu/addSecondarymenu",data,function (data) {
+                toolMsgAndClose();
+                window.parent.brush();
+                return false;
             })
+
             layer.close(parentIndex);
             return false;
         });
 
 
-        // form.on('submit(returnBtn)', function (data) {
-        //     layer.close(parentIndex);
-        //     return true;
-        // })
-
-
-        //表单初始赋值
-        // form.val('example', {
-        //     "username": "贤心" // "name": "value"
-        //     , "password": "123456"
-        //     , "interest": 1
-        //     , "like[write]": true //复选框选中状态
-        //     , "close": true //开关状态
-        //     , "sex": "女"
-        //     , "desc": "我爱 layui"
-        // })
         $("#returnBtn").click(function () {
             layer.closeAll();
         })

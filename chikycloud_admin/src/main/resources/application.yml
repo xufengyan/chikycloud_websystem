@@ -18,7 +18,8 @@ spring:
 #    password: chikytech2018cavin
   #------redis
   redis:
-    host: 39.96.7.233
+    host: 192.168.161.131
+#    host: 39.96.7.233
     port: 6379
     password: 123456
     database: 0

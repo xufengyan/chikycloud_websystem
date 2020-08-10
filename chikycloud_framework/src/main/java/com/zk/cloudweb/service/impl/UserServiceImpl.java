@@ -8,6 +8,7 @@ import com.zk.cloudweb.util.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,9 +44,12 @@ public class UserServiceImpl implements IUserService
     @Override
     public List<User> selectUserList(User user)
     {
-        Integer limit = user.getLimit();
-        user.setLimit(user.getLimit()*(user.getPage()-1));
-        user.setCount(limit*user.getPage());
+        if (user.getLimit()!=null&&user.getPage()!=null){
+            Integer limit = user.getLimit();
+            user.setLimit(user.getLimit()*(user.getPage()-1));
+            user.setCount(limit*user.getPage());
+        }
+
         return userMapper.selectUserList(user);
     }
 
@@ -59,6 +63,7 @@ public class UserServiceImpl implements IUserService
     public int insertUser(User user)
     {
         user.setId(Tool.CreateID());
+        user.setCreateTime(new Date());
         return userMapper.insertUser(user);
     }
 
