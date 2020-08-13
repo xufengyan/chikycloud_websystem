@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ChikyCloud注册</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../lib/layui-v2.5.6/css/layui.css" media="all">
+    <!--[if lt IE 9]-->
+    <script src="../lib/layui-v2.5.6/layui.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lib/jquery-3.3.1.min.js?v=2020-06-11" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/Tool.js?v=1.0.5" charset="utf-8"></script>
+
+    <!--[endif]-->
+    <style>
+        body {background-image:url('../images/bg2.png');height:100%;width:100%;}
+        #container{height:100%;width:100%;}
+        input:-webkit-autofill {-webkit-box-shadow:inset 0 0 0 1000px #fff;background-color:transparent;}
+        .admin-login-background {width:300px;height:300px;position:absolute;left:50%;top:40%;margin-left:-150px;margin-top:-100px;}
+        .admin-header {text-align:center;margin-bottom:20px;color:#ffffff;font-weight:bold;font-size:35px}
+        .admin-input {border-top-style:none;border-right-style:solid;border-bottom-style:solid;border-left-style:solid;height:50px;width:300px;padding-bottom:0px;}
+        .admin-input::-webkit-input-placeholder {color:#a78369}
+        .layui-icon-email {color:#a78369 !important;}
+        .layui-icon-email:hover {color:#9dadce !important;}
+        .layui-icon-password {color:#a78369 !important;}
+        .layui-icon-password:hover {color:#9dadce !important;}
+        .admin-input-username {border-top-style:solid;border-radius:10px 10px 0 0;}
+        .admin-input-verify {border-radius:0 0 10px 10px;}
+        .admin-button {margin-top:20px;font-weight:bold;font-size:18px;width:300px;height:50px;border-radius:5px;background-color:#a78369;border:1px solid #d8b29f}
+        .admin-icon {margin-left:260px;margin-top:10px;font-size:30px;}
+        i {position:absolute;}
+        .admin-captcha {position:absolute;margin-left:175px;margin-top:-40px;color: white;background-color: #03a9f4;border: none;width: 120px;height: 30px}
+    </style>
+<!--    <script>-->
+<!--        // 登录过期的时候，跳出ifram框架-->
+<!--        // debugger-->
+<!--        var curPageUrl = window.document.location.href;-->
+<!--        var rootPath = ""+curPageUrl.split("//")[1].split("/")[1].split("#")[0];-->
+<!--        // alert(rootPath+"&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;"+top.location+""+self.location+window.open());-->
+<!--        if(rootPath!=="login"){-->
+<!--            alert('未登录或登录超时。请重新登录');-->
+<!--            window.location="/logout"-->
+<!--        };-->
+<!--    </script>-->
+</head>
+<body>
+<div id="container layui-anim layui-anim-upbit">
+    <div></div>
+    <div class="admin-login-background">
+        <div class="admin-header">
+            <span>ChikyCloud注册</span>
+        </div>
+        <form class="layui-form" >
+            <div>
+                <i class="layui-icon layui-icon-email admin-icon"></i>
+                <input type="email" lay-verify="required|email" name="uName" placeholder="邮箱账号"  autocomplete="off" class="layui-input admin-input admin-input-username">
+            </div>
+            <div>
+                <i class="layui-icon layui-icon-password admin-icon"></i>
+                <input type="password" name="uPassword" lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input admin-input" >
+            </div>
+            <div>
+                <input type="text" name="authCode" placeholder="请输入验证码" autocomplete="off" class="layui-input admin-input admin-input-verify" value="">
+                <button id="admin-captcha" class="admin-captcha" lay-submit="" lay-filter="verify">发送验证码</button>
+            </div>
+<!--            <div style="margin-top: 10px"><strong style="color: white">账号还没注册？<a href="../signUp/getSignUpHtml">立即注册</a></strong></div>-->
+            <button class="layui-btn admin-button" lay-submit="" lay-filter="login">注 册</button>
+        </form>
+    </div>
+</div>
+<script src="../lib/jquery-3.3.1.min.js?v=2020-06-11" type="text/javascript" charset="utf-8"></script>
+
+<script>
+
+
+    layui.use(['form','jquery','layer'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery;
+
+
+        form.on('submit(verify)', function (data) {
+            var obj = new Object();
+            obj["uName"] = data.field.uName
+            ajaxResult("sendAuthCode",obj,function (res) {
+                debugger
+                if (res.success){
+                    layer.msg('验证码已发送');
+                    var second = 60;
+                    var timer = null;
+                    timer = setInterval(function(){
+                        second -= 1;
+                        if(second >0){
+                            $(".admin-captcha").attr('disabled',true);
+                            $(".admin-captcha").text(second + "秒后发送验证码");
+                            // $(".admin-captcha").attr('width',"120px");
+                            // document.getElementById("admin-captcha").style.width=120+"px";
+                            document.getElementById("admin-captcha").style.backgroundColor="#03a9f49e";
+                        }else{
+                            clearInterval(timer);
+                            $(".admin-captcha").attr('disabled',false);
+                            $(".admin-captcha").text("发送验证码");
+                            // document.getElementById("admin-captcha").style.width=90+"px";
+                            document.getElementById("admin-captcha").style.backgroundColor="#03a9f4";
+                        }
+                    },1000);
+                }else {
+                    toolMsgAndDefeatedClose("错误码："+res.code+","+res.msg);
+                }
+            })
+            return false;
+        })
+        // 进行登录操作
+        form.on('submit(login)', function (data) {
+            if (data.field.authCode==''){
+                toolMsgAndDefeatedClose("请输入邮箱验证码")
+                return false;
+            }
+            ajaxLayuiFromParamMax("addUser",data,function (res) {
+                if(res.success){
+                    layer.alert("<font color='red'>恭喜你，您的账号注册成功！</font>", {
+                            icon: 1,
+                            title: "系统提示"
+                        },
+                        function(index) {
+                            //关闭弹窗
+                            layer.close(index);
+                            window.location = 'index';
+                        });
+
+                }else{
+                    toolMsgAndDefeatedClose("错误码："+res.code+","+res.msg);
+                }
+            });
+
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
