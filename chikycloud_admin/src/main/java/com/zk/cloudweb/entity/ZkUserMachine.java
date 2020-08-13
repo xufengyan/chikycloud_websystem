@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * 用户对应机器对象 zk_user_machine
  * 
- * @author ruoyi
+ * @author xf
  * @date 2020-06-11
  */
 @Data

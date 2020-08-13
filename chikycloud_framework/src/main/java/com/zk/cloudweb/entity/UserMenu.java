@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * 菜单对象 user_menu
  * 
- * @author ruoyi
+ * @author xf
  * @date 2020-05-20
  */
 @Data

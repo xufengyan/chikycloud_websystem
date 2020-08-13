@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 用户对应机器Service业务层处理
  * 
- * @author ruoyi
+ * @author xf
  * @date 2020-06-11
  */
 @Service

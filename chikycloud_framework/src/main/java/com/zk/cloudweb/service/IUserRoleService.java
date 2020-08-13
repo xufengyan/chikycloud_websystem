@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 角色Service接口
  * 
- * @author ruoyi
+ * @author xf
  * @date 2020-05-20
  */
 public interface IUserRoleService 

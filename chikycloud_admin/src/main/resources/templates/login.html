@@ -14,9 +14,11 @@
     <script src="../lib/layui-v2.5.5/layui.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lib/jquery-3.3.1.min.js?v=2020-06-11" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/Tool.js?v=1.0.5" charset="utf-8"></script>
     <!--[endif]-->
     <style>
-        body {background-image:url('./images/bg.jpg');height:100%;width:100%;}
+        body {background-image:url('../images/bg2.png');height:100%;width:100%;}
         #container{height:100%;width:100%;}
         input:-webkit-autofill {-webkit-box-shadow:inset 0 0 0 1000px #fff;background-color:transparent;}
         .admin-login-background {width:300px;height:300px;position:absolute;left:50%;top:40%;margin-left:-150px;margin-top:-100px;}
@@ -63,9 +65,10 @@
                 <input type="password" name="password" placeholder="请输入密码" autocomplete="off" class="layui-input admin-input" >
             </div>
             <div>
-                <input type="text" name="captcha" placeholder="请输入验证码" autocomplete="off" class="layui-input admin-input admin-input-verify" value="xszg">
-                <img class="admin-captcha" width="90" height="30" src="../images/captcha.jpg">
+                <input type="text" name="authCode" placeholder="请输入验证码" autocomplete="off" class="layui-input admin-input admin-input-verify" value="xszg">
+                <img class="admin-captcha" width="90" height="30" src="../captchaImage" title="点击更换验证码">
             </div>
+            <div style="margin-top: 10px"><strong style="color: white">账号还没注册？<a style="color: #ff8d00f0" href="../register">立即注册</a></strong></div>
             <button class="layui-btn admin-button" lay-submit="" lay-filter="login">登 陆</button>
         </form>
     </div>
@@ -80,7 +83,10 @@
             layer = layui.layer,
             $ = layui.jquery;
 
-
+        $(".admin-captcha").click(function () {
+            var url = "../captchaImage"
+            $(".admin-captcha").attr("src", url);
+        })
         // 进行登录操作
         form.on('submit(login)', function (data) {
 
@@ -96,6 +102,7 @@
             var obj = new Object();
             obj["userName"] = data.userName;
             obj["password"] = data.password;
+            obj["authCode"] = data.authCode;
             $.ajax({
                 url:"../getLogin",
                 type:'post',
@@ -108,8 +115,13 @@
                 success:function (data) {
                     //关闭弹框
                     // layer.msg('登录成功', function () {
-                        window.location = 'index';
+
                     // });
+                    if (data.success){
+                        window.location = 'index';
+                    }else {
+                        toolMsgAndDefeatedClose(data.msg);
+                    }
                     return true;
                 },
                 error:function () {

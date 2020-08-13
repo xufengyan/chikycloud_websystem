@@ -17,7 +17,7 @@ import java.util.Deque;
 /**
  * 退出过滤器
  * 
- * @author ruoyi
+ * @author xf
  */
 public class LogoutFilter extends org.apache.shiro.web.filter.authc.LogoutFilter
 {

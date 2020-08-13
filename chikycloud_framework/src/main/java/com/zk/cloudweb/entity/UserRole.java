@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * 角色对象 user_role
  * 
- * @author ruoyi
+ * @author xf
  * @date 2020-05-20
  */
 @Data

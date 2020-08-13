@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 用户Mapper接口
  * 
- * @author ruoyi
+ * @author xf
  * @date 2020-05-19
  */
 public interface UserMapper 

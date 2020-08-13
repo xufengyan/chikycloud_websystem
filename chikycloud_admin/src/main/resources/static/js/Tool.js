@@ -20,6 +20,20 @@ function toolMsgAndCloseNocpm(msg) {
 }
 
 /**
+ * 失败提示弹框
+ * @param msg
+ */
+function toolMsgAndDefeatedClose(msg) {
+    if(isEmpty(msg))
+    {
+        msg = "成功";
+    }
+    layer.msg(msg, {icon: 2});
+}
+
+
+
+/**
  * 判断控空字符串
  * @param obj
  * @returns {boolean}

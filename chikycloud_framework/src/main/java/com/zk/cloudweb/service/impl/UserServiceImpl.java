@@ -4,9 +4,15 @@ package com.zk.cloudweb.service.impl;
 import com.zk.cloudweb.dao.UserMapper;
 import com.zk.cloudweb.entity.User;
 import com.zk.cloudweb.service.IUserService;
+import com.zk.cloudweb.util.MessageUtils;
+import com.zk.cloudweb.util.ServletUtils;
 import com.zk.cloudweb.util.Tool;
+import com.zk.cloudweb.util.constant.ShiroConstants;
+import com.zk.cloudweb.util.exception.CaptchaException;
+import com.zk.cloudweb.util.exception.UserNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -14,7 +20,7 @@ import java.util.List;
 /**
  * 用户Service业务层处理
  * 
- * @author ruoyi
+ * @author xf
  * @date 2020-05-19
  */
 @Service
@@ -105,7 +111,22 @@ public class UserServiceImpl implements IUserService
 
     @Override
     public User findUser(User realUser) {
-        return userMapper.findUser(realUser);
+        // 验证码校验
+        if (!StringUtils.isEmpty(ServletUtils.getRequest().getAttribute(ShiroConstants.CURRENT_CAPTCHA)))
+        {
+            throw new CaptchaException();
+        }
+        // 用户名或密码为空 错误
+        if (StringUtils.isEmpty(realUser.getUName()) || StringUtils.isEmpty(realUser.getUPassword()))
+        {
+            throw new UserNotExistsException();
+        }
+        User user = userMapper.findUser(realUser);
+        if (user == null)
+        {
+            throw new UserNotExistsException();
+        }
+        return user;
     }
 
     @Override

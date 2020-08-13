@@ -3,6 +3,7 @@ package com.zk.cloudweb.shiro.config;
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.zk.cloudweb.shiro.LogoutFilter;
 import com.zk.cloudweb.shiro.realm.UserRealm;
+import com.zk.cloudweb.util.captcha.CaptchaValidateFilter;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Value;
@@ -114,7 +115,10 @@ public class ShiroConfig {
         // 退出 logout地址，shiro去清除session
         filterChainDefinitionMap.put("/logout", "logout");
         // 不需要拦截的访问
-        filterChainDefinitionMap.put("/getLogin", "anon");
+        filterChainDefinitionMap.put("/sendAuthCode", "anon");
+        filterChainDefinitionMap.put("/addUser", "anon");
+        filterChainDefinitionMap.put("/captchaImage", "anon");
+        filterChainDefinitionMap.put("/getLogin", "anon,captchaValidate");
         filterChainDefinitionMap.put("/login", "anon");
         // 注册相关
         filterChainDefinitionMap.put("/register", "anon");
@@ -124,14 +128,14 @@ public class ShiroConfig {
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
 //        filters.put("onlineSession", onlineSessionFilter());
 //        filters.put("syncOnlineSession", syncOnlineSessionFilter());
-//        filters.put("captchaValidate", captchaValidateFilter());
+        filters.put("captchaValidate", captchaValidateFilter());
 //        filters.put("kickout", kickoutSessionFilter());
         // 注销成功，则跳转到指定页面
         filters.put("logout", logoutFilter());
         shiroFilterFactoryBean.setFilters(filters);
 
         // 所有请求需要认证
-//        filterChainDefinitionMap.put("/**", "user,kickout,onlineSession,syncOnlineSession");
+        filterChainDefinitionMap.put("/**", "user,kickout,onlineSession,syncOnlineSession");
                 filterChainDefinitionMap.put("/**", "user");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
@@ -166,6 +170,19 @@ public class ShiroConfig {
 //        kickoutSessionFilter.setKickoutUrl("/login?kickout=1");
 //        return kickoutSessionFilter;
 //    }
+
+
+    /**
+     * 自定义验证码过滤器
+     */
+    @Bean
+    public CaptchaValidateFilter captchaValidateFilter()
+    {
+        CaptchaValidateFilter captchaValidateFilter = new CaptchaValidateFilter();
+        captchaValidateFilter.setCaptchaEnabled(captchaEnabled);
+        captchaValidateFilter.setCaptchaType(captchaType);
+        return captchaValidateFilter;
+    }
 
     /**
      * 安全管理器

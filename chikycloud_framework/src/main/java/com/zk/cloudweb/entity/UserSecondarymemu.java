@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 二级菜单对象 user_secondarymemu
  * 
- * @author ruoyi
+ * @author xf
  * @date 2020-05-21
  */
 @Data

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 二级菜单Mapper接口
  * 
- * @author ruoyi
+ * @author xf
  * @date 2020-05-21
  */
 public interface UserSecondarymemuMapper 

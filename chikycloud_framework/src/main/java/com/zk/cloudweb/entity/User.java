@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * 用户对象 user
  * 
- * @author ruoyi
+ * @author xf
  * @date 2020-05-19
  */
 @Data
@@ -30,5 +30,8 @@ public class User extends BaseEntity
 
     /** 权限等级 */
     private String roleId;
+
+    /** 验证码 */
+    private String authCode;
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 用户对应机器Service接口
  * 
- * @author ruoyi
+ * @author xf
  * @date 2020-06-11
  */
 public interface IZkUserMachineService 

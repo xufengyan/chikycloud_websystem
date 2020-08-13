@@ -63,7 +63,6 @@ public class UserController {
     @RequestMapping("/addUser")
     @ResponseBody
     public Result addUser(User user){
-
         int res = userService.insertUser(user);
         Result result =new Result(ResultEnum.OK,true);
         return result;

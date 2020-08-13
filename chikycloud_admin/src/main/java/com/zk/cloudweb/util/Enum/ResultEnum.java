@@ -15,7 +15,11 @@ public enum ResultEnum {
     UNSESSION_ERR(401,"登录超时"),
     UNKONW_ERR(500,"未知异常"),
     UNPOWER_ERR(507,"权限不足，访问失败"),
-    INMACHINE_ERR(470,"设备已添加，请勿重复添加")
+    INMACHINE_ERR(470,"设备已添加，请勿重复添加"),
+    REPEATEDREQUEST(301,"邮箱验证码重复请求"),
+    AUTHCODE_ERROR(302,"验证码不匹配"),
+    NOAUTHCODE_ERROR(303,"未发送验证码或者验证码已过期"),
+    SIGNUP_ERROR(304,"该用户已注册，请使用其他邮箱进行注册")
     ;
 
 

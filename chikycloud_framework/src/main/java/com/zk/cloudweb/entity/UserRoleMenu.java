@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * 角色权限对象 user_role_menu
  * 
- * @author ruoyi
+ * @author xf
  * @date 2020-05-20
  */
 @Data
