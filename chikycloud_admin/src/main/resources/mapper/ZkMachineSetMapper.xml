@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.ZkMachineSetDao">
+    
+    <resultMap type="com.zk.cloudweb.entity.ZkMachineSet" id="ZkMachineSetResult">
+        <result property="machineNum"    column="machine_num"    />
+        <result property="residueArea"    column="residue_area"    />
+        <result property="spraying"    column="spraying"    />
+        <result property="factoryReset"    column="factory_reset"    />
+        <result property="factoryTime"    column="factory_time"    />
+        <result property="reach"    column="reach"    />
+        <result property="voice"    column="voice"    />
+        <result property="sendType"    column="send_type"    />
+        <result property="sendTime"    column="send_time"    />
+
+        <result property="id"    column="id"    />
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectZkMachineSetVo">
+        select id, machine_num, residue_area, spraying, factory_reset, factory_time, reach, voice, send_type ,send_time, create_time from zk_set_machine
+    </sql>
+
+<!--    <select id="selectZkMachineList" parameterType="com.zk.cloudweb.entity.ZkMachine" resultMap="ZkMachineResult">-->
+<!--        <include refid="selectZkMachineVo"/>-->
+<!--        <where>-->
+<!--            <if test="id != null  and id != ''">and id = #{id}</if>-->
+<!--            <if test="mNumber != null  and mNumber != ''"> and m_number = #{mNumber}</if>-->
+<!--            <if test="mName != null  and mName != ''"> and m_name = #{mName}</if>-->
+<!--        </where>-->
+<!--        <if test="limit !=null">-->
+<!--            limit #{limit},#{count}-->
+<!--        </if>-->
+<!--    </select>-->
+
+<!--    <select id="selectZkMachineListCount" parameterType="com.zk.cloudweb.entity.ZkMachine" resultType="int">-->
+<!--        select count(*) from zk_set_machine-->
+<!--       <where>-->
+<!--           <if test="id != null  and id != ''">and id = #{id}</if>-->
+<!--           <if test="mNumber != null  and mNumber != ''"> and m_number = #{mNumber}</if>-->
+<!--           <if test="mName != null  and mName != ''"> and m_name = #{mName}</if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+
+
+    <select id="selectZkMachineSet" parameterType="com.zk.cloudweb.entity.ZkMachineSet" resultMap="ZkMachineSetResult">
+        <include refid="selectZkMachineSetVo"/>
+        <where>
+            <if test="id != null  and id != ''">and id = #{id}</if>
+            <if test="machineNum != null  and machineNum != ''"> and machine_num = #{machineNum}</if>
+            <if test="sendType != null  and sendType != ''"> and send_type = #{sendType}</if>
+        </where>
+    </select>
+
+
+
+    <select id="selectZkMachineSetList" parameterType="com.zk.cloudweb.entity.ZkMachineSet" resultMap="ZkMachineSetResult">
+        <include refid="selectZkMachineSetVo"/>
+        <where>
+            <if test="id != null  and id != ''">and id = #{id}</if>
+            <if test="machineNum != null  and machineNum != ''"> and machine_num = #{machineNum}</if>
+            <if test="sendType != null  and sendType != ''"> and send_type = #{sendType}</if>
+        </where>
+        order by create_time
+    </select>
+<!--    <select id="selectZkMachineById" parameterType="String" resultMap="ZkMachineResult">-->
+<!--        <include refid="selectZkMachineVo"/>-->
+<!--        where id = #{id}-->
+<!--    </select>-->
+        
+    <insert id="insertZkMachineSet" parameterType="com.zk.cloudweb.entity.ZkMachineSet">
+        insert into zk_set_machine
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="machineNum != null ">machine_num,</if>
+            <if test="residueArea != null ">residue_area,</if>
+            <if test="spraying != null ">spraying,</if>
+            <if test="factoryReset != null ">factory_reset,</if>
+            <if test="factoryTime != null ">factory_time,</if>
+            <if test="reach != null ">reach,</if>
+            <if test="voice != null ">voice,</if>
+            <if test="sendType != null ">send_type,</if>
+            <if test="sendTime != null ">send_time,</if>
+            <if test="createTime !=null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="machineNum != null ">#{machineNum},</if>
+            <if test="residueArea != null ">#{residueArea},</if>
+            <if test="spraying != null ">#{spraying},</if>
+            <if test="factoryReset != null ">#{factoryReset},</if>
+            <if test="factoryTime != null ">#{factoryTime},</if>
+            <if test="reach != null ">#{reach},</if>
+            <if test="voice != null ">#{voice},</if>
+            <if test="sendType != null ">#{sendType},</if>
+            <if test="sendTime != null ">#{sendTime},</if>
+            <if test="createTime !=null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZkMachineSet" parameterType="com.zk.cloudweb.entity.ZkMachineSet">
+        update zk_set_machine
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sendTime != null">send_time = #{sendTime},</if>
+            <if test="sendType != null">send_type = #{sendType},</if>
+        </trim>
+        where id = #{id}
+    </update>
+<!--    <update id="updateZkMachine" parameterType="com.zk.cloudweb.entity.ZkMachine">-->
+<!--        update zk_set_machine-->
+<!--        <trim prefix="SET" suffixOverrides=",">-->
+<!--            <if test="title != null  and title != ''">title = #{title},</if>-->
+<!--            <if test="href != null  and href != ''">href = #{href},</if>-->
+<!--            <if test="target != null  and target != ''">target = #{target},</if>-->
+<!--        </trim>-->
+<!--        where id = #{id}-->
+<!--    </update>-->
+
+<!--    <delete id="deleteZkMachineById" parameterType="String">-->
+<!--        delete from zk_set_machine where id = #{id}-->
+<!--    </delete>-->
+
+<!--    <delete id="deleteZkMachineByIds" parameterType="String">-->
+<!--        delete from zk_set_machine where id in -->
+<!--        <foreach item="id" collection="array" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>-->
+<!--    </delete>-->
+    
+</mapper>

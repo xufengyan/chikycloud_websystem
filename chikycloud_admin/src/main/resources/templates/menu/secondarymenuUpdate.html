@@ -1,46 +1,66 @@
-<div class="layuimini-container layuimini-page-anim">
-    <div class="layuimini-main" style="height: 100%">
-        <form class="layui-form layui-form-pane" style="width: 60%;margin: auto;height: 100%" lay-filter="secondarymenuUpdate" id="secondarymenuUpdate" onsubmit="return false;">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>ChikyCloud</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="../js/commonCSS.js" charset="utf-8"></script>
+    <style id="layuimini-bg-color">
+    </style>
+</head>
+<body class="layui-layout-body layuimini-all">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layuimini-container layuimini-page-anim">
+            <div class="layuimini-main" style="height: 100%">
+                <form class="layui-form layui-form-pane" style="width: 60%;margin: auto;height: 100%" lay-filter="secondarymenuUpdate" id="secondarymenuUpdate" onsubmit="return false;">
 
-            <div class="layui-form-item">
-                <div class="layui-inline" >
-                    <label class="layui-form-label">头部菜单：</label>
-                    <div class="layui-input-block">
-                        <select name="headmenuId" id="headmenuId" lay-filter="aihao"  >
-                            <option value=""></option>
-                        </select>
+                    <div class="layui-form-item">
+                        <div class="layui-inline" >
+                            <label class="layui-form-label">头部菜单：</label>
+                            <div class="layui-input-block">
+                                <select name="headmenuId" id="headmenuId" lay-filter="aihao"  >
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="layui-form-item">
-                <div class="layui-inline " >
-                    <label class="layui-form-label">菜单名称：</label>
-                    <div class="layui-input-inline">
-                        <input type="hidden" name="id">
-                        <input type="text" name="title" lay-verify="required" autocomplete="off" class="layui-input"  >
+                    <div class="layui-form-item">
+                        <div class="layui-inline " >
+                            <label class="layui-form-label">菜单名称：</label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" name="id">
+                                <input type="text" name="title" lay-verify="required" autocomplete="off" class="layui-input"  >
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit="" lay-filter="updateBtn">确认修改</button>
-                    <button class="layui-btn" lay-submit="" id="returnBtn">返回</button>
-                </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit="" lay-filter="updateBtn">确认修改</button>
+                            <button class="layui-btn" lay-submit="" id="returnBtn">返回</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
-</div>
-
+<script src="../js/commonJS.js" charset="utf-8"></script>
 <script>
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form
             , layer = layui.layer
             , layedit = layui.layedit
             , laydate = layui.laydate
-            , $ = layui.jquery
-            , miniPage = layui.miniPage;
+            , $ = layui.jquery;
 
         var getFormatDate = function(ndate) {
             var date = ndate.split("T")[0];
@@ -109,3 +129,5 @@
 
 
 </script>
+</body>
+</html>

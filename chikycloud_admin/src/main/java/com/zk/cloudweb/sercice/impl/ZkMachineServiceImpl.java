@@ -1,5 +1,6 @@
 package com.zk.cloudweb.sercice.impl;
 
+import com.zk.cloudweb.dao.SocketMeasureResultDao;
 import com.zk.cloudweb.dao.ZkMachineDao;
 import com.zk.cloudweb.entity.ZkMachine;
 import com.zk.cloudweb.sercice.IZkMachineService;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author xf
@@ -31,4 +34,10 @@ public class ZkMachineServiceImpl implements IZkMachineService {
         zkMachine.setCreateTime(new Date());
         return zkMachineDao.insertZkMachine(zkMachine);
     }
+    @Override
+    public int updateZkMachine(ZkMachine zkMachine) {
+        return zkMachineDao.updateZkMachine(zkMachine);
+    }
+
+
 }

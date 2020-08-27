@@ -1,50 +1,73 @@
-<div class="layuimini-container layuimini-page-anim">
-    <div class="layuimini-main">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>ChikyCloud</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="../js/commonCSS.js" charset="utf-8"></script>
+    <style id="layuimini-bg-color">
+    </style>
+</head>
+<body class="layui-layout-body layuimini-all">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layuimini-container layuimini-page-anim">
+            <div class="layuimini-main">
+                <fieldset class="table-search-fieldset">
+                    <legend>设备列表</legend>
+                    <div style="margin: 10px 10px 10px 10px">
+                        <form class="layui-form layui-form-pane" lay-filter="secondarymenu"  onsubmit="return false;">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">设备ID</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="mNumber" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
 
-        <fieldset class="table-search-fieldset">
-            <legend>设备列表</legend>
-            <div style="margin: 10px 10px 10px 10px">
-                <form class="layui-form layui-form-pane" lay-filter="secondarymenu"  onsubmit="return false;">
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">设备ID</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="mNumber" autocomplete="off" class="layui-input">
+                                <div class="layui-inline">
+                                    <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="layui-inline">
-                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
-                        </div>
+                        </form>
                     </div>
-                </form>
+                </fieldset>
+
+                <script type="text/html" id="toolbarDemo">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="addUserMachine"> 绑定设备 </button>
+                    </div>
+                </script>
+
+                <table class="layui-hide" id="zkMachine" lay-filter="currentTableFilter"></table>
+
+                <script type="text/html" id="currentTableBar">
+                    <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="setMachine"><i class="layui-icon">&#xe716;</i>设置</a>
+                    <a class="layui-btn layui-btn-xs data-count-edit" lay-event="updateMachine"><i class="layui-icon">&#xe642;</i>编辑</a>
+                    <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="selectRoleMenu"><i class="layui-icon">&#xe60a;</i>测量列表</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-warm ddata-count-edit" lay-event="selectMeasureLocation"><i class="layui-icon">&#xe715;</i>测量位置</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="deleteMachine"><i class="layui-icon">&#xe640;</i>删除设备</a>
+                </script>
+
             </div>
-        </fieldset>
-
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="addUserMachine"> 绑定设备 </button>
-            </div>
-        </script>
-
-        <table class="layui-hide" id="zkMachine" lay-filter="currentTableFilter"></table>
-
-        <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="selectRoleMenu">测量列表</a>
-            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="selectMeasureLocation">测量位置</a>
-            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="deleteMachine">删除设备</a>
-
-        </script>
-
-    </div>
+        </div>
 </div>
 
+<script src="../js/commonJS.js" charset="utf-8"></script>
+
 <script >
-    layui.use(['form', 'table','miniPage','element'], function () {
+    layui.use(['form', 'table'  ,'element'], function () {
         var $ = layui.jquery,
             form = layui.form,
-            table = layui.table,
-            miniPage = layui.miniPage;
+            table = layui.table;
+
 
         table.render({
             elem: '#zkMachine',
@@ -98,52 +121,23 @@
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'addUserMachine') {   // 监听添加操作
-                layuiWindowsOpen("绑定设备","zkMachine/addZkMachineHtml",miniPage);
+                layuiWindowsOpenSublevel("绑定设备","../zkMachine/addZkMachineHtml");
 
             }
 
         });
 
-
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
             if (obj.event === 'selectRoleMenu') {
 
-                var content = miniPage.getHrefContent('ZKSocketMeasureResult/getSocketMeasureResultListHtml?machineNum='+data.mnumber);
-                // var content = miniPage.getHrefContent('overtime/updateOvertimeHtml');
+                layuiWindowsParentOpensl("测量列表",'ZKSocketMeasureResult/getSocketMeasureResultListHtml?machineNum='+data.mnumber);
 
-                var openWH = miniPage.getOpenWidthHeight();
-                var index = layer.open({
-                    title: '查看测量列表',
-                    type: 1,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: [openWH[0]+200 + 'px', openWH[1]+100 + 'px'],
-                    // offset: [0 + 'px', 0 + 'px'],
-                    content: content,
-                });
-                $(window).on("resize2", function () {
-                    layer.full(index);
-                });
                 return false;
             } else if (obj.event === 'selectMeasureLocation') {
-                var content = miniPage.getHrefContent('zkMachine/getMachineLocationHtml?mnumber='+data.mnumber);
-                // var content = miniPage.getHrefContent('overtime/updateOvertimeHtml');
-                var openWH = miniPage.getOpenWidthHeight();
-                var index = layer.open({
-                    title: '查看测量位置',
-                    type: 1,
-                    shade: 0.2,
-                    maxmin:true,
-                    shadeClose: true,
-                    area: [openWH[0] + 'px', openWH[1]+100 + 'px'],
-                    offset: [ 0 + 'px', openWH[3]+'px'],
-                    content: content,
-                });
-                $(window).on("resize", function () {
-                    layer.full(index);
-                });
+
+                layuiWindowsOpenSublevel("查询测量位置",'zkMachine/getMachineLocationHtml?mnumber='+data.mnumber)
+
                 return false;
             } else if (obj.event === 'deleteMachine'){
 
@@ -156,15 +150,15 @@
                     })
                     layer.close(index);
                 });
-
-
-
+            }else if(obj.event === 'updateMachine'){
+                layuiWindowsOpenSublevel("修改设备信息","zkMachine/updateZkMachineHtml?id="+data.id);
+            }else if(obj.event === 'setMachine'){
+                layuiWindowsOpenSublevel("设备设置","zkMachine/userMachineSetHtml?machineNum="+data.mnumber);
             }
 
         });
 
     });
-
 
     function brush() {
         layui.use(['table'],function () {
@@ -174,3 +168,5 @@
 
     }
 </script>
+</body>
+</html>

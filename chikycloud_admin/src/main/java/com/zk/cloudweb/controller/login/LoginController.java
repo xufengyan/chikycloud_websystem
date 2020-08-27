@@ -1,11 +1,14 @@
 package com.zk.cloudweb.controller.login;
 
 
+import com.zk.cloudweb.controller.socket.service.serviceSend;
+import com.zk.cloudweb.controller.socket.util.Analysis;
 import com.zk.cloudweb.entity.User;
+import com.zk.cloudweb.entity.ZkMachineSet;
 import com.zk.cloudweb.util.StringUtils;
-import com.zk.cloudweb.util.email.EmailUtil;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
+import com.zk.cloudweb.util.socketChannel.channelSingle;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -29,6 +32,11 @@ public class LoginController {
     public String loginHtml(){
         return "login";
     }
+
+    @RequestMapping("/home")
+    public String homeHtml() {
+        return "home";
+    }
     @RequestMapping("/index")
     public ModelAndView indexHtml(ModelAndView model){
         Subject subject= SecurityUtils.getSubject();
@@ -41,6 +49,11 @@ public class LoginController {
     @RequestMapping(value = "/getLogin",method = RequestMethod.POST)
     @ResponseBody
     public Result userLogin(String userName, String password){
+
+//        channelSingle channelSingleUtil = channelSingle.getChannelUtil();
+//
+//        serviceSend.socket_setMachine_Data(channelSingleUtil.getChannelMap().get("869467040604671"),new ZkMachineSet());
+
         UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
         Subject subject = SecurityUtils.getSubject();
         try

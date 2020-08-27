@@ -192,10 +192,13 @@ layui.define(["element", "jquery"], function (exports) {
          * @returns {jQuery[]}
          */
         getOpenWidthHeight: function () {
-            var clienWidth = $(".layuimini-content-page").width();
-            var clientHeight = $(".layuimini-content-page").height();
-            var offsetLeft = $(".layuimini-content-page").offset().left;
-            var offsetTop = $(".layuimini-content-page").offset().top;
+            var d = document.getElementsByClassName("layui-body");
+            console.log(d)
+            var clienWidth = $(".layui-body").width();
+            var clientHeight = $(".layui-body").height();
+            debugger
+            var offsetLeft = $(".layui-body").offset().left;
+            var offsetTop = $(".layui-body").offset().top;
             return [clienWidth, clientHeight, offsetTop, offsetLeft];
         },
 

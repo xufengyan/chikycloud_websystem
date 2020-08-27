@@ -4,14 +4,15 @@
  * version:2.0
  * description:layuimini 主体框架扩展
  */
-layui.define(["jquery", "miniMenu", "element","miniPage", "miniTheme"], function (exports) {
+layui.define(["jquery", "miniMenu", "element", "miniTheme", "miniTab"], function (exports) {
     var $ = layui.$,
         element = layui.element,
         layer = layui.layer,
         miniMenu = layui.miniMenu,
+        // miniPage = layui.miniPage,
         miniTheme = layui.miniTheme,
-        miniPage = layui.miniPage;
-
+        miniTab = layui.miniTab
+        ;
     if (!/http(s*):\/\//.test(location.href)) {
         var tips = "请先将项目部署至web容器（Apache/Tomcat/Nginx/IIS/等），否则部分数据将无法显示";
         return layer.alert(tips);
@@ -34,11 +35,13 @@ layui.define(["jquery", "miniMenu", "element","miniPage", "miniTheme"], function
             options.iniUrl = options.iniUrl || null;
             options.clearUrl = options.clearUrl || null;
             options.renderPageVersion = options.renderPageVersion || false;
+            options.urlHashLocation = options.urlHashLocation || false;
             options.bgColorDefault = options.bgColorDefault || 0;
             options.multiModule = options.multiModule || false;
             options.menuChildOpen = options.menuChildOpen || false;
             options.loadingTime = options.loadingTime || 1;
             options.pageAnim = options.pageAnim || false;
+            options.maxTabNum = options.maxTabNum || 20;
             $.getJSON(options.iniUrl, function (data) {
                 if (data == null) {
                     miniAdmin.error('暂无菜单信息')
@@ -55,12 +58,24 @@ layui.define(["jquery", "miniMenu", "element","miniPage", "miniTheme"], function
                         multiModule: options.multiModule,
                         menuChildOpen: options.menuChildOpen
                     });
-                    miniPage.render({
-                        homeInfo:data.homeInfo,
-                        menuList: data.menuInfo,
+                    // miniPage.render({
+                    //     homeInfo:data.homeInfo,
+                    //     menuList: data.menuInfo,
+                    //     multiModule: options.multiModule,
+                    //     renderPageVersion: options.renderPageVersion,
+                    //     menuChildOpen: options.menuChildOpen,
+                    //     listenSwichCallback: function () {
+                    //         miniAdmin.renderDevice();
+                    //     }
+                    // });
+                    miniTab.render({
+                        filter: 'layuiminiTab',
+                        urlHashLocation: options.urlHashLocation,
                         multiModule: options.multiModule,
-                        renderPageVersion: options.renderPageVersion,
                         menuChildOpen: options.menuChildOpen,
+                        maxTabNum: options.maxTabNum,
+                        menuList: data.menuInfo,
+                        homeInfo: data.homeInfo,
                         listenSwichCallback: function () {
                             miniAdmin.renderDevice();
                         }

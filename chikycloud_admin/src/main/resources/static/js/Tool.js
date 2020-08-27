@@ -81,7 +81,7 @@ function ajaxResult(url,data,callback) {
 }
 
 /**
- * 有返回值有参数ajax请求
+ * 有返回值无参数ajax请求
  * @param url
  * @param data
  * @param callback
@@ -156,20 +156,86 @@ function ajaxLayuiFromParamMax(url,data,callback) {
  * 通用弹出层，需要传递参数的直接拼接在地址后面
  * @param url
  */
-function layuiWindowsOpen(title,url,miniPage) {
-    var content = miniPage.getHrefContent(url);
-    var openWH = miniPage.getOpenWidthHeight();
+// function layuiWindowsOpen(title,url,miniPage) {
+//     var content = miniPage.getHrefContent(url);
+//     var openWH = miniPage.getOpenWidthHeight();
+//     var index = layer.open({
+//         title: title,
+//         type: 1,
+//         shade: 0.2,
+//         maxmin:true,
+//         shadeClose: true,
+//         area: [openWH[0] + 'px', openWH[1] + 'px'],
+//         offset: [openWH[2] + 'px', openWH[3] + 'px'],
+//         content: content,
+//     });
+//     $(window).on("resize", function () {
+//         layer.full(index);
+//     });
+// }
+/**
+ * 当前页面
+ * 通用弹出层，需要传递参数的直接拼接在地址后面
+ * @param url
+ */
+function layuiWindowsOpenSublevel(title,url) {
     var index = layer.open({
+        type: 2,        //iframe窗
         title: title,
-        type: 1,
-        shade: 0.2,
-        maxmin:true,
-        shadeClose: true,
-        area: [openWH[0] + 'px', openWH[1] + 'px'],
-        offset: [openWH[2] + 'px', openWH[3] + 'px'],
-        content: content,
+        shadeClose: false,
+        shade: 0.3,
+        offset: 'auto',
+        maxmin: true, //开启最大化最小化按钮
+        area: ['80%', '80%'],
+        content: "../"+url,
     });
     $(window).on("resize", function () {
         layer.full(index);
     });
+}
+
+/**
+ * 在父级页面打开弹框
+ *
+ */
+function layuiWindowsParentOpensl(title,url) {
+    var index = parent.layer.open({
+        type: 2,        //iframe窗
+        title: title,
+        shadeClose: true,
+        shade: 0.3,
+        offset:  'auto',
+        maxmin: true, //开启最大化最小化按钮
+        area: ['100%', '100%'],
+        content: "../"+url,
+    });
+    $(window).on("resize", function () {
+        layer.full(index);
+    });
+}
+
+
+/**
+ * 转换时间
+ * @param data
+ * @returns {string}
+ */
+function date(data) {
+    var date = new Date(data)
+    var Y = date.getFullYear() + '-'
+    var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+    var D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' '
+    var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
+    var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':'
+    var s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
+    return Y + M + D + h + m + s
+}
+
+/**
+ * 随机数
+ * @returns {number}
+ * @param num 随机范围
+ */
+function randomNum(max,min) {
+    return Math.floor(Math.random()*(max-min+1)+min);
 }

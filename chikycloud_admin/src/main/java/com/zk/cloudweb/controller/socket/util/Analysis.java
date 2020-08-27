@@ -1,10 +1,14 @@
 package com.zk.cloudweb.controller.socket.util;
 
+import com.zk.cloudweb.controller.socket.ServerHandler;
+import com.zk.cloudweb.controller.socket.service.DeviceSession;
+import com.zk.cloudweb.entity.ZkMachineSet;
 import com.zk.cloudweb.entity.socketLink.SocketGPSDataPackage;
 import com.zk.cloudweb.entity.socketLink.SocketMeasurResult;
 import com.zk.cloudweb.entity.socketLink.SocketPackage;
 import com.zk.cloudweb.entity.socketLink.Socketlogin;
 import com.zk.cloudweb.util.dateFormat;
+import io.netty.channel.ChannelHandlerContext;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -209,12 +213,6 @@ public class Analysis {
         socketMeasurResult.setMachineNum(machineNum);
         return socketMeasurResult;
     }
-
-
-
-
-
-
 
 
 

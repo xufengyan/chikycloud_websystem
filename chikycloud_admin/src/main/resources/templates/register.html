@@ -37,17 +37,6 @@
         i {position:absolute;}
         .admin-captcha {position:absolute;margin-left:175px;margin-top:-40px;color: white;background-color: #03a9f4;border: none;width: 120px;height: 30px}
     </style>
-<!--    <script>-->
-<!--        // 登录过期的时候，跳出ifram框架-->
-<!--        // debugger-->
-<!--        var curPageUrl = window.document.location.href;-->
-<!--        var rootPath = ""+curPageUrl.split("//")[1].split("/")[1].split("#")[0];-->
-<!--        // alert(rootPath+"&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;"+top.location+""+self.location+window.open());-->
-<!--        if(rootPath!=="login"){-->
-<!--            alert('未登录或登录超时。请重新登录');-->
-<!--            window.location="/logout"-->
-<!--        };-->
-<!--    </script>-->
 </head>
 <body>
 <div id="container layui-anim layui-anim-upbit">
@@ -99,14 +88,11 @@
                         if(second >0){
                             $(".admin-captcha").attr('disabled',true);
                             $(".admin-captcha").text(second + "秒后发送验证码");
-                            // $(".admin-captcha").attr('width',"120px");
-                            // document.getElementById("admin-captcha").style.width=120+"px";
                             document.getElementById("admin-captcha").style.backgroundColor="#03a9f49e";
                         }else{
                             clearInterval(timer);
                             $(".admin-captcha").attr('disabled',false);
                             $(".admin-captcha").text("发送验证码");
-                            // document.getElementById("admin-captcha").style.width=90+"px";
                             document.getElementById("admin-captcha").style.backgroundColor="#03a9f4";
                         }
                     },1000);

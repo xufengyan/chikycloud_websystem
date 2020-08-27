@@ -9,5 +9,5 @@ import com.zk.cloudweb.entity.BaseEntity;
  */
 public class homeInfo extends BaseEntity {
     public String title ="首页";
-    public String href = "page/welcome-1.html?t=1";
+    public String href = "home?t=1";
 }

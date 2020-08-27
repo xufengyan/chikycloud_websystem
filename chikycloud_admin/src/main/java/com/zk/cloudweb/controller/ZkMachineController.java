@@ -1,15 +1,17 @@
 package com.zk.cloudweb.controller;
 
-import com.zk.cloudweb.entity.User;
-import com.zk.cloudweb.entity.ZkMachine;
-import com.zk.cloudweb.entity.ZkSocketLogin;
-import com.zk.cloudweb.entity.ZkUserMachine;
+import com.sun.org.apache.xpath.internal.operations.Mod;
+import com.zk.cloudweb.controller.socket.service.serviceSend;
+import com.zk.cloudweb.entity.*;
 import com.zk.cloudweb.sercice.ISocketloginService;
 import com.zk.cloudweb.sercice.IZkMachineService;
+import com.zk.cloudweb.sercice.IZkMachineSetService;
 import com.zk.cloudweb.sercice.IZkUserMachineService;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
 import com.zk.cloudweb.util.getShiroUser;
+import com.zk.cloudweb.util.socketChannel.channelSingle;
+import io.netty.channel.ChannelHandlerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 设备Controller
@@ -38,6 +41,9 @@ public class ZkMachineController {
 
     @Autowired
     private ISocketloginService socketLoginService;
+
+    @Autowired
+    private IZkMachineSetService zkMachineSetService;
     /**
      * 跳转列表页
      * @return
@@ -75,7 +81,29 @@ public class ZkMachineController {
         model.addObject("mnumber",mnumber);
         model.setViewName("admin/machineLocation");
         return model;
-    };
+    }
+
+    /**
+     * 跳转设备修改页面
+     * @param model
+     * @param id
+     * @return
+     */
+    @RequestMapping("/updateZkMachineHtml")
+    public ModelAndView updateZkMachineHtml(ModelAndView model,String id){
+        model.addObject("id",id);
+        model.setViewName("admin/machineUpdate");
+        return model;
+    }
+
+
+    @RequestMapping("userMachineSetHtml")
+    public ModelAndView userMachineSetHtml(ModelAndView model,String machineNum){
+        model.addObject("machineNum",machineNum);
+        model.setViewName("admin/machineSet");
+        return model;
+    }
+
 
     /**
      * 查询机器列表
@@ -123,6 +151,27 @@ public class ZkMachineController {
     }
 
 
+    @RequestMapping("/getMachineLoginHistory")
+    @ResponseBody
+    public Result getMachineLoginHistory(){
+        Result result = null;
+        ZkUserMachine zkUserMachine = new ZkUserMachine();
+        //查询当前登录的用户
+        User user = getShiroUser.getUser();
+        zkUserMachine.setUmUserId(user.getId());
+        List<ZkSocketLogin> zkSocketLogins = socketLoginService.selectMachineLoginHistiryList(zkUserMachine);
+
+        if (zkSocketLogins.size()>0){
+            result = new Result(ResultEnum.OK,zkSocketLogins,true);
+        }else {
+            result = new Result(ResultEnum.PARAMETER_ERROR,false);
+        }
+
+        return result;
+    }
+
+
+
 
     /**
      * 用户添加设备
@@ -162,6 +211,36 @@ public class ZkMachineController {
         return result;
     }
 
+    /**
+     * 修改
+     * @param zkMachine
+     * @return
+     */
+    @RequestMapping("/updateZkMachine")
+    @ResponseBody
+    public Result updateZkMachine(ZkMachine zkMachine){
+        int res = zkMachineService.updateZkMachine(zkMachine);
+        Result result = new Result(ResultEnum.OK,true);
+        return result;
+    }
+
+    /**
+     * 查询单条设备
+     * @param zkMachine
+     * @return
+     */
+    @RequestMapping("/selectzkMachineById")
+    @ResponseBody
+    public Result selectzkMachineById(ZkMachine zkMachine){
+        Result result =null;
+        if (null!=zkMachine.getId()&&""!=zkMachine.getId()){
+            ZkMachine resZkMachine = zkMachineService.selectZkMachine(zkMachine);
+            result = new Result(ResultEnum.OK,resZkMachine,true);
+        }else {
+            result = new Result(ResultEnum.COMMON_NULL,false);
+        }
+        return result;
+    }
 
     /**
      * 删除用户绑定设备
@@ -182,7 +261,39 @@ public class ZkMachineController {
     }
 
 
+    /**
+     * 查询首页统计数据
+     * @return
+     */
+    @RequestMapping("/getMachineDataStatistics")
+    @ResponseBody
+    public Result getMachineDataStatistics(){
+        Map<String,Object> map = zkUserMachineService.selectMachineDataStatistics();
+        Result result = new Result(ResultEnum.OK,map,true);
+        return result;
+    }
 
+
+
+
+    /**
+     * 设置机器数据
+     * @return
+     */
+    @RequestMapping("/setUserMachine")
+    @ResponseBody
+    public Result setUserMachine(ZkMachineSet zkMachineSet){
+
+        Result result = null;
+        channelSingle channelSingleUtil = channelSingle.getChannelUtil();
+        Map<String, ChannelHandlerContext>  channelMap = channelSingleUtil.getChannelMap();
+        int res = zkMachineSetService.insertZkMachineSet(zkMachineSet);
+        if(channelMap.containsKey(zkMachineSet.getMachineNum())){
+            serviceSend.socket_setMachine_Data(channelMap.get(zkMachineSet.getMachineNum()),zkMachineSet);
+            result = new Result(ResultEnum.OK,true);
+        }
+        return result;
+    }
 
 
 }

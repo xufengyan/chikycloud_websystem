@@ -13,9 +13,20 @@ public class DeviceSession {
 	
 	private String returnValue;
 
+	/**
+	 * 连接数据
+	 */
 	private SocketPackage socketPackage;
 
+	/**
+	 * 登录数据
+	 */
 	private Socketlogin socketlogin;
+
+	/**
+	 * 用户设置机器Id
+	 */
+	private String machineSetId;
 
 	public DeviceSession(Channel channel) {
 		this.channel = channel;

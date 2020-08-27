@@ -1,3 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>ChikyCloud</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+       <script src="../js/commonCSS.js" charset="utf-8"></script>
+    <style id="layuimini-bg-color">
+    </style>
+</head>
+<body class="layui-layout-body layuimini-all">
+<div class="layui-layout layui-layout-admin">
 <div class="layuimini-container layuimini-page-anim">
     <div class="layuimini-main" style="height: 100%">
         <form class="layui-form layui-form-pane" style="padding-left: 40%"  lay-filter="example" id="example" onsubmit="return false;">
@@ -28,7 +48,8 @@
         </form>
     </div>
 </div>
-
+</div>
+<script src="../js/commonJS.js" charset="utf-8"></script>
 <script>
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form
@@ -36,7 +57,7 @@
             , layedit = layui.layedit
             , laydate = layui.laydate
             , $ = layui.jquery
-            , miniPage = layui.miniPage;
+            ;
 
         function toolMsgAndClose(msg) {
             // if(isEmpty(msg))
@@ -67,25 +88,20 @@
         var parentIndex = layer.index;
         //监听提交
         form.on('submit(updateBtn)', function (data) {
-
             ajaxLayuiFromParamMax("zkMachine/addZkMachine",data,function (res) {
                 toolMsgAndClose();
                 window.parent.brush();
                 return false;
             })
-
-
             layer.close(parentIndex);
             return false;
         })
-
 
         $("#returnBtn").click(function () {
             layer.closeAll();
         })
     })
 
-
-
-
 </script>
+</body>
+</html>

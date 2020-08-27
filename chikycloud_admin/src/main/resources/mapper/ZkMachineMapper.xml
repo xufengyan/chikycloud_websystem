@@ -67,7 +67,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
          </trim>
     </insert>
-
+    <update id="updateZkMachine" parameterType="com.zk.cloudweb.entity.ZkMachine">
+        update zk_machine
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mNumber != null  and mNumber != ''">m_number = #{mNumber},</if>
+            <if test="mName != null  and mName != ''">m_name = #{mName},</if>
+        </trim>
+        where id = #{id}
+    </update>
 <!--    <update id="updateZkMachine" parameterType="com.zk.cloudweb.entity.ZkMachine">-->
 <!--        update zk_machine-->
 <!--        <trim prefix="SET" suffixOverrides=",">-->

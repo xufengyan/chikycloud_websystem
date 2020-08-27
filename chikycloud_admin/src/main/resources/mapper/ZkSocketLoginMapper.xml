@@ -50,6 +50,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
+
+    <select id="selectMachineLoginHistiryList" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultMap="ZkSocketLoginResult">
+
+        select sl.machine_num,sl.id,max(sl.create_time) create_time,sl.machine_name from zk_socket_login_history sl
+        left join zk_machine m on m.m_number = sl.machine_num
+        left join zk_user_machine um on m.id = um.um_machine_id
+        where
+         um.um_user_id = #{umUserId}
+         AND
+		sl.login_type = 0
+        GROUP BY sl.machine_num
+
+    </select>
+
     <select id="selectOnLineZkSocketLogin" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultMap="ZkSocketLoginResult">
         select sl.* from zk_socket_login sl
         left join zk_machine m on m.m_number = sl.machine_num

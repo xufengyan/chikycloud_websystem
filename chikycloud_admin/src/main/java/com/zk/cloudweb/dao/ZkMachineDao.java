@@ -16,4 +16,6 @@ public interface ZkMachineDao {
 
     public int insertZkMachine(ZkMachine zkMachine);
 
+    int updateZkMachine(ZkMachine zkMachine);
+
 }

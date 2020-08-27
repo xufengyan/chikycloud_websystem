@@ -1,8 +1,10 @@
 package com.zk.cloudweb.controller.socket;
 
 import com.zk.cloudweb.controller.socket.service.DeviceSession;
+import com.zk.cloudweb.controller.socket.service.serviceSend;
 import com.zk.cloudweb.controller.socket.util.Analysis;
 import com.zk.cloudweb.controller.socket.util.Hex_to_Decimal;
+import com.zk.cloudweb.entity.ZkMachineSet;
 import com.zk.cloudweb.entity.socketLink.SocketGPSDataPackage;
 import com.zk.cloudweb.entity.socketLink.SocketMeasurResult;
 import com.zk.cloudweb.entity.socketLink.SocketPackage;
@@ -10,8 +12,11 @@ import com.zk.cloudweb.entity.socketLink.Socketlogin;
 import com.zk.cloudweb.sercice.ISocketGPSDataPackageService;
 import com.zk.cloudweb.sercice.ISocketMeasureResultService;
 import com.zk.cloudweb.sercice.ISocketloginService;
+import com.zk.cloudweb.sercice.IZkMachineSetService;
+import com.zk.cloudweb.util.socketChannel.channelSingle;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -27,6 +32,7 @@ import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 自定义服务端处理器 
@@ -36,7 +42,7 @@ import java.util.List;
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     //日志
-    private static Logger logger = LoggerFactory.getLogger(com.zk.cloudweb.controller.socket.ServerHandler.class);
+    private static Logger logger = LoggerFactory.getLogger(ServerHandler.class);
 
     //想当于session
     public static final AttributeKey<DeviceSession> KEY = AttributeKey.valueOf("ZK_SOCKET_IO");
@@ -53,6 +59,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Autowired
     private ISocketMeasureResultService socketMeasureResultService;
 
+    @Autowired
+    private IZkMachineSetService zkMachineSetService;
+
+    private channelSingle single = channelSingle.getChannelUtil();
 
     /**
      * 客户端注册
@@ -86,17 +96,17 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         DeviceSession deviceSession = ctx.channel().attr(KEY).get();
         //将客户端发送的数据先做统一的处理
-        System.out.println(msg.toString());
+        logger.info(msg.toString());
         SocketPackage socketPackage = Analysis.socket_data(msg.toString());
         //如果消息为空或者不是正常情况下连接的用户直接关闭连接
         if(msg==null||deviceSession==null){
+            logger.info("消息为空-----不是正常连接用户");
             closeClient(ctx);
             return;
         }
-
-
         if (socketPackage!=null){
-            System.out.println("数据包类型："+socketPackage.getPackageType());
+            deviceSession.setSocketPackage(socketPackage);
+            logger.info("数据包类型："+socketPackage.getPackageType());
             switch(socketPackage.getPackageType()){
                 case "00":
                     //判断当前设备是否登录过
@@ -113,12 +123,18 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                         socketlogin.setId(id);
                         deviceSession.setSocketlogin(socketlogin);
                     }
-                    deviceSession.setHeartbeatNum(0);
-                    System.out.println("登录包");
+                    //获取当前连接的用户，将用户的channel存入channelUtil
+
+                    Map<String, ChannelHandlerContext> map = single.getChannelMap();
+                    map.put(deviceSession.getSocketlogin().getTerminalID().replaceAll(" ",""),ctx);
+                    single.setChannelMap(map);
+
+                    //查询当前设备是否有需要执行的设置
+
+                    logger.info("登录包");
                     break;
                 case "01":
-                    System.out.println("心跳包");
-                    deviceSession.setHeartbeatNum(0);
+                    logger.info("心跳包");
                     break;
                 case "02":
                     //获取到处理过的测量结果
@@ -127,13 +143,11 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     if(socketMeasurResult!=null){
                         socketMeasureResultService.insertSocketMeasureResult(socketMeasurResult);
                     }
-                    System.out.println("测量结果包");
-                    deviceSession.setHeartbeatNum(0);
+                    logger.info("测量结果包");
                     break;
                 case "03":
-                    deviceSession.setHeartbeatNum(0);
 
-                    System.out.println("设备信息包");
+                    logger.info("设备信息包");
                     break;
                 case "04":
                     //获取到处理过的测量数据
@@ -142,80 +156,30 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     if (socketGPSDataPackages.size()>0){
                         socketGPSDataPackageService.insertSocketGPSDataPackageList(socketGPSDataPackages);
                     }
-                    System.out.println("测量数据包");
-                    deviceSession.setHeartbeatNum(0);
+                    logger.info("测量数据包");
+                    break;
+                case "05":
+                    logger.info("设备设置包回复");
+                    //当发送设备设置数据后，机器会返回设置结果数据
+                    ZkMachineSet zkMachineSet  = new ZkMachineSet();
+                    zkMachineSet.setId(deviceSession.getMachineSetId());
+                    //修改数据库中设置数据为已修改
+                    int res = zkMachineSetService.updateZkMachineSet(zkMachineSet) ;
                     break;
                 case "0B":
-                    System.out.println("结果不处理");
-                    deviceSession.setHeartbeatNum(0);
+                    logger.info("结果不处理");
+                    break;
+                case "0C":
+                    logger.info("FTP文件传输回复包");
                     break;
                 default : //可选
-                    System.out.println("类型不存在，准备关闭连接..................");
+                    logger.info("类型不存在，准备关闭连接..................");
                     closeClient(ctx);
                     return;
             }
-//            if("00".equals(socketPackage.getPackageType())){//登录包
-//                //判断当前设备是否登录过
-//                if(deviceSession.getSocketlogin()==null){
-//                    //获取客户端的ip和端口
-//                    InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
-//                    String clientIP = insocket.getAddress().getHostAddress();
-//                    int clientPort = insocket.getPort();
-//                    socketPackage.setClientIP(clientIP+":"+clientPort);
-//                    //解析登陆数据包
-//                    Socketlogin socketlogin = Analysis.socket_login_data(socketPackage.getData());
-//                    //将设备信息和登录信息保存到数据库
-//                    String id =  socketloginService.insertSocketlogin(socketPackage,socketlogin);
-//                    socketlogin.setId(id);
-//                    deviceSession.setSocketlogin(socketlogin);
-//                }
-//                deviceSession.setHeartbeatNum(0);
-//                System.out.println("登录包");
-//            }else if("01".equals(socketPackage.getPackageType())){//心跳包
-//                //判断如果服务器
-//                System.out.println("心跳包");
-//
-//                deviceSession.setHeartbeatNum(0);
-//
-//            }else if("02".equals(socketPackage.getPackageType())){//测量结果包
-//                //获取到处理过的测量结果
-//                SocketMeasurResult socketMeasurResult = Analysis.socket_measure_result(socketPackage.getData(),deviceSession.getSocketlogin().getTerminalID().replaceAll(" ",""));
-//                //将测量结果包保存到数据库
-//                if(socketMeasurResult!=null){
-//                    socketMeasureResultService.insertSocketMeasureResult(socketMeasurResult);
-//                }
-//                System.out.println("测量结果包");
-//                deviceSession.setHeartbeatNum(0);
-//            } else if ("03".equals(socketPackage.getPackageType())){
-//
-//                deviceSession.setHeartbeatNum(0);
-//
-//                System.out.println("设备信息包");
-//            }
-//            else if("04".equals(socketPackage.getPackageType())){//GPS数据包
-//                System.out.println(socketPackage.getData());
-//                //获取到处理过的测量数据
-//                List<SocketGPSDataPackage> socketGPSDataPackages = Analysis.socket_gps_data(socketPackage.getData(),deviceSession.getSocketlogin().getTerminalID().replaceAll(" ",""));
-//                //将测量数据保存到数据库
-//                if (socketGPSDataPackages.size()>0){
-//                    socketGPSDataPackageService.insertSocketGPSDataPackageList(socketGPSDataPackages);
-//                }
-//                System.out.println("测量数据包");
-//                deviceSession.setHeartbeatNum(0);
-//
-//            }else if ("0B".equals(socketPackage.getPackageType())){
-//                System.out.println("结果不处理");
-//                deviceSession.setHeartbeatNum(0);
-//
-//            } else {
-//                System.out.println("类型不存在，准备关闭连接..................");
-//                closeClient(ctx);
-//                return;
-//            }
         }
-        deviceSession.setSocketPackage(socketPackage);
+        deviceSession.setHeartbeatNum(0);
         ctx.channel().attr(KEY).set(deviceSession);
-
         //处理完客户端发来的时候后对数据进行响应给客户端
         logger.info("业务处理");
     }
@@ -227,9 +191,19 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
  */
 @Override
 public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        closeClient(ctx);
-        logger.info("netty客户端与服务端连接关闭...");
+    DeviceSession deviceSession = ctx.channel().attr(KEY).get();
+    if (null!=deviceSession.getSocketlogin()){
+        if(null!=deviceSession.getSocketlogin().getId()){
+            single.getChannelMap().remove(deviceSession.getSocketlogin().getTerminalID().replaceAll(" ",""));
+            logger.info("删除在线机器");
+            //删除设置在线信息
+            socketloginService.delZkSocketLoginById(deviceSession.getSocketlogin());
+            //添加登出信息
+            socketloginService.insertSocketlogout(deviceSession.getSocketPackage(),deviceSession.getSocketlogin());
+        }
     }
+    logger.info("netty客户端与服务端连接关闭...");
+}
  
     /**
      * 服务端接收客户端发送过来的数据结束之后调用
@@ -238,14 +212,28 @@ public void channelInactive(ChannelHandlerContext ctx) throws Exception {
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         DeviceSession deviceSession = ctx.channel().attr(KEY).get();
         SocketPackage socketPackage  = deviceSession.getSocketPackage();
-        if (socketPackage!=null){
+        if (socketPackage!=null&&!"05".equals(socketPackage.getPackageType())){
 //            String result = Hex_to_Decimal.StringToByte(socketPackage);
-        byte [] b = Hex_to_Decimal.StringToByte(socketPackage);
+        byte [] b = serviceSend.StringToByte(socketPackage);
             //接收完客户端端发送的消息后，对客户端做出回应
             ByteBuf bufff = Unpooled.buffer();
             bufff.writeBytes(b);
             ctx.channel().write(bufff);
             ctx.flush();
+
+            //当发送登录包后，回复服务器后，如果当前设备有设置包则发送设置包给设置
+            if("00"==socketPackage.getPackageType()){
+                logger.info("回复时如果是登录包则发送设置信息");
+                ZkMachineSet zmSet = new ZkMachineSet();
+                zmSet.setMachineNum(deviceSession.getSocketlogin().getTerminalID().replaceAll(" ",""));
+                zmSet.setSendType(0);
+                List<ZkMachineSet> resZmSet = zkMachineSetService.selectZkMachineSetList(zmSet);
+                if (resZmSet.size()>0){//如果不为空则执行设置操作
+                    logger.info("发送机器设置");
+                    serviceSend.socket_setMachine_Data(ctx,resZmSet.get(0));
+                    deviceSession.setMachineSetId(resZmSet.get(0).getId());
+                }
+            }
             logger.info("信息接收完毕...");
         }
     }
@@ -257,7 +245,7 @@ public void channelInactive(ChannelHandlerContext ctx) throws Exception {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
         closeClient(ctx);
-        System.out.println("异常信息：rn " + cause.getMessage());
+        logger.info("异常信息：rn " + cause.getMessage());
     }
 
     /**
@@ -275,19 +263,18 @@ public void channelInactive(ChannelHandlerContext ctx) throws Exception {
             //检测 是否 这段时间没有和服务器联系
             if (e.state() == IdleState.ALL_IDLE)
             {
-                //判断当前socket请求4次没有回复则将改连接关闭
-                if (heartbeatNum>6){
+                //判断当前socket请求12次没有回复则将改连接关闭
+                if (heartbeatNum>12){
+                    logger.info("心跳检测关闭连接");
                     closeClient(ctx);
                 }else {
                     heartbeatNum++;
                     deviceSession.setHeartbeatNum(heartbeatNum);
                     ctx.channel().attr(KEY).set(deviceSession);
-                    System.out.println(new Date()+" "+ctx);
+                    logger.info("心跳检测:"+heartbeatNum+"信息："+new Date()+" "+ctx);
                 }
                 //检测心跳
 //                checkIdle(ctx);
-
-
             }
         }
 
@@ -300,18 +287,8 @@ public void channelInactive(ChannelHandlerContext ctx) throws Exception {
      * @param ctx
      */
     public void closeClient(ChannelHandlerContext ctx){
-        DeviceSession deviceSession = ctx.channel().attr(KEY).get();
-        if (null!=deviceSession.getSocketlogin()){
-            if(null!=deviceSession.getSocketlogin().getId()){
-                System.out.println("删除在线机器");
-                //删除设置在线信息
-                socketloginService.delZkSocketLoginById(deviceSession.getSocketlogin());
-                //添加登出信息
-                socketloginService.insertSocketlogout(deviceSession.getSocketPackage(),deviceSession.getSocketlogin());
-            }
-        }
         ctx.close();
-        System.out.println(ctx+"-----连接关闭");
+        logger.info(ctx+"-----连接关闭");
     }
 
 }

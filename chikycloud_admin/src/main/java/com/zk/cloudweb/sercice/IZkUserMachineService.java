@@ -4,6 +4,7 @@ import com.zk.cloudweb.entity.ZkMachine;
 import com.zk.cloudweb.entity.ZkUserMachine;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户对应机器Service接口
@@ -72,4 +73,6 @@ public interface IZkUserMachineService
 
 
     ZkUserMachine selectZkUserMachineByEntity(ZkMachine zm);
+
+    Map<String, Object> selectMachineDataStatistics();
 }

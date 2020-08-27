@@ -50,4 +50,6 @@ public interface ISocketloginService {
      * @return
      */
     int selectOnLineZkSocketLoginCount(ZkUserMachine zkUserMachine);
+
+    List<ZkSocketLogin> selectMachineLoginHistiryList(ZkUserMachine zkUserMachine);
 }

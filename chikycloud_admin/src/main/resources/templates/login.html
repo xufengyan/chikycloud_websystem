@@ -39,12 +39,12 @@
     <script>
         // 登录过期的时候，跳出ifram框架
         // debugger
-        var curPageUrl = window.document.location.href;
+        var curPageUrl = parent.window.document.location.href;
         var rootPath = ""+curPageUrl.split("//")[1].split("/")[1].split("#")[0];
         // alert(rootPath+"--------"+top.location+""+self.location+window.open());
         if(rootPath!=="login"){
             alert('未登录或登录超时。请重新登录');
-            window.location="/logout"
+            parent.window.location="/logout"
         };
     </script>
 </head>

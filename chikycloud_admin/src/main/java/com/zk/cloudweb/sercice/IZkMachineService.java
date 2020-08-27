@@ -2,6 +2,8 @@ package com.zk.cloudweb.sercice;
 
 import com.zk.cloudweb.entity.ZkMachine;
 
+import java.util.Map;
+
 /**
  * 设备表service
  * @author xf
@@ -25,5 +27,6 @@ public interface IZkMachineService {
     public int insertZkMachine(ZkMachine zkMachine);
 
 
+    int updateZkMachine(ZkMachine zkMachine);
 
 }

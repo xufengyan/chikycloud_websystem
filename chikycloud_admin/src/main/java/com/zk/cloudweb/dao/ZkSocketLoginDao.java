@@ -25,4 +25,6 @@ public interface ZkSocketLoginDao {
     List<ZkSocketLogin> selectOnLineZkSocketLogin(ZkUserMachine zkUserMachine);
 
     int selectOnLineZkSocketLoginCount(ZkUserMachine zkUserMachine);
+
+    List<ZkSocketLogin> selectMachineLoginHistiryList(ZkUserMachine zkUserMachine);
 }

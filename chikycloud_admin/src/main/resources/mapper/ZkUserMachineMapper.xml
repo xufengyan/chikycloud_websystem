@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zk.cloudweb.dao.ZkUserMachineMapper">
+<mapper namespace="com.zk.cloudweb.dao.ZkUserMachineDao">
     
     <resultMap type="com.zk.cloudweb.entity.ZkUserMachine" id="ZkUserMachineResult">
         <result property="id"    column="id"    />
@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectZkUserMachineByEntity" parameterType="com.zk.cloudweb.entity.ZkMachine" resultMap="ZkMachineResult">
+    <select id="selectZkUserMachineByEntity" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultMap="ZkUserMachineResult">
         select um.* from zk_machine m
         left join zk_user_machine um on um.um_machine_id = m.id
         <where>

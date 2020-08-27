@@ -20,32 +20,29 @@
     <div class="layui-layout layui-layout-admin">
         <div class="layuimini-container layuimini-page-anim">
             <div class="layuimini-main" style="height: 100%">
-                <form class="layui-form layui-form-pane" style="width: 60%;margin: auto;height: 100%"   id="secondarymenuAdd" onsubmit="return false;">
-
+                <form class="layui-form layui-form-pane" style="padding-left: 40%"  lay-filter="example" id="example" onsubmit="return false;">
 
                     <div class="layui-form-item">
-                        <div class="layui-inline layui-form" lay-filter="secondarymenuAdd">
-                            <label class="layui-form-label">头部菜单：</label>
-                            <div class="layui-input-block">
-                                <select name="headmenuId" id="headmenuId" lay-filter="aihao"  >
-                                    <option value=""></option>
-                                </select>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备名称：</label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" name="id">
+                                <input type="text" name="mName" lay-verify="required" autocomplete="off" class="layui-input"  >
                             </div>
                         </div>
                     </div>
-
                     <div class="layui-form-item">
-                        <div class="layui-inline " >
-                            <label class="layui-form-label">菜单名称：</label>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备编号：</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="title" lay-verify="required" autocomplete="off" class="layui-input"  >
+                                <input type="text" name="mNumber" lay-verify="required" autocomplete="off" class="layui-input"  >
                             </div>
                         </div>
                     </div>
 
                     <div class="layui-form.-item">
                         <div class="layui-input-block">
-                            <button class="layui-btn" lay-submit="" lay-filter="updateBtn">确认添加</button>
+                            <button class="layui-btn" lay-submit="" lay-filter="updateBtn">确认修改</button>
                             <button class="layui-btn" id="returnBtn">返回</button>
                         </div>
                     </div>
@@ -60,16 +57,13 @@
             , layer = layui.layer
             , layedit = layui.layedit
             , laydate = layui.laydate
-            , $ = layui.jquery;
+            , $ = layui.jquery
+            ;
 
-
-        var getFormatDate = function(ndate) {
-            var date = ndate.split("T")[0];
-            return date;
-        }
         /**
          * 初始化表单，要加上，不然刷新部分组件可能会不加载
          */
+        form.render();
 
         //日期
         laydate.render({
@@ -79,40 +73,37 @@
             elem: '#inTime'
         });
 
-        form.render();
 
-
-
-        ajaxNOParam("headmenu/getHeadmenuList",function (data) {
-            var dh="";
-            for (var i = 0;i<data.data.length;i++){
-                dh+="<option value="+data.data[i].id+">"+data.data[i].title+"</option>"
-            }
-            $("#secondarymenuAdd #headmenuId").html(dh);
-            form.render('select','secondarymenuAdd');
+        var obj = new Object();
+        obj['id'] = "[[${id}]]"
+        ajaxResult("zkMachine/selectzkMachineById",obj,function (res) {
+            form.val('example', {
+                "id" : res.data.id
+                , "mName": ""+res.data.mname // "name": "value"
+                , "mNumber": ""+res.data.mnumber
+            })
         })
-
 
         var parentIndex = layer.index;
         //监听提交
         form.on('submit(updateBtn)', function (data) {
 
-            ajaxLayuiFrom("secondarymenu/addSecondarymenu",data,function (data) {
+            ajaxLayuiFromParamMax("zkMachine/updateZkMachine",data,function (res) {
                 toolMsgAndClose();
                 window.parent.brush();
                 return false;
             })
 
+
             layer.close(parentIndex);
             return false;
-        });
+        })
 
 
         $("#returnBtn").click(function () {
             layer.closeAll();
         })
     })
-
 </script>
 </body>
 </html>

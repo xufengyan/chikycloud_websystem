@@ -1,33 +1,55 @@
-<!--<div class="layuimini-container layuimini-page-anim">-->
-    <div class="layuimini-main" style="height: 100%">
-        <fieldset class="table-search-fieldset">
-            <legend>设备列表</legend>
-            <div style="margin: 10px 10px 10px 10px">
-                <form class="layui-form layui-form-pane" lay-filter="secondarymenu"  onsubmit="return false;">
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">测量时间</label>
-                            <div class="layui-input-inline">
-                                <input type="hidden" name = "machineNum" id = "machineNum">
-                                <input type="text" name="measureTime" id="measureTime" autocomplete="off" class="layui-input">
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>ChikyCloud</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="../js/commonCSS.js" charset="utf-8"></script>
+    <style id="layuimini-bg-color">
+    </style>
+</head>
+<body class="layui-layout-body layuimini-all">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layuimini-main" style="height: 100%">
+            <fieldset class="table-search-fieldset">
+                <legend>设备列表</legend>
+                <div style="margin: 10px 10px 10px 10px">
+                    <form class="layui-form layui-form-pane" lay-filter="secondarymenu"  onsubmit="return false;">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">测量时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="hidden" name = "machineNum" id = "machineNum">
+                                    <input type="text" name="measureTime" id="measureTime" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
                             </div>
                         </div>
+                    </form>
+                </div>
+            </fieldset>
 
-                        <div class="layui-inline">
-                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
-                        </div>
-                    </div>
-                </form>
+            <div style="width: 100%;height: 800px; ">
+                <div id="allmap" ></div>
             </div>
-        </fieldset>
-
-        <div style="width: 100%;height: 800px; ">
-            <div id="allmap" ></div>
         </div>
-    </div>
 <!--</div>-->
+    </div>
 
-<script>
+    <script src="../js/commonJS.js" charset="utf-8"></script>
+    <script>
     bdiduMap(null, null);
     function bdiduMap(longitude,latitude) {
         if (longitude!=null&&latitude!=null){
@@ -97,8 +119,7 @@
             , layer = layui.layer
             , layedit = layui.layedit
             , laydate = layui.laydate
-            , $ = layui.jquery
-            , miniPage = layui.miniPage;
+            , $ = layui.jquery;
         var mnumber = "[[${mnumber}]]";
         $("#machineNum").val(mnumber);
         function toolMsgAndClose(msg) {
@@ -154,8 +175,6 @@
             layer.closeAll();
         })
     })
-
-
-
-
 </script>
+</body>
+</html>

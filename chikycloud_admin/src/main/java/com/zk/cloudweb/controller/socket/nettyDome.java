@@ -29,11 +29,13 @@ public class nettyDome {
 ////        System.out.println(Float.intBitsToFloat(Integer.parseInt("00005EDA", 16)));
 //        System.out.println(Float.intBitsToFloat(Integer.valueOf("00005EDA", 16)));
 
-        System.out.println(Hex_to_Decimal.strToHexStr("ZKCT"));
+//        System.out.println(Hex_to_Decimal.strToHexStr("ZKCT"));
+//
+//        System.out.println(Hex_to_Decimal.intToHex16(12));
 
-        System.out.println(Hex_to_Decimal.intToHex16(12));
+        String d=Hex_to_Decimal.intOneHex16(251);
 
-
+        System.out.println(d);
     }
 
 

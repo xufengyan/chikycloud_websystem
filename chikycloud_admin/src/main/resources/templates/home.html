@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>ChikyCloud</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="../js/commonCSS.js" charset="utf-8"></script>
+    <style id="layuimini-bg-color">
+    </style>
+    <style>
+        .welcome .layui-card {border:1px solid #f2f2f2;border-radius:5px;}
+        .welcome .icon {margin-right:10px;color:#1aa094;}
+        .welcome .icon-cray {color:#ffb800 !important;}
+        .welcome .icon-blue {color:#1e9fff !important;}
+        .welcome .icon-tip {color:#ff5722 !important;}
+        .welcome .layuimini-qiuck-module {text-align:center;margin-top:10px}
+        .welcome .layuimini-qiuck-module a i {display:inline-block;width:100%;height:60px;line-height:60px;text-align:center;border-radius:2px;font-size:30px;background-color:#F8F8F8;color:#333;transition:all .3s;-webkit-transition:all .3s;}
+        .welcome .layuimini-qiuck-module a cite {position:relative;top:2px;display:block;color:#666;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;font-size:14px;}
+        .welcome .welcome-module {width:100%;height:210px;}
+        .welcome .panel {background-color:#fff;border:1px solid transparent;border-radius:3px;-webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);box-shadow:0 1px 1px rgba(0,0,0,.05)}
+        .welcome .panel-body {padding:10px}
+        .welcome .panel-title {margin-top:0;margin-bottom:0;font-size:12px;color:inherit}
+        .welcome .label {display:inline;padding:.2em .6em .3em;font-size:75%;font-weight:700;line-height:1;color:#fff;text-align:center;white-space:nowrap;vertical-align:baseline;border-radius:.25em;margin-top:.3em;}
+        .welcome .layui-red {color:red}
+        .welcome .main_btn > p {height:40px;}
+        .welcome .layui-bg-number {background-color:#F8F8F8;}
+        .welcome .layuimini-notice:hover {background:#f6f6f6;}
+        .welcome .layuimini-notice {padding:7px 16px;clear:both;font-size:12px !important;cursor:pointer;position:relative;transition:background 0.2s ease-in-out;}
+        .welcome .layuimini-notice-title,.layuimini-notice-label {padding-right:70px !important;text-overflow:ellipsis !important;overflow:hidden !important;white-space:nowrap !important;}
+        .welcome .layuimini-notice-title {line-height:28px;font-size:14px;}
+        .welcome .layuimini-notice-extra {position:absolute;top:50%;margin-top:-8px;right:16px;display:inline-block;height:16px;color:#999;}
+        .no-margins-h1 {display: inline;line-height: 59px;}
+    </style>
+</head>
+<body >
+<!--<div class="layui-layout layui-layout-admin">-->
+
+<!--<div class="layuimini-container layuimini-page-anim">-->
+    <div class="layuimini-main welcome">
+<!--        <div class="layui-row layui-col-space15">-->
+<!--            <div class="layui-col-md8">-->
+                <div class="layui-row layui-col-space15" style="margin-left: 5%">
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+
+                            <div class="layui-card-header"><i class="fa fa-warning icon"></i>数据统计</div>
+                            <div class="layui-card-body" style="height: 350px">
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10">
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <span class="label pull-right layui-bg-blue">实时</span>
+                                                        <h5>设备数量统计</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins-h1 no-margins-machineSum">1234</h1>
+                                                        <span>台</span>
+                                                        <p style="margin: 0 0 0"><small>当前设备总记录数</small></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <span class="label pull-right layui-bg-cyan">实时</span>
+                                                        <h5>测量面积统计</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins-h1 no-margins-areaSum">1234</h1>
+                                                        <span>亩</span>
+                                                        <p style="margin: 0 0 0"><small>当前测量面积总记录数</small></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <span class="label pull-right layui-bg-orange">实时</span>
+                                                        <h5>测量时间统计</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins-h1 no-margins-dateSum">1234</h1>
+                                                        <span>小时</span>
+                                                        <p style="margin: 0 0 0"><small>当前测量时间总记录数</small></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+<!--                                        <div class="layui-col-xs6">-->
+<!--                                            <div class="panel layui-bg-number">-->
+<!--                                                <div class="panel-body">-->
+<!--                                                    <div class="panel-title">-->
+<!--                                                        <span class="label pull-right layui-bg-green">实时</span>-->
+<!--                                                        <h5>订单统计</h5>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="panel-content">-->
+<!--                                                        <h1 class="no-margins-h1 no-margins">1234</h1>-->
+<!--                                                        -->
+<!--                                                        <p style="margin: 0 0 0"><small>当前分类总记录数</small></p>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md5" style="margin-left: 50px;">
+                        <div class="layui-card">
+
+                                <div class="layui-card-header"><i class="fa fa-bullhorn icon icon-tip"></i>设备登录记录</div>
+                                <div class="layui-card-body layui-text" style="overflow:scroll !important;height: 350px;" id = "layui-card-body-text">
+
+                                </div>
+<!--                                </div>-->
+                            </div>
+                        </div>
+
+                    </div>
+
+        </div>
+<!--    </div>-->
+<!--</div>-->
+<!--</div>-->
+<script src="../js/commonJS.js" charset="utf-8"></script>
+
+<script>
+
+
+    layui.use(['layer','echarts'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            echarts = layui.echarts;
+        //查询登录设备
+        ajaxNOParam("zkMachine/getMachineLoginHistory",function (data) {
+            var html = "";
+            if (data.success){
+                var data = data.data;
+                for (var i = 0;i<data.length;i++){
+                        html += "<div class=\"layuimini-notice\">\n" +
+                            "                                        <div class=\"layuimini-notice-title\">"+data[i].machineName+"</div>\n" +
+                            "                                        <div class=\"layuimini-notice-extra\">"+date(data[i].createTime)+"</div>\n" +
+                            "\n" +
+                            "                                    </div>"
+                }
+                $("#layui-card-body-text").html(html);
+            }
+        });
+
+        //查询统计信息
+        ajaxNOParam("zkMachine/getMachineDataStatistics",function (data) {
+            var loop1, loop2, loop3, time = 30, i1 = 0,i2 = 0, i3 = 0, number;
+            loop3 = setInterval(function () {
+                if (i1 > 60) {
+                    clearInterval(loop3);
+                    $(".no-margins-machineSum").html(data.data.machineCount);
+                } else {
+                    $(".no-margins-machineSum").html(randomNum(99,10)+""+randomNum(99,10));
+                    i1++;
+                }
+            }, time);
+            loop2 = setInterval(function () {
+                if (i2 > 60) {
+                    clearInterval(loop2);
+                    $(".no-margins-areaSum").html(data.data.measureAreaSum);
+                } else {
+                    $(".no-margins-areaSum").html(randomNum(99,10)+"."+randomNum(99,10));
+                    i2++;
+                }
+            }, time);
+            loop1 = setInterval(function () {
+                if (i3 > 60) {
+                    clearInterval(loop1);
+                    $(".no-margins-dateSum").html(data.data.measureDateSum);
+                } else {
+                    $(".no-margins-dateSum").html(randomNum(99,10)+"."+randomNum(99,10));
+                    i3++;
+                }
+            }, time);
+
+
+
+        });
+    });
+
+</script>
+</body>
+</html>

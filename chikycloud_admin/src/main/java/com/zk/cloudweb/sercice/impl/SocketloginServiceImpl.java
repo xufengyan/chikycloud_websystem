@@ -1,5 +1,6 @@
 package com.zk.cloudweb.sercice.impl;
 
+import com.zk.cloudweb.controller.socket.ServerHandler;
 import com.zk.cloudweb.dao.ZkSocketLoginDao;
 import com.zk.cloudweb.entity.ZkMachine;
 import com.zk.cloudweb.entity.ZkSocketLogin;
@@ -9,6 +10,8 @@ import com.zk.cloudweb.entity.socketLink.Socketlogin;
 import com.zk.cloudweb.sercice.ISocketloginService;
 import com.zk.cloudweb.sercice.IZkMachineService;
 import com.zk.cloudweb.util.Tool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +31,7 @@ public class SocketloginServiceImpl implements ISocketloginService {
 
     @Autowired
     ZkSocketLoginDao zkSocketLoginDao;
+    private static Logger logger = LoggerFactory.getLogger(SocketloginServiceImpl.class);
 
     /**
      * 添加登录信息
@@ -42,8 +46,9 @@ public class SocketloginServiceImpl implements ISocketloginService {
         ZkMachine resZkMachine = zkMachineService.selectZkMachine(zkMachine);
         if (resZkMachine == null){
             //如果设备不存在则添加
-        zkMachine.setMName(socketPackage.getStartNum()+"_"+socketlogin.getTerminalID().replaceAll(" ",""));
-        zkMachineService.insertZkMachine(zkMachine);
+            logger.info("添加设备");
+            zkMachine.setMName(socketPackage.getStartNum()+"_"+socketlogin.getTerminalID().replaceAll(" ",""));
+            zkMachineService.insertZkMachine(zkMachine);
         }
 
         //添加登录信息
@@ -116,6 +121,11 @@ public class SocketloginServiceImpl implements ISocketloginService {
     @Override
     public int selectOnLineZkSocketLoginCount(ZkUserMachine zkUserMachine) {
         return zkSocketLoginDao.selectOnLineZkSocketLoginCount(zkUserMachine);
+    }
+
+    @Override
+    public List<ZkSocketLogin> selectMachineLoginHistiryList(ZkUserMachine zkUserMachine) {
+        return zkSocketLoginDao.selectMachineLoginHistiryList(zkUserMachine);
     }
 
 

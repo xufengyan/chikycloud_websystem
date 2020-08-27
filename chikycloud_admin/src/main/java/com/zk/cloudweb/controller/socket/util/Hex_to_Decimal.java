@@ -28,6 +28,16 @@ public class Hex_to_Decimal {
         return Float.intBitsToFloat(Integer.valueOf(hex.trim(), 16));
     }
 
+
+    /**
+     * float转16进制字符串4个字节
+     * @param b
+     * @return
+     */
+    public static String floatThreeHex16(float b) {
+
+        return Integer.toHexString(Float.floatToIntBits(b)).toUpperCase();
+    }
     /**
      * 将整形转换为16进制的2个字节的字符串
      * @param b
@@ -36,6 +46,15 @@ public class Hex_to_Decimal {
     public static String intToHex16(int b) {
 
         return String.format("%04x", b).toUpperCase();
+    }
+
+    /**
+     * 将整形转换为16进制的1个字节的字符串
+     * @param b
+     * @return
+     */
+    public static String intOneHex16(int b) {
+        return String.format("%02x", b).toUpperCase();
     }
 
 
@@ -53,7 +72,22 @@ public class Hex_to_Decimal {
          }
          return hex;
     }
-
+    /**
+     * 将4个字节16进制字符串转换为小端模式
+     * @param hex
+     * @return
+     */
+    public static String threeHex16ToSmall(String hex){
+        int le = hex.length();
+        if (le==8) {
+            String head = hex.substring(0, 2);
+            String end1 = hex.substring(2, 4);
+            String end2 = hex.substring(4, 6);
+            String end3 = hex.substring(6, 8);
+            hex = end3 +" "+ end2+" "+end1+" "+ head;
+        }
+        return hex;
+    }
 
     /**
      * 将16进制字符串装换为正常字符串
@@ -104,57 +138,7 @@ public class Hex_to_Decimal {
     }
 
 
-    /**
-     * 将要返回给设备的数据进行转换
-     * @param socketPackage
-     * @return
-     */
-    public static byte [] StringToByte(SocketPackage socketPackage){
-        String start = "";//起始位
-        String num = "";//序列号
-        String type = "";//数据包类型
-        String lenghtHexStr = "";
-        Integer lenght = null;//数据包长度
-        String data = "";//数据包
-        String checkSum = "";
-        String stopBit = "";
-        start = com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.strToHexStr(socketPackage.getStartNum());
-        num = com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.towHex16ToSmall(com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.intToHex16(socketPackage.getSerialNum()));
-        type = socketPackage.getPackageType();
-//        if (lenghtHexStr.length()==2){
-//            lenghtHexStr = "00 "+lenghtHexStr;
-//        }else if (lenghtHexStr.length()<4&&lenghtHexStr.length()>2){
-//            String [] lArr = lenghtHexStr.split("");
-//            lenghtHexStr = "0"+lArr[0]+" "+lArr[1]+lArr[2];
-//        }else if (lenghtHexStr.length()==4){
-//            String [] lArr = lenghtHexStr.split("");
-//            lenghtHexStr = lArr[0]+lArr[1]+ " " +lArr[2]+lArr[3];
-//        }
 
-        //判断回复数据包的格式
-        if ("00".equals(socketPackage.getPackageType())){
-            for (int i = 0;i<8;i++){
-                data += "00"+" ";
-            }
-            lenghtHexStr =  com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.towHex16ToSmall(com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.intToHex16(8));
-        }else{
-            for (int i = 0;i<4;i++){
-                data += "00"+" ";
-            }
-            lenghtHexStr =  com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.towHex16ToSmall(com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.intToHex16(4));
-
-        }
-        /**
-         * 计算返回机器时的crc值
-         */
-        byte [] hexByte = com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.hex2Bytes(data.replaceAll(" ",""));
-        checkSum = com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.towHex16ToSmall(com.zk.cloudweb.controller.socket.util.Hex_to_Decimal.intToHex16(CRC16Util.calcCrc16(hexByte)))+" ";
-//        checkSum = socketPackage.getCheckSum();
-        stopBit = socketPackage.getStopBit();
-        String resultStr = start+" "+num+" "+type+" "+lenghtHexStr+" "+data+checkSum+stopBit;
-        byte [] b = hex2Bytes((resultStr.replaceAll(" ","")));
-        return b;
-    }
 
 
     /**
@@ -209,6 +193,12 @@ public class Hex_to_Decimal {
         }
         return bytes;
     }
+
+
+
+
+
+
 
 
 }

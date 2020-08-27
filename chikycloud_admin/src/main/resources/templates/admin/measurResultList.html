@@ -1,9 +1,27 @@
-
-<!--<div class="layuimini-container layuimini-page-anim">-->
-<!--    <div class="resultBody" style="font-family:'微软雅黑';background-color: #ffffff;width:98%;height:97%;margin-left: 10px;">-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>ChikyCloud</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="../js/commonCSS.js" charset="utf-8"></script>
+    <style id="layuimini-bg-color">
+    </style>
+</head>
+<body class="layui-layout-body layuimini-all">
+<div class="layui-layout layui-layout-admin">
+    <div class="layuimini-container layuimini-page-anim">
         <div class="container">
             <div class="row" >
-                <div class="col-lg-2 col-md-2  col-sm-2 col-xs-2 showMap">
+                <div class="col-lg-2 col-md-2  col-sm-2 col-xs-3 showMap">
                     <div style="" class="table_s">
                         <table >
                             <thead>
@@ -86,9 +104,10 @@
                 </div>
             </div>
         </div>
-<!--    </div>-->
-<!--</div>-->
+    </div>
+</div>
 
+<script src="../js/commonJS.js" charset="utf-8"></script>
 <script>
     bdiduMap([]);
     function bdiduMap(measureds) {
@@ -260,7 +279,7 @@
             , layedit = layui.layedit
             , laydate = layui.laydate
             , $ = layui.jquery
-            , miniPage = layui.miniPage;
+            ;
         var machineNum = "[[${machineNum}]]";
         $("#machineNum").val(machineNum);
         var sdata = new Object();
@@ -315,3 +334,5 @@
         });
     }
 </script>
+</body>
+</html>

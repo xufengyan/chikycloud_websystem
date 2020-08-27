@@ -11,7 +11,7 @@ import java.util.List;
  * @author xf
  * @date 2020-06-11
  */
-public interface ZkUserMachineMapper 
+public interface ZkUserMachineDao
 {
     /**
      * 查询用户对应机器

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>ChikyCloud</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="../js/commonCSS.js" charset="utf-8"></script>
+    <style id="layuimini-bg-color">
+    </style>
+</head>
+<body class="layui-layout-body layuimini-all">
+<div class="layui-layout layui-layout-admin">
+    <div class="layuimini-container layuimini-page-anim">
+        <div class="layuimini-main" style="height: 100%">
+            <form class="layui-form layui-form-pane" style="padding-left: 40%"  lay-filter="example" id="example" onsubmit="return false;">
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">设置选项：</label>
+                        <input type="hidden" name="machineNum">
+                        <div class="layui-input-inline">
+                            <select name="optionSet" id="optionSet" lay-filter="optionSet"  >
+                                <option value="residueArea">剩余可作业面积</option>
+                                <option value="spraying">喷幅</option>
+                                <option value="factoryReset">恢复出厂设置</option>
+                                <option value="factoryTime">恢复应急时间</option>
+                                <option value="reach">深松执行机构臂长</option>
+                                <option value="voice">语音播报</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item" id="inputSet">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">应急时间：</label>
+                        <div class="layui-input-inline">
+                            <input type="number" name="residueArea" lay-verify="required" autocomplete="off" class="layui-input" value="" >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form.-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="updateBtn">确认添加</button>
+                        <button class="layui-btn" id="returnBtn">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../js/commonJS.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate
+            , $ = layui.jquery;
+
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        form.on('select(optionSet)', function(data){
+            switch (data.value) {
+                case "residueArea" :
+                    $("#inputSet").html("<div class=\"layui-inline\">\n" +
+                        "                        <label class=\"layui-form-label\">应急时间：</label>\n" +
+                        "                        <div class=\"layui-input-inline\">\n" +
+                        "                            <input type=\"number\" name=\"residueArea\" lay-verify=\"required\" autocomplete=\"off\" class=\"layui-input\"  >\n" +
+                        "                        </div>\n" +
+                        "                    </div>")
+                    break;
+                case "spraying" :
+                    $("#inputSet").html("<div class=\"layui-inline\">\n" +
+                        "                        <label class=\"layui-form-label\">喷幅：</label>\n" +
+                        "                        <div class=\"layui-input-inline\">\n" +
+                        "                            <input type=\"number\" name=\"spraying\" lay-verify=\"required\" autocomplete=\"off\" class=\"layui-input\"  >\n" +
+                        "                        </div>\n" +
+                        "                    </div>")
+                    break;
+                case "factoryReset" :
+                    $("#inputSet").html("<div class=\"layui-inline\">\n" +
+                        "                        <label class=\"layui-form-label\" title='恢复出厂设置'>恢复出厂设置：</label>\n" +
+                        "                        <div class=\"layui-input-inline\">\n" +
+                        "                           <input type=\"radio\" name=\"factoryReset\" value=\"0\" title=\"是\">\n" +
+                        "                           <input type=\"radio\" name=\"factoryReset\" value=\"1\" title=\"否\" checked>             "+
+                        "                        </div>\n" +
+                        "                    </div>");
+                    break;
+                case "factoryTime" :
+                    $("#inputSet").html("<div class=\"layui-inline\">\n" +
+                        "                        <label class=\"layui-form-label\" title='恢复应急时间'>恢复应急时间：</label>\n" +
+                        "                        <div class=\"layui-input-inline\">\n" +
+                        "                           <input type=\"radio\" name=\"factoryTime\" value=\"0\" title=\"是\">\n" +
+                        "                           <input type=\"radio\" name=\"factoryTime\" value=\"1\" title=\"否\" checked>             "+
+                        "                        </div>\n" +
+                        "                    </div>");
+                    break;
+                case "reach" :
+                    $("#inputSet").html("<div class=\"layui-inline\">\n" +
+                        "                        <label class=\"layui-form-label\">深松臂长：</label>\n" +
+                        "                        <div class=\"layui-input-inline\">\n" +
+                        "                            <input type=\"number\" name=\"reach\" lay-verify=\"required\" autocomplete=\"off\" class=\"layui-input\"  >\n" +
+                        "                        </div>\n" +
+                        "                    </div>")
+                    break;
+                case "voice" :
+
+                    $("#inputSet").html("<div class=\"layui-inline\">\n" +
+                        "                        <label class=\"layui-form-label\">语音播报：</label>\n" +
+                        "                        <div class=\"layui-input-inline\">\n" +
+                        "                           <select name=\"voice\" lay-filter=\"voice\">\n" +
+                        "                                <option value=\"00\">不执行任何操作</option>\n" +
+                        "                                <option value=\"01\">关闭当前开机广告</option>\n" +
+                        "                                <option value=\"02\">打开当前开机广告</option>\n" +
+                        "                                <option value=\"03\">关闭开机设备初始化成功后广告</option>\n" +
+                        "                                <option value=\"04\">打开开机设备初始化成功后广告</option>\n" +
+                        "                                <option value=\"05\">关闭循环播报广告</option>\n" +
+                        "                                <option value=\"06\">打开循环播报广告</option>\n" +
+                        "                                <option value=\"07\">关闭播报作业结束之后广告</option>\n" +
+                        "                                <option value=\"08\">打开播报作业结束之后广告</option>\n" +
+                        "                                <option value=\"09\">关闭关机之前广告</option>\n" +
+                        "                                <option value=\"10\">打开关机之前广告</option>\n" +
+                        "                            </select>" +
+                        "                        </div>\n" +
+                        "                    </div>");
+
+                    break;
+            }
+            form.render();
+
+        });
+
+        var parentIndex = layer.index;
+        //监听提交
+        $("input[name='machineNum']").val("[[${machineNum}]]")
+        form.on('submit(updateBtn)', function (data) {
+            ajaxLayuiFromParamMax("zkMachine/setUserMachine",data,function (res) {
+                toolMsgAndClose();
+                window.parent.brush();
+                return false;
+            })
+            layer.close(parentIndex);
+            return false;
+        })
+
+        $("#returnBtn").click(function () {
+            layer.closeAll();
+        })
+    })
+
+</script>
+</body>
+</html>
