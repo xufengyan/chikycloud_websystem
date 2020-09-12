@@ -70,18 +70,6 @@
             , laydate = layui.laydate
             , $ = layui.jquery;
 
-        function toolMsgAndClose(msg) {
-            // if(isEmpty(msg))
-            // {
-            msg = "成功";
-            // }
-            layer.closeAll();
-            layer.msg(msg, {icon: 1});
-        }
-        var getFormatDate = function(ndate) {
-            var date = ndate.split("T")[0];
-            return date;
-        }
         /**
          * 初始化表单，要加上，不然刷新部分组件可能会不加载
          */
@@ -106,7 +94,12 @@
         var parentIndex = layer.index;
         //监听提交
         form.on('submit(updateBtn)', function (data) {
+            layer.msg('正在提交',{
+                icon:16,
+                shade:0.01
+            })
             ajaxLayuiFromParamMax("user/addUser",data,function (data) {
+                debugger;
                 toolMsgAndClose();
                 window.parent.brush();
                 return false;
@@ -122,7 +115,7 @@
         // })
 
         $("#returnBtn").click(function () {
-            layer.closeAll();
+            parent.layer.closeAll();
         })
     })
 

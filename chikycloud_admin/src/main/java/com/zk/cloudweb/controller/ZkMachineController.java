@@ -3,24 +3,22 @@ package com.zk.cloudweb.controller;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.zk.cloudweb.controller.socket.service.serviceSend;
 import com.zk.cloudweb.entity.*;
-import com.zk.cloudweb.sercice.ISocketloginService;
-import com.zk.cloudweb.sercice.IZkMachineService;
-import com.zk.cloudweb.sercice.IZkMachineSetService;
-import com.zk.cloudweb.sercice.IZkUserMachineService;
+import com.zk.cloudweb.sercice.*;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
 import com.zk.cloudweb.util.getShiroUser;
 import com.zk.cloudweb.util.socketChannel.channelSingle;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.epoll.EpollServerChannelConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 设备Controller
@@ -32,6 +30,23 @@ import java.util.Map;
 @RequestMapping("zkMachine")
 public class ZkMachineController {
 
+    @Value("${ftp.upload.host}")
+    private String host;
+
+    @Value("${ftp.upload.port}")
+    private int port;
+
+    @Value("${ftp.upload.userName}")
+    private String userName;
+
+    @Value("${ftp.upload.passWord}")
+    private String passWord;
+
+    @Value("${ftp.upload.basePath}")
+    private String basePath;
+
+    @Value("${ftp.upload.upgradeFile}")
+    private String upgradeFile;
 
     @Autowired
     private IZkMachineService zkMachineService;
@@ -44,6 +59,9 @@ public class ZkMachineController {
 
     @Autowired
     private IZkMachineSetService zkMachineSetService;
+
+    @Autowired
+    private IZkFileService zkFileService;
     /**
      * 跳转列表页
      * @return
@@ -294,6 +312,55 @@ public class ZkMachineController {
         }
         return result;
     }
+
+
+    /**
+     * 查询在线机器
+     */
+    @RequestMapping("/getOnLineMachine")
+    @ResponseBody
+    public Result getOnLineMachine(){
+        channelSingle channelSingleUtil = channelSingle.getChannelUtil();
+        Map<String, ChannelHandlerContext>  channelMap = channelSingleUtil.getChannelMap();
+        Iterator<String> iter = channelMap.keySet().iterator();
+        Map<String,Object> machineNumMap = new HashMap<>();
+        Set<Map<String,Object>> machineNumArr = new HashSet<>();
+        while(iter.hasNext()) {
+            machineNumMap.put("machineNum",iter.next());
+            machineNumArr.add(machineNumMap);
+        }
+        Result result = new Result(ResultEnum.OK,machineNumArr,true);
+        return result;
+    }
+
+
+    /**
+     * 向设备发送升级包
+     */
+    @RequestMapping("/MachineUpgrade")
+    @ResponseBody
+    public Result MachineUpgrade(String [] machineNumArr,String fileId){
+
+        ZkFile zkFile = new ZkFile();
+        zkFile.setId(fileId);
+        channelSingle channelSingleUtil = channelSingle.getChannelUtil();
+        Map<String, ChannelHandlerContext>  channelMap = channelSingleUtil.getChannelMap();
+        ZkFile zf = zkFileService.selectEntityByEntity(zkFile);
+        if (null != zf){
+            for (String s : machineNumArr) {
+                if(channelMap.containsKey(s)){
+                    ChannelHandlerContext ctx = channelMap.get(s);
+                    serviceSend.socket_machine_upgrade(ctx,host,port,userName,passWord,zf.getFilePath(),zf.getFileCRC32(),0);
+                    //发送升级包数据
+                }
+            }
+        }
+        Result result = new Result(ResultEnum.OK,true);
+        return result;
+    }
+
+
+
 
 
 }

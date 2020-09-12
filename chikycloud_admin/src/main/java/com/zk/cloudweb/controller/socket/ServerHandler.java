@@ -212,7 +212,7 @@ public void channelInactive(ChannelHandlerContext ctx) throws Exception {
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         DeviceSession deviceSession = ctx.channel().attr(KEY).get();
         SocketPackage socketPackage  = deviceSession.getSocketPackage();
-        if (socketPackage!=null&&!"05".equals(socketPackage.getPackageType())){
+        if (socketPackage!=null&&!"05".equals(socketPackage.getPackageType())&&!"0C".equals(socketPackage.getPackageType())){
 //            String result = Hex_to_Decimal.StringToByte(socketPackage);
         byte [] b = serviceSend.StringToByte(socketPackage);
             //接收完客户端端发送的消息后，对客户端做出回应

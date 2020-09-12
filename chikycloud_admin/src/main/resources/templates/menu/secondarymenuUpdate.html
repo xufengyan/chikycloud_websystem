@@ -62,10 +62,7 @@
             , laydate = layui.laydate
             , $ = layui.jquery;
 
-        var getFormatDate = function(ndate) {
-            var date = ndate.split("T")[0];
-            return date;
-        }
+
         /**
          * 初始化表单，要加上，不然刷新部分组件可能会不加载
          */
@@ -123,7 +120,7 @@
 
 
         $("#returnBtn").click(function () {
-            layer.closeAll();
+            parent.layer.closeAll();
         })
     })
 

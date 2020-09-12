@@ -176,7 +176,7 @@
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {   // 监听添加操作
-                layuiWindowsOpenSublevel("添加菜单","menu/addMenuHtml",miniPage);
+                layuiWindowsOpenSublevel("添加菜单","menu/addMenuHtml");
 
             } else if (obj.event === 'delete') {  // 监听删除操作
                 var checkStatus = table.checkStatus('currentTableId')
@@ -193,7 +193,7 @@
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
-                layuiWindowsOpenSublevel("编辑菜单",'menu/updateMenuHtml?id='+data.id+'&headmenuId='+data.headmenu_id+"&sercondarymenuId="+data.sercondarymenu_id,miniPage);
+                layuiWindowsOpenSublevel("编辑菜单",'menu/updateMenuHtml?id='+data.id+'&headmenuId='+data.headmenu_id+"&sercondarymenuId="+data.sercondarymenu_id);
 
                 return false;
             } else if (obj.event === 'delete') {

@@ -68,9 +68,16 @@ public class UserServiceImpl implements IUserService
     @Override
     public int insertUser(User user)
     {
-        user.setId(Tool.CreateID());
-        user.setCreateTime(new Date());
-        return userMapper.insertUser(user);
+        User u = new User();
+        u.setUName(user.getUName());
+        User ifUser = userMapper.findUser(u);
+        if(null!=ifUser){
+            return 0;
+        }else {
+            user.setId(Tool.CreateID());
+            user.setCreateTime(new Date());
+            return userMapper.insertUser(user);
+        }
     }
 
     /**

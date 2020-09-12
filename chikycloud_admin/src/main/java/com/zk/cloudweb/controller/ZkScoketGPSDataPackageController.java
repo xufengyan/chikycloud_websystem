@@ -48,7 +48,7 @@ public class ZkScoketGPSDataPackageController {
 
 
     /**
-     * 根据测量结果插叙测量数据
+     * 根据测量结果查询测量数据
      * @param socketMeasurResult
      * @return
      */
@@ -57,7 +57,7 @@ public class ZkScoketGPSDataPackageController {
     public Result getMachineMeasureGPSData(SocketMeasurResult socketMeasurResult){
         DecimalFormat df = new DecimalFormat("#.0000000");
         Result result = null;
-        if ((null!=socketMeasurResult.getId()&&""!=socketMeasurResult.getId())||(null!=socketMeasurResult.getMachineNum()&&""!=socketMeasurResult.getMachineNum())){
+        if ((null!=socketMeasurResult.getId()&&""!=socketMeasurResult.getId())&&(null!=socketMeasurResult.getMachineNum()&&""!=socketMeasurResult.getMachineNum())){
             List<SocketGPSDataPackage> socketGPSDataPackages = socketGPSDataPackageService.selectSocketGPSDataPackageList(socketMeasurResult);
             SocketMeasurResult measurResult = socketMeasureResultService.selectSocketMeasurResult(socketMeasurResult);
             libgeodesy_ct libgeodesy_ct = new libgeodesy_ct();

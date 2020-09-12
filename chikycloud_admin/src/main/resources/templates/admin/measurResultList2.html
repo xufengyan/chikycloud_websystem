@@ -23,7 +23,8 @@
     <div class="row" >
 <!--        列表-->
         <div class="col-xs-4 col-sm-2 col-md-3 col-lg-2"
-             style="height: 500px;">
+             style="height: 780px;overflow: hidden">
+            <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="screenTime" >筛选测量时间</button>
             <div style="" class="table_s">
                 <table >
                     <thead>
@@ -49,59 +50,56 @@
         <div class="col-xs-4 col-sm-3 col-md-4 col-lg-3"
              style="height: 500px;">
             <div class="zkfont-size" style="font-family: 仿宋">全自动高精度北斗GPS面积测量仪</div>
-            <div style="width: 100%;height:93%;border: 1px solid #ccc;" id="graphic">
+            <div style="width: 100%;height:93%;border: 1px solid #ccc; overflow:hidden;" id="graphic">
                 <canvas id="myCanvas" height="300">测量图形</canvas>
             </div>
-<!--            <div style="border: 1px solid #ccc;height:40.5%;width: 100%">-->
-<!--                <span class="zkfont-size" >测量计算结果：</span>-->
-<!--                <div class="zkfont-size" style="font-family: 仿宋" id="measure_result">-->
-<!--                    <p>时间：</p>-->
-<!--                    <p>面积：平方米</p>-->
-<!--                    <p>&nbsp;   &nbsp;   &nbsp; 亩</p>-->
-<!--                    <p>曲线：</p>-->
-<!--                    <p>直线：</p>-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
 
-        <div class="col-xs-4 col-sm-2 col-md-3 col-lg-2"
+        <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2"
              style="height: 300px;">
             <div style="width: 100%;height: 100%; ">
-
                 <!--        单个文件导出-->
-                <div style="margin-top: 10px;">
-
+                <div class = "dowloadBtn" >
+                    <input type="hidden" id="measureResultId"/>
                     <input type="hidden" id="machineNum"/>
-                    <input class="buttons" type="button" id="exportKML" value="导出KML文件"/>
+                    <button type="button" class="layui-btn layui-btn-xs" lay-submit="" lay-filter="exportKML" >导出KML</button>
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-submit="" lay-filter="exportBatchKML">批量导出KML</button>
 
-                    <input type="hidden" id="exportCADValue"/>
-                    <input class="buttons" type="button" id="exportCAD" value="导出CAD文件"/>
+                    </br>
+                    <button type="button" class="layui-btn layui-btn-xs" lay-submit="" lay-filter="exportCAD">导出CAD</button>
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-submit="" lay-filter="exportBatchCAD">批量导出CAD</button>
+
+                    </br>
+                    <button type="button" class="layui-btn layui-btn-xs" lay-submit="" lay-filter="exportExcel">导出Excel</button>
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-submit="" lay-filter="exportBatchExcel">批量导出Excel</button>
+
+                    </br>
+                    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-submit="" lay-filter="exportImage">导出图片</button>
+
+<!--                    <input class="buttons" type="button" id="exportKML" value="导出KML文件"/>-->
+<!--                    <input class="buttons" type="button" id="exportCAD" value="导出CAD文件"/>-->
                     <!--            <div id="exportKML">导出KML文件</div>-->
                     <!--            <div id="exportCAD">导出CAD文件</div>-->
-                    <input type="hidden" id="exportExcelValue"/>
-                    <input class="buttons" type="button" id="exportExcel" value="导出EXCEL文件"/>
-
-                    <input class="buttons" type="button" id="exportImage" value="导出图片"/>
-
+<!--                    <input class="buttons" type="button" id="exportExcel" value="导出EXCEL文件"/>-->
+<!--                    <input class="buttons" type="button" id="exportImage" value="导出图片"/>-->
                 </div>
                 <!--        批量导出-->
-                <div style="margin: 30px auto;width: 100px;">
+<!--                <div style="margin: 30px auto;width: 100px;">-->
+<!--                    <input type="hidden" id="exportBatchValue"/>-->
+<!--                    <input class="buttons" type="button" id="exportBatchKML" value="批量导出KML文件"/>-->
 
-                    <input type="hidden" id="exportBatchValue"/>
-                    <input class="buttons" type="button" id="exportBatchKML" value="批量导出KML文件"/>
+<!--                    <input class="buttons" type="button" id="exportBatchCAD" value="批量导出CAD文件"/>-->
 
-                    <input class="buttons" type="button" id="exportBatchCAD" value="批量导出CAD文件"/>
-
-                    <input class="buttons" type="button" id="exportBatchExcel" value="批量导出Excel文件"/>
-                </div>
+<!--                    <input class="buttons" type="button" id="exportBatchExcel" value="批量导出Excel文件"/>-->
+<!--                </div>-->
 
 
             </div>
         </div>
 <!--        图片显示-->
-        <div class="col-xs-8 col-sm-5 col-md-5 col-lg-7 showMap"
+        <div class="col-xs-6 col-sm-3 col-md-3 col-lg-5 showMap"
              style="height: 300px;text-align: center;margin-top: 1.5%">
-            <img width="80%" height="90%" src="../images/bg.png">
+            <img width="90%" height="88%" src="../images/bg.png">
         </div>
         <div class="col-xs-4 col-sm-3 col-md-4 col-lg-3"
              style="height: 300px;">
@@ -116,126 +114,10 @@
                 </div>
             </div>
         </div>
-<!--        <div class="clearfix visible-xs">asdad</div>-->
 
-<!--        <div class="col-xs-6 col-sm-4"-->
-<!--             style="background-color: #dedef8;-->
-<!--         box-shadow:inset 1px -1px 1px #444, inset -1px 1px 1px #444;">-->
-<!--            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco-->
-<!--                laboris nisi ut aliquip ex ea commodo consequat. asdad-->
-<!--            </p>-->
-<!--        </div>-->
-<!--        <div class="col-xs-6 col-sm-3"-->
-<!--             style="background-color: #dedef8;box-shadow:-->
-<!--         inset 1px -1px 1px #444, inset -1px 1px 1px #444;">-->
-<!--            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do-->
-<!--                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut-->
-<!--                enim ad minim-->
-<!--            </p>-->
-<!--        </div>-->
-<!--        <div class="col-xs-6 col-sm-3"-->
-<!--             style="background-color: #dedef8;box-shadow:-->
-<!--         inset 1px -1px 1px #444, inset -1px 1px 1px #444;">-->
-<!--            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do-->
-<!--                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut-->
-<!--                enim ad minim-->
-<!--            </p>-->
-<!--        </div>-->
     </div>
 </div>
 
-
-
-
-<!--<div class="layui-layout layui-layout-admin">-->
-<!--    <div class="layuimini-container layuimini-page-anim">-->
-<!--        <div class="container">-->
-<!--            <div class="row" >-->
-<!--                <div class="col-lg-2 col-md-2  col-sm-2 col-xs-2 showMap">-->
-<!--                    <div style="" class="table_s">-->
-<!--                        <table >-->
-<!--                            <thead>-->
-<!--                            <tr>-->
-<!--                                <td style="width: 60%">测量时间</td>-->
-<!--                                <td style="width: 20%">结果</td>-->
-<!--                                <td style="width: 150px">操作</td>-->
-<!--                            </tr>-->
-<!--                            </thead>-->
-<!--                        </table>-->
-<!--                        <table id="table_d">-->
-
-<!--                        </table>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-
-<!--                &lt;!&ndash;    地图显示&ndash;&gt;-->
-<!--                <div class="col-lg-6 col-md-5 col-sm-5 col-xs-5 showMap">-->
-<!--                    <div style="width: 100%;height:800px; ">-->
-<!--                        <div id="resultmap" ></div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-
-<!--                &lt;!&ndash;                    测量图形显示&ndash;&gt;-->
-<!--                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 showMap">-->
-<!--                    &lt;!&ndash;            <div style="width: 100%;height: 100%; ">&ndash;&gt;-->
-<!--                    <div class="zkfont-size" style="font-family: 仿宋">全自动高精度北斗GPS面积测量仪</div>-->
-<!--                    <div style="width: 100%;height:56%;border: 1px solid #ccc;" id="graphic">-->
-<!--                        <canvas id="myCanvas" height="300">测量图形</canvas>-->
-<!--                    </div>-->
-<!--                    <div style="border: 1px solid #ccc;height:40.5%;width: 100%">-->
-<!--                        <span class="zkfont-size" >测量计算结果：</span>-->
-<!--                        <div class="zkfont-size" style="font-family: 仿宋" id="measure_result">-->
-<!--                            <p>时间：</p>-->
-<!--                            <p>面积：平方米</p>-->
-<!--                            <p>&nbsp;   &nbsp;   &nbsp; 亩</p>-->
-<!--                            <p>曲线：</p>-->
-<!--                            <p>直线：</p>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    &lt;!&ndash;            </div>&ndash;&gt;-->
-<!--                </div>-->
-
-
-<!--                &lt;!&ndash;    导出按钮&ndash;&gt;-->
-<!--                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 showMap">-->
-<!--                    <div style="width: 100%;height: 100%; ">-->
-
-<!--                        &lt;!&ndash;        单个文件导出&ndash;&gt;-->
-<!--                        <div style="margin-top: 50px;">-->
-
-<!--                            <input type="hidden" id="machineNum"/>-->
-<!--                            <input class="buttons" type="button" id="exportKML" value="导出KML文件"/>-->
-
-<!--                            <input type="hidden" id="exportCADValue"/>-->
-<!--                            <input class="buttons" type="button" id="exportCAD" value="导出CAD文件"/>-->
-<!--                            &lt;!&ndash;            <div id="exportKML">导出KML文件</div>&ndash;&gt;-->
-<!--                            &lt;!&ndash;            <div id="exportCAD">导出CAD文件</div>&ndash;&gt;-->
-<!--                            <input type="hidden" id="exportExcelValue"/>-->
-<!--                            <input class="buttons" type="button" id="exportExcel" value="导出EXCEL文件"/>-->
-
-<!--                            <input class="buttons" type="button" id="exportImage" value="导出图片"/>-->
-
-<!--                        </div>-->
-<!--                        &lt;!&ndash;        批量导出&ndash;&gt;-->
-<!--                        <div style="margin: 30px auto;width: 100px;">-->
-
-<!--                            <input type="hidden" id="exportBatchValue"/>-->
-<!--                            <input class="buttons" type="button" id="exportBatchKML" value="批量导出KML文件"/>-->
-
-<!--                            <input class="buttons" type="button" id="exportBatchCAD" value="批量导出CAD文件"/>-->
-
-<!--                            <input class="buttons" type="button" id="exportBatchExcel" value="批量导出Excel文件"/>-->
-<!--                        </div>-->
-
-
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 
 <script src="../js/commonJS.js" charset="utf-8"></script>
 <script>
@@ -371,6 +253,7 @@
             var obj = new Object();
             obj['id'] = resultId;
             obj['machineNum'] = $("#machineNum").val();
+            $("#measureResultId").val(resultId);
             debugger
             ajaxResult("ZkScoketGPSDataPackage/getMachineMeasureGPSData",obj,function (res) {
                 var coordinate = res.data;
@@ -390,7 +273,6 @@
                     "                <p>深松深度："+coordinate2.totalWeight+"cm</p>"
                 $("#measure_result").html(mea);
 
-
                 // $("#exportKMLValue").val(zid);
                 // $("#exportCADValue").val(zid);
                 // $("#exportExcelValue").val(zid);
@@ -409,26 +291,87 @@
             , layedit = layui.layedit
             , laydate = layui.laydate
             , $ = layui.jquery;
-        var machineNum = "[[${machineNum}]]";
-        $("#machineNum").val(machineNum);
-        var sdata = new Object();
-        sdata['machineNum'] = machineNum;
-        ajaxResult("ZKSocketMeasureResult/getSocketMeasureResultList",sdata,function (data) {
-            var res = data.data;
-            var trHtml = "";
-            if (res.length>0){
-                for (var i =0 ;i<res.length;i++){
-                    trHtml+="<tr id='remtr_"+i+"' ondblclick='trClick(\"" + res[i].id + "\","+i+")'>\n" +
 
-                        "                <td style=\"width: 60%\">" + date(res[i].startTime) + "</td>\n" +
-                        "                <td style=\"width: 20%\" align=\"right\">" + res[i].measureArea + "亩</td>" +
-                        "                <td style=\"width: 150px\"><button onclick='removeClick(\"" + res[i].id+"\","+i+" )' class='delBtn' >删除</button></td>\n" +
-                        "            </tr>"
+            var machineNum = "[[${machineNum}]]";
+            var startTime = null;
+            var endTime = null;
+            var  measureResultId = $("#measureResultId").val();
+            $("#machineNum").val(machineNum);
 
-                }
-                $("#table_d").html(trHtml);
+            dateWindows();
+
+            function dateWindows() {
+                var index = layer.open({
+                    type: 2,        //iframe窗
+                    title: "请选择测量时间",
+                    shadeClose: false,
+                    shade: 0.3,
+                    offset: 'auto',
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['70%', '70%'],
+                    content: "../ZKSocketMeasureResult/getBeforDateHtml",
+                    btn:['确认'],
+                    yes:function (index) {
+                        var dateRes = window["layui-layer-iframe" + index].callbackData();
+                        var sdata = new Object();
+                        sdata['machineNum'] = machineNum;
+                        if(dateRes.startTime!=null&&dateRes.startTime!=""){
+                            sdata['startTime'] = new Date(Date.parse(dateRes.startTime.replace(/-/g,"/")));
+                            startTime = dateRes.startTime;
+                        }
+                        if(dateRes.endTime!=null&&dateRes.endTime!=""){
+                            sdata['endTime'] = new Date(Date.parse(dateRes.endTime.replace(/-/g,"/")));
+                            endTime = dateRes.endTime;
+                        }
+                        ajaxResult("ZKSocketMeasureResult/getSocketMeasureResultList",sdata,function (data) {
+                            var res = data.data;
+                            var trHtml = "";
+                            if(res.length>0){
+                                $("#measureResultId").val(res[0].id);
+                                if (res.length>0){
+                                    for (var i =0 ;i<res.length;i++){
+                                        trHtml+="<tr id='remtr_"+i+"' ondblclick='trClick(\"" + res[i].id + "\","+i+")'>\n" +
+
+                                            "                <td style=\"width: 60%\">" + date(res[i].startTime) + "</td>\n" +
+                                            "                <td style=\"width: 20%\" align=\"right\">" + res[i].measureArea + "亩</td>" +
+                                            "                <td style=\"width: 150px\"><button onclick='removeClick(\"" + res[i].id+"\","+i+" )' class='delBtn' >删除</button></td>\n" +
+                                            "            </tr>"
+
+                                    }
+                                    style="width: 60%"
+                                    for (var i =0 ;i<25-res.length;i++){
+                                        trHtml+="<tr><td style=\"width: 60%\"></td><td style=\"width: 20%\"></td><td style=\"width: 150px\"></td></tr>"
+                                    }
+                                    $("#table_d").html(trHtml);
+
+                                    if(null!=res[0].socketGPSDataPackages.lenght){
+                                        if(res[0].socketGPSDataPackages.lenght>0){
+                                            bdiduMap(res[0].socketGPSDataPackages);
+                                            MeasurementPatten(res[0].socketGPSDataPackages);
+                                        }
+                                    }
+
+                                }
+                            }else {
+                                for (var i =0 ;i<25;i++){
+                                    trHtml+="<tr><td style=\"width: 60%\"></td><td style=\"width: 20%\"></td><td style=\"width: 150px\"></td></tr>"
+                                }
+                                $("#table_d").html(trHtml);
+                            }
+                        })
+                        layer.close(index)
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
             }
-        })
+
+        //点击筛选的时候弹出层
+        form.on('submit(screenTime)', function (data) {
+            dateWindows();
+            return false;
+        });
 
         /**
          * 初始化表单，要加上，不然刷新部分组件可能会不加载
@@ -444,6 +387,39 @@
         $("#returnBtn").click(function () {
             layer.closeAll();
         })
+
+
+        //单独导出
+        form.on('submit(exportKML)', function (data) {
+            window.location.href="../ZKSocketMeasureResult/exportMeasureResultKML?machineNum="+machineNum+"&id="+measureResultId;
+            return false;
+        });
+
+        form.on('submit(exportCAD)', function (data) {
+            window.location.href="../ZKSocketMeasureResult/exportMeasureResultCAD?machineNum="+machineNum+"&id="+measureResultId;
+            return false;
+        });
+
+        form.on('submit(exportExcel)', function (data) {
+            window.location.href="../ZKSocketMeasureResult/exportMeasureResultExcel?machineNum="+machineNum+"&id="+measureResultId;
+            return false;
+        });
+
+        //批量导出
+        form.on('submit(exportBatchKML)', function (data) {
+            window.location.href="../ZKSocketMeasureResult/exportBatchMeasureResultKml?machineNum="+machineNum+"&startTime="+startTime+"&endTime="+endTime;
+            return false;
+        });
+
+        form.on('submit(exportBatchCAD)', function (data) {
+            window.location.href="../ZKSocketMeasureResult/exportBatchMeasureResultCAD?machineNum="+machineNum+"&startTime="+startTime+"&endTime="+endTime;
+            return false;
+        });
+
+        form.on('submit(exportBatchExcel)', function (data) {
+            window.location.href="../ZKSocketMeasureResult/exportBatchMeasureResultExcel?machineNum="+machineNum+"&startTime="+startTime+"&endTime="+endTime;
+            return false;
+        });
 
     })
     function removeClick(resultId,n){

@@ -11,6 +11,8 @@ import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.zip.CRC32;
+
 /**
  * @author xf
  * @version 1.0
@@ -119,5 +121,93 @@ public class serviceSend {
         logger.info("设置信息发送完毕...");
 
     }
+
+    /**
+     * 发送设备升级包
+     */
+    public static void socket_machine_upgrade(ChannelHandlerContext ctx,String host, int port, String username, String password, String filePath,String CRC32,int fileType){
+        DeviceSession deviceSession = ctx.channel().attr(ServerHandler.KEY).get();
+        SocketPackage socketPackage = deviceSession.getSocketPackage();
+        String start = "";//起始位
+        String num = "";//序列号
+        String type = "0C";//数据包类型
+        String lenghtHexStr = "";
+        String checkSum = "";
+
+        start = Hex_to_Decimal.strToHexStr(socketPackage.getStartNum());
+        num = Hex_to_Decimal.towHex16ToSmall(Hex_to_Decimal.intToHex16(socketPackage.getSerialNum()));
+        lenghtHexStr = Hex_to_Decimal.towHex16ToSmall(Hex_to_Decimal.intToHex16(183));
+
+        //IP地址
+        host = Hex_to_Decimal.strToHexStr(host).replaceAll(" ","");
+        int hlen = 92 - host.length();
+        if (host.length()<=92){
+            if(host.length()<92){
+                for (int i=0;i<hlen;i++){
+                    host+="0";
+                }
+            }
+        }else {
+            return;
+        }
+        //用户名
+        username = Hex_to_Decimal.strToHexStr(username).replaceAll(" ","");
+        int ulen = 64 - username.length();
+        if (username.length()<=64){
+            if(username.length()<64){
+                for (int i=0;i<ulen;i++){
+                    username+="0";
+                }
+            }
+        }else {
+            return;
+        }
+
+        //密码
+        password = Hex_to_Decimal.strToHexStr(password).replaceAll(" ","");
+        int plen = 64 - password.length();
+        if (password.length()<=64){
+            if(password.length()<64){
+                for (int i=0;i<plen;i++){
+                    password+="0";
+                }
+            }
+        }else {
+            return;
+        }
+
+        //地址
+        filePath = Hex_to_Decimal.strToHexStr(filePath).replaceAll(" ","");
+        int flen = 128 - filePath.length();
+        if (filePath.length()<=128){
+            if(filePath.length()<128){
+                for (int i=0;i<flen;i++){
+                    filePath+="0";
+                }
+            }
+        }else {
+            return;
+        }
+
+        //文件类型
+        String Type = Hex_to_Decimal.intOneHex16(fileType);
+
+        //数据包
+        String data =host+username+password+type+filePath+CRC32+"00000000"
+                ;
+        byte [] hexByte = Hex_to_Decimal.hex2Bytes(data);
+        checkSum = Hex_to_Decimal.towHex16ToSmall(Hex_to_Decimal.intToHex16(CRC16Util.calcCrc16(hexByte)));
+        String resultStr = start+num+type+lenghtHexStr+data+checkSum+"0D0A";
+        logger.info("升级包数据");
+        logger.info(resultStr);
+        byte [] setBytes = Hex_to_Decimal.hex2Bytes((resultStr.replaceAll(" ","")));
+
+        ByteBuf bufff = Unpooled.buffer();
+        bufff.writeBytes(setBytes);
+        ctx.channel().write(bufff);
+        ctx.flush();
+        logger.info("空中升级包发送完毕...");
+    }
+
 
 }

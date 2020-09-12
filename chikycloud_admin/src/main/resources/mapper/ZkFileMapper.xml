@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.ZkFileDao">
+    
+    <resultMap type="com.zk.cloudweb.entity.ZkFile" id="ZkFileResult">
+        <result property="id"    column="id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="fileVersion"    column="file_version"    />
+        <result property="fileAccount"    column="file_account"    />
+        <result property="fileCRC32"    column="file_crc32"    />
+        <result property="fileType"    column="file_type"    />
+        <result property="fileAdmin"    column="file_admin"    />
+        <result property="fileUpgradeType"    column="file_upgrade_type"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectZkFileVo">
+        select id, file_name, file_path,file_version,file_account,file_crc32,file_type,file_admin,file_upgrade_type, create_time from zk_file
+    </sql>
+
+    <select id="selectZkFileListByEntity" parameterType="com.zk.cloudweb.entity.ZkFile" resultMap="ZkFileResult">
+        <include refid="selectZkFileVo"/>
+        <where>  
+            <if test="id != null  and id != ''"> and id = #{id}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name = #{fileName}</if>
+            <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
+            <if test="fileVersion != null  and fileVersion != ''"> and file_version = #{fileVersion}</if>
+            <if test="fileAccount != null  and fileAccount != ''"> and file_account = #{fileAccount}</if>
+            <if test="fileCRC32 != null and fileCRC32!=''"> and file_crc32 = #{fileCRC32}</if>
+            <if test="fileType != null"> and file_type = #{fileType}</if>
+            <if test="fileAdmin != null  and fileAdmin != ''"> and file_admin = #{fileAdmin}</if>
+            <if test="fileUpgradeType != null  and fileUpgradeType != ''"> and file_upgrade_type = #{fileUpgradeType}</if>
+        </where>
+        order by create_time,file_version
+    </select>
+
+    <select id="selectZkFileListByEntityCount" parameterType="com.zk.cloudweb.entity.ZkFile" resultType="int">
+        select count(0) from zk_file
+        <where>
+            <if test="id != null  and id != ''"> and id = #{id}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name = #{fileName}</if>
+            <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
+            <if test="fileVersion != null  and fileVersion != ''"> and file_version = #{fileVersion}</if>
+            <if test="fileAccount != null  and fileAccount != ''"> and file_account = #{fileAccount}</if>
+            <if test="fileCRC32 != null and fileCRC32!=''"> and file_crc32 = #{fileCRC32}</if>
+            <if test="fileType != null"> and file_type = #{fileType}</if>
+            <if test="fileAdmin != null  and fileAdmin != ''"> and file_admin = #{fileAdmin}</if>
+            <if test="fileUpgradeType != null  and fileUpgradeType != ''"> and file_upgrade_type = #{fileUpgradeType}</if>
+        </where>
+        order by create_time,file_version
+        <if test="limit !=null">
+            limit #{limit},#{count}
+        </if>
+    </select>
+
+    <select id="selectZkFileByEntity" parameterType="com.zk.cloudweb.entity.ZkFile" resultMap="ZkFileResult">
+        <include refid="selectZkFileVo"/>
+        <where>
+            <if test="id != null  and id != ''"> and id = #{id}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name = #{fileName}</if>
+            <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
+            <if test="fileVersion != null  and fileVersion != ''"> and file_version = #{fileVersion}</if>
+            <if test="fileAccount != null  and fileAccount != ''"> and file_account = #{fileAccount}</if>
+            <if test="fileType != null"> and file_type = #{fileType}</if>
+            <if test="fileAdmin != null  and fileAdmin != ''"> and file_admin = #{fileAdmin}</if>
+            <if test="fileUpgradeType != null  and fileUpgradeType != ''"> and file_upgrade_type = #{fileUpgradeType}</if>
+        </where>
+    </select>
+
+
+<!--    <select id="selectZkUserMachineById" parameterType="String" resultMap="ZkFileResult">-->
+<!--        <include refid="selectZkFileVo"/>-->
+<!--        where id = #{id}-->
+<!--    </select>-->
+<!--        -->
+    <insert id="insertZkFileByEntity" parameterType="com.zk.cloudweb.entity.ZkFile">
+        insert into zk_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''"> id,</if>
+            <if test="fileName != null  and fileName != ''">file_name,</if>
+            <if test="filePath != null  and filePath != ''">file_path,</if>
+            <if test="fileVersion != null  and fileVersion != ''">file_version,</if>
+            <if test="fileAccount != null  and fileAccount != ''">file_account,</if>
+            <if test="fileCRC32 != null  and fileCRC32 != ''">file_crc32,</if>
+            <if test="fileType != null">file_type,</if>
+            <if test="fileAdmin != null  and fileAdmin != ''">file_admin,</if>
+            <if test="fileUpgradeType != null  and fileUpgradeType != ''">file_upgrade_type,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="fileName != null  and fileName != ''">#{fileName},</if>
+            <if test="filePath != null  and filePath != ''">#{filePath},</if>
+            <if test="fileVersion != null  and fileVersion != ''">#{fileVersion},</if>
+            <if test="fileAccount != null  and fileAccount != ''">#{fileAccount},</if>
+            <if test="fileCRC32 != null  and fileCRC32 != ''">#{fileCRC32},</if>
+            <if test="fileType != null">#{fileType},</if>
+            <if test="fileAdmin != null  and fileAdmin != ''">#{fileAdmin},</if>
+            <if test="fileUpgradeType != null  and fileUpgradeType != ''">#{fileUpgradeType},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <delete id="deleteZkFileById" parameterType="String">
+        delete from zk_file where id = #{id}
+    </delete>
+
+    
+</mapper>

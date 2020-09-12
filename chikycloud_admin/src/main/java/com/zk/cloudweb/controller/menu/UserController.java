@@ -2,14 +2,12 @@ package com.zk.cloudweb.controller.menu;
 
 import com.zk.cloudweb.entity.User;
 import com.zk.cloudweb.service.IUserService;
-import com.zk.cloudweb.service.impl.UserServiceImpl;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.w3c.dom.ls.LSInput;
 
 import java.util.List;
 
@@ -32,12 +30,12 @@ public class UserController {
      */
     @RequestMapping("/getUserListHtml")
     public String getUserListHtml(){
-        return "menu/userList";
+        return "user/userList";
     }
 
     @RequestMapping("/addUserHtml")
     public String addUserHtml(){
-        return "menu/userAdd";
+        return "user/userAdd";
     }
 
 
@@ -63,8 +61,13 @@ public class UserController {
     @RequestMapping("/addUser")
     @ResponseBody
     public Result addUser(User user){
+        Result result = null;
         int res = userService.insertUser(user);
-        Result result =new Result(ResultEnum.OK,true);
+        if(res == 0){
+            result = new Result(ResultEnum.SIGNUP_ERROR,false);
+        }else {
+            result =new Result(ResultEnum.OK,true);
+        }
         return result;
     }
 

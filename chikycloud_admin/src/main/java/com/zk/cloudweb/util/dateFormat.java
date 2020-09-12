@@ -1,5 +1,6 @@
 package com.zk.cloudweb.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,5 +25,30 @@ public class dateFormat {
         return date;
     }
 
+    /**
+     * 将时间格式转换为字符串时间格式
+     * @param date
+     * @return
+     */
+    public static String Date_DateStr(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(date);
+    }
+
+    /**
+     * 将字符串时间转换为时间格式
+     * @param dateStr
+     * @return
+     */
+    public static Date Date_StrToDate(String dateStr){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = sdf.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 
 }

@@ -113,7 +113,7 @@
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {   // 添加用户
-                layuiWindowsOpenSublevel("添加用户",'user/addUserHtml',miniPage);
+                layuiWindowsOpenSublevel("添加用户",'user/addUserHtml');
 
             } else if (obj.event === 'delete') {  // 监听删除操作
                 var checkStatus = table.checkStatus('currentTableId')
@@ -133,23 +133,6 @@
             var data = obj.data;
             if (obj.event === 'selectRoleMenu') {
 
-                // var content = miniPage.getHrefContent('roleMenu/getRoleMenuListHtml?roleId='+data.id+'&roleName='+data.roleName);
-                // // var content = miniPage.getHrefContent('overtime/updateOvertimeHtml');
-                //
-                // var openWH = miniPage.getOpenWidthHeight();
-                // var index = layer.open({
-                //     title: '查看权限',
-                //     type: 1,
-                //     shade: 0.2,
-                //     maxmin:true,
-                //     shadeClose: true,
-                //     area: [openWH[0] + 'px', openWH[1] + 'px'],
-                //     offset: [openWH[2] + 'px', openWH[3] + 'px'],
-                //     content: content,
-                // });
-                // $(window).on("resize", function () {
-                //     layer.full(index);
-                // });
                 return false;
             } else if (obj.event === 'delete') {
                 layer.confirm('真的删除行么', function (index) {

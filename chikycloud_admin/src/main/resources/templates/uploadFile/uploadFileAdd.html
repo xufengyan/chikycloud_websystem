@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>ChikyCloud</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="../js/commonCSS.js" charset="utf-8"></script>
+    <style id="layuimini-bg-color">
+    </style>
+</head>
+<body class="layui-layout-body layuimini-all">
+<div class="layui-layout layui-layout-admin">
+    <div class="layuimini-container layuimini-page-anim">
+        <div class="layuimini-main" >
+            <form class="layui-form layui-form-pane" style="padding-left: 40%"  lay-filter="menuformAdd" id="menuformAdd" onsubmit="return false;">
+
+                <div class="layui-form-item">
+                    <div class="layui-inline " >
+                        <label class="layui-form-label">文件名：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="fileName" lay-verify="required" autocomplete="off" class="layui-input"  >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline " >
+                        <label class="layui-form-label">版本号：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="fileVersion" lay-verify="required" autocomplete="off" class="layui-input"  >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item ">
+                    <div class="layui-inline layui-form" lay-filter="selectRole">
+                        <label class="layui-form-label">文件型号：</label>
+                        <div class="layui-input-inline">
+                            <select name="fileType" id="fileType" lay-filter="aihao"  >
+                                <option value="0" selected>升级文件</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline " >
+                        <label class="layui-form-label">升级机型：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="fileUpgradeType" lay-verify="required" autocomplete="off" class="layui-input"  >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline " >
+                        <label class="layui-form-label">文件描述：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="fileAccount"  autocomplete="off" class="layui-input"  >
+                            <input type="hidden" name="filePath" id="filePath">
+                            <input type="hidden" name="fileCRC32" id="fileCRC32">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline " >
+                        <button type="button" class="layui-btn layui-btn-normal" id="selectFile">选择文件</button>
+                        <div class="layui-upload-list">
+                            <table class="layui-table">
+                                <thead>
+                                <tr><th>文件名</th>
+                                    <th>大小</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr></thead>
+                                <tbody id="fileList"></tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="layui-btn" id="uploadFile">开始上传</button>
+                    </div>
+                </div>
+
+                <div class="layui-form.-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="updateBtn">确认添加</button>
+                        <button class="layui-btn" id="returnBtn">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../js/commonJS.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'layedit', 'laydate','upload'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate
+            , $ = layui.jquery
+            , upload = layui.upload;
+
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+
+        //日期
+        laydate.render({
+            elem: '#birthday'
+        });
+        laydate.render({
+            elem: '#inTime'
+        });
+
+        ajaxNOParam("role/getRoleLsit",function (data) {
+            let dh="<option selected></option>";
+            for (var i = 0;i<data.data.length;i++){
+                dh+="<option value="+data.data[i].id+">"+data.data[i].roleName+"</option>"
+            }
+            $("#roleId").html(dh);
+            form.render('select','selectRole');
+        })
+
+        var parentIndex = layer.index;
+        //监听提交
+        form.on('submit(updateBtn)', function (data) {
+            if(data.field.filePath!==''&&data.field.filePath!==null){
+                ajaxLayuiFromParamMax("zkFile/addZkFile",data,function (data) {
+                    toolMsgAndClose();
+                    window.parent.brush();
+                    return false;
+                })
+            }else {
+                toolMsgAndDefeatedClose("请上传文件");
+            }
+            layer.close(parentIndex);
+            return false;
+        });
+
+
+        // form.on('submit(returnBtn)', function (data) {
+        //     layer.close(parentIndex);
+        //     return true;
+        // })
+
+        $("#returnBtn").click(function () {
+            parent.layer.closeAll();
+        })
+
+
+        //多文件列表示例
+        var demoListView = $('#fileList')
+            ,uploadListIns = upload.render({
+            elem: '#selectFile'
+            ,url: '../zkFile/uploadFile' //改成您自己的上传接口
+            ,accept: 'file'
+            ,multiple: false
+            ,auto: false
+            ,bindAction: '#uploadFile'
+            ,choose: function(obj){
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                //读取本地文件
+                obj.preview(function(index, file, result){
+                    if(Object.keys(files).length>1){
+                        delete files[index];
+                        toolMsgAndDefeatedClose("最多只能同时上传一个文件")
+                    }else {
+                        var tr = $(['<tr id="upload-'+ index +'">'
+                            ,'<td>'+ file.name +'</td>'
+                            ,'<td>'+ (file.size/1024).toFixed(1) +'kb</td>'
+                            ,'<td>等待上传</td>'
+                            ,'<td>'
+                            ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                            ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                            ,'</td>'
+                            ,'</tr>'].join(''));
+
+                        //单个重传
+                        tr.find('.demo-reload').on('click', function(){
+                            obj.upload(index, file);
+                        });
+
+                        //删除
+                        tr.find('.demo-delete').on('click', function(){
+                            delete files[index]; //删除对应的文件
+                            tr.remove();
+                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                        });
+
+                        demoListView.append(tr);
+                    }
+
+                });
+            }
+            ,done: function(res, index, upload){
+                if(res.success){ //上传成功
+                    var tr = demoListView.find('tr#upload-'+ index)
+                        ,tds = tr.children();
+                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                    tds.eq(3).html(''); //清空操作
+                    $("#filePath").val(res.data);
+                    $("#fileCRC32").val(res.data2);
+                    toolMsgAndCloseNocpm("文件上传成功");
+                    return delete this.files[index]; //删除文件队列已经上传成功的文件
+                }
+                this.error(index, upload);
+            }
+            ,error: function(index, upload){
+                var tr = demoListView.find('tr#upload-'+ index)
+                    ,tds = tr.children();
+                tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+        });
+
+    })
+
+
+
+
+</script>
+</body>
+</html>

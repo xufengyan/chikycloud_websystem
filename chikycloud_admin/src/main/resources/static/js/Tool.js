@@ -7,7 +7,7 @@ function toolMsgAndClose(msg) {
     {
         msg = "成功";
     }
-    layer.closeAll();
+    parent.layer.closeAll();
     layer.msg(msg, {icon: 1});
 }
 
@@ -26,7 +26,7 @@ function toolMsgAndCloseNocpm(msg) {
 function toolMsgAndDefeatedClose(msg) {
     if(isEmpty(msg))
     {
-        msg = "成功";
+        msg = "失败";
     }
     layer.msg(msg, {icon: 2});
 }

@@ -14,13 +14,13 @@ import java.util.List;
 @Component
 public interface ZkSocketLoginDao {
 
-     ZkSocketLogin selectZkMachine(ZkSocketLogin zkSocketLogin);
+    ZkSocketLogin selectZkMachine(ZkSocketLogin zkSocketLogin);
 
-     int insertZkSocketLogin(ZkSocketLogin zkSocketLogin);
+    int insertZkSocketLogin(ZkSocketLogin zkSocketLogin);
 
-     int insertZkSocketLoginHistory(ZkSocketLogin zkSocketLogin);
+    int insertZkSocketLoginHistory(ZkSocketLogin zkSocketLogin);
 
-     int delZkSocketLoginById(String id);
+    int delZkSocketLoginById(String id);
 
     List<ZkSocketLogin> selectOnLineZkSocketLogin(ZkUserMachine zkUserMachine);
 

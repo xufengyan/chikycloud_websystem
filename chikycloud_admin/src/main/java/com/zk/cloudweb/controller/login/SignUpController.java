@@ -117,19 +117,24 @@ public class SignUpController {
                 if (authCode.equals(resAuthCode)){//判断
                     user.setRoleId("zk1111");
                     int res = userService.insertUser(user);
-                    //注册成功后自动登录
-                    UsernamePasswordToken token = new UsernamePasswordToken(user.getUName(), user.getUPassword());
-                    Subject subject = SecurityUtils.getSubject();
-                    try
-                    {
-                        subject.login(token);
-                        result = new Result(ResultEnum.OK,true);
-                    }
-                    catch (AuthenticationException e)
-                    {
-                         result = new Result(ResultEnum.NO,"登录失败，账号或者密码错误,请重新输入",false);
+                    if(res==0){
+                        result = new Result(ResultEnum.SIGNUP_ERROR,false);
+                    }else {
+                        //注册成功后自动登录
+                        UsernamePasswordToken token = new UsernamePasswordToken(user.getUName(), user.getUPassword());
+                        Subject subject = SecurityUtils.getSubject();
+                        try
+                        {
+                            subject.login(token);
+                            result = new Result(ResultEnum.OK,true);
+                        }
+                        catch (AuthenticationException e)
+                        {
+                            result = new Result(ResultEnum.NO,"登录失败，账号或者密码错误,请重新输入",false);
 
+                        }
                     }
+
                 }else {
                     result = new Result(ResultEnum.AUTHCODE_ERROR,false);
                 }

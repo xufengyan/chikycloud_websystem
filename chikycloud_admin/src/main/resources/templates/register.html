@@ -108,6 +108,7 @@
                 toolMsgAndDefeatedClose("请输入邮箱验证码")
                 return false;
             }
+            layer.load(2);
             ajaxLayuiFromParamMax("addUser",data,function (res) {
                 if(res.success){
                     layer.alert("<font color='red'>恭喜你，您的账号注册成功！</font>", {
