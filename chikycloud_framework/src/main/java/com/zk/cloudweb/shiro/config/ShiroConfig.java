@@ -115,6 +115,8 @@ public class ShiroConfig {
         // 退出 logout地址，shiro去清除session
         filterChainDefinitionMap.put("/logout", "logout");
         // 不需要拦截的访问
+        //测试机器页面不拦截
+        filterChainDefinitionMap.put("/machineTest/**","anon");
         filterChainDefinitionMap.put("/sendAuthCode", "anon");
         filterChainDefinitionMap.put("/addUser", "anon");
         filterChainDefinitionMap.put("/captchaImage", "anon");

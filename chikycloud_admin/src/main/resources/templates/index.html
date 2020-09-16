@@ -12,17 +12,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="icon" href="../images/favicon.ico">
-    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
-    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
-    <link rel="stylesheet" href="../css/layuimini.css?v=2.0.2" media="all">
-    <link rel="stylesheet" href="../css/themes/default.css" media="all">
-    <link rel="stylesheet" href="../css/public.css" media="all">
-    <link rel="stylesheet" href="../css/measureResult.css?v=1.0.5" media="all">
-    <link rel="stylesheet" href="../js/Bootstrap3.3.7/css/bootstrap.min.css">
-    <!--[if lt IE 9]-->
-    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <script src="../zkcloud/js/commonCSS.js" charset="utf-8"></script>
+
+    <script src="../zkcloud/js/commonJS.js" charset="utf-8"></script>
     <!--[endif]-->
     <style id="layuimini-bg-color">
     </style>
@@ -133,7 +125,7 @@
                 </li>
             </div>
             <div class="layui-tab-content">
-                <div id="layuiminiHomeTabIframe" class="layui-tab-item layui-show"><iframe width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" src="../home?t=1"></iframe></div>
+                <div id="layuiminiHomeTabIframe" class="layui-tab-item layui-show"><iframe width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" src="../zkcloud/home?t=1"></iframe></div>
             </div>
         </div>
 <!--            <div class="layui-tab-item layui-show">-->
@@ -147,18 +139,6 @@
     </div>
 
 </div>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=tPrM2awjRveinK1GGTvZh7rtayf2CHcc"></script>
-<script src="../lib/jquery-3.3.1.min.js?v=2020-06-11" type="text/javascript" charset="utf-8"></script>
-<script src="../js/Bootstrap3.3.7/js/bootstrap.min.js"></script>
-<script src="../lib/rgbcolor.min.js?v=2020-06-11" type="text/javascript" charset="utf-8"></script>
-<script src="../lib/stackblur.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="../lib/canvg.js?v=2020-06-11" type="text/javascript" charset="utf-8"></script>
-<script src="../lib/html2canvas.min.js?v=2020-06-11" type="text/javascript" charset="utf-8"></script>
-<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
-<script src="../js/lay-config.js?v=2.0.0" charset="utf-8"></script>
-<script src="../js/graphic.js?v=2.0.0" charset="utf-8"></script>
-<script src="../js/Tool.js?v=1.0.5" charset="utf-8"></script>
-
 <script>
     layui.use(['jquery', 'layer', 'miniAdmin', 'miniTongji'], function () {
         var $ = layui.jquery,
@@ -192,7 +172,7 @@
 
         $('.login-out').on("click", function () {
             layer.msg('退出登录成功', function () {
-                window.location = '/logout';
+                window.location = '/zkcloud/logout';
             });
         });
     });

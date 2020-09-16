@@ -9,16 +9,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
-    <!--[if lt IE 9]-->
-    <script src="../lib/layui-v2.5.5/layui.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../lib/jquery-3.3.1.min.js?v=2020-06-11" type="text/javascript" charset="utf-8"></script>
-    <script src="../js/Tool.js?v=1.0.5" charset="utf-8"></script>
-    <!--[endif]-->
+    <script src="../zkcloud/js/commonCSS.js" charset="utf-8"></script>
+
+    <script src="../zkcloud/js/commonJS.js" charset="utf-8"></script>
     <style>
-        body {background-image:url('../images/bg2.png');height:100%;width:100%;}
+        body {background-image:url('../zkcloud/images/bg2.png');height:100%;width:100%;}
         #container{height:100%;width:100%;}
         input:-webkit-autofill {-webkit-box-shadow:inset 0 0 0 1000px #fff;background-color:transparent;}
         .admin-login-background {width:300px;height:300px;position:absolute;left:50%;top:40%;margin-left:-150px;margin-top:-100px;}
@@ -40,11 +35,11 @@
         // 登录过期的时候，跳出ifram框架
         // debugger
         var curPageUrl = parent.window.document.location.href;
-        var rootPath = ""+curPageUrl.split("//")[1].split("/")[1].split("#")[0];
+        var rootPath = ""+curPageUrl.split("//")[1].split("/")[1].split("#")[0]+"/"+curPageUrl.split("//")[1].split("/")[2].split("#")[0];
         // alert(rootPath+"--------"+top.location+""+self.location+window.open());
-        if(rootPath!=="login"){
+        if(rootPath!=="zkcloud/login"){
             alert('未登录或登录超时。请重新登录');
-            parent.window.location="/logout"
+            parent.window.location="/zkcloud/logout"
         };
     </script>
 </head>
@@ -66,14 +61,13 @@
             </div>
             <div>
                 <input type="text" name="authCode" placeholder="请输入验证码" autocomplete="off" class="layui-input admin-input admin-input-verify" value="">
-                <img class="admin-captcha" width="90" height="30" src="../captchaImage" title="点击更换验证码">
+                <img class="admin-captcha" width="90" height="30" src="../zkcloud/captchaImage" title="点击更换验证码">
             </div>
             <div style="margin-top: 10px"><strong style="color: white">账号还没注册？<a style="color: #ff8d00f0" href="../register">立即注册</a></strong></div>
             <button class="layui-btn admin-button" lay-submit="" lay-filter="login">登 陆</button>
         </form>
     </div>
 </div>
-<script src="../lib/jquery-3.3.1.min.js?v=2020-06-11" type="text/javascript" charset="utf-8"></script>
 
 <script>
 
@@ -84,7 +78,7 @@
             $ = layui.jquery;
 
         $(".admin-captcha").click(function () {
-            var url = "../captchaImage"
+            var url = ctx+"/captchaImage"
             $(".admin-captcha").attr("src", url);
         })
         // 进行登录操作
@@ -104,7 +98,7 @@
             obj["password"] = data.password;
             obj["authCode"] = data.authCode;
             $.ajax({
-                url:"../getLogin",
+                url:ctx+"/getLogin",
                 type:'post',
                 // dataType: 'html',
                 data: obj,

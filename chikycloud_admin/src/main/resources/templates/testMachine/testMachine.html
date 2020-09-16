@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>ChikyCloud</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="../js/commonCSS.js" charset="utf-8"></script>
+    <style id="layuimini-bg-color">
+    </style>
+</head>
+<body >
+
+
+<div class="container" >
+    <div class="row" >
+        <!--        列表-->
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"
+             style="height:500px;background-color:white">
+
+
+            <form class="layui-form layui-form-pane"  lay-filter="menuformAdd" id="menuformAdd" onsubmit="return false;">
+
+                <div class="layui-form-item">
+                    <div class="layui-inline " >
+                        <label class="layui-form-label">IP：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="fileName" lay-verify="required" autocomplete="off" class="layui-input"  >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline " >
+                        <label class="layui-form-label">端口：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="fileVersion" lay-verify="required" autocomplete="off" class="layui-input"  >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="updateBtn">确认连接</button>
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <button class="layui-btn" lay-submit="" lay-filter="updateBtn">发送登录包</button>
+                        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="updateBtn">心跳包</button>
+                        <button class="layui-btn layui-btn-warm" lay-submit="" lay-filter="updateBtn">发送测量数据包</button>
+                        <button class="layui-btn layui-btn-danger" lay-submit="" lay-filter="updateBtn">发送测量结果包</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+<!--        信息展示-->
+        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 showMap"
+             style="height: 500px;background-color: black">
+
+        </div>
+
+    </div>
+</div>
+
+
+<script src="../js/commonJS.js" charset="utf-8"></script>
+<script>
+
+</script>
+</body>
+</html>

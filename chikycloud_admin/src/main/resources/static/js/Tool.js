@@ -64,7 +64,7 @@ function isEmpty(obj){
  */
 function ajaxResult(url,data,callback) {
     $.ajax({
-        url : "../"+url,
+        url : ctx+"/"+url,
         type : "POST",
         // contentType : 'application/json',
         async: true,
@@ -88,7 +88,7 @@ function ajaxResult(url,data,callback) {
  */
 function ajaxNOParam(url,callback) {
     $.ajax({
-        url:"../"+url,
+        url:ctx+"/"+url,
         type:'post',
         async: true,
         dataType:'json',
@@ -113,7 +113,7 @@ function ajaxNOParam(url,callback) {
  */
 function ajaxLayuiFrom(url,data,callback) {
     $.ajax({
-        url: "../" + url,
+        url: ctx+ "/" + url,
         type: 'post',
         // dataType: 'html',
         data: JSON.stringify(data.field),
@@ -138,7 +138,7 @@ function ajaxLayuiFrom(url,data,callback) {
  */
 function ajaxLayuiFromParamMax(url,data,callback) {
     $.ajax({
-        url:"../"+url,
+        url:ctx+"/"+url,
         type:'post',
         data:data.field,
         dataType:'json',
@@ -187,7 +187,7 @@ function layuiWindowsOpenSublevel(title,url) {
         offset: 'auto',
         maxmin: true, //开启最大化最小化按钮
         area: ['80%', '80%'],
-        content: "../"+url,
+        content: ctx+"/"+url,
     });
     $(window).on("resize", function () {
         layer.full(index);
@@ -207,7 +207,7 @@ function layuiWindowsParentOpensl(title,url) {
         offset:  'auto',
         maxmin: true, //开启最大化最小化按钮
         area: ['100%', '100%'],
-        content: "../"+url,
+        content: ctx+"/"+url,
     });
     $(window).on("resize", function () {
         layer.full(index);

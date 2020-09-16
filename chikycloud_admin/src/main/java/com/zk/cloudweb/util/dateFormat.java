@@ -2,7 +2,9 @@ package com.zk.cloudweb.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * @author xf
@@ -16,7 +18,7 @@ public class dateFormat {
 
         SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");//制定日期的显示格式
 
-        Date date = new Date(((m-28800)*1000L));
+        Date date = new Date(((m)*1000L));
 
         String time=sdf.format(date);//m为从服务器返回的数据转换后的值（往往是将服务器返回的字符串形式的值，需要转化为int型或者long型）
 
@@ -51,4 +53,17 @@ public class dateFormat {
         return date;
     }
 
+    /**
+     * 将时间转换为秒
+     * @param date
+     * @return
+     */
+    public static Long dateToGMT(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.setTime(date);
+        TimeZone tz = TimeZone.getTimeZone("GMT");
+        calendar.setTimeZone(tz);
+        return calendar.getTimeInMillis()/1000;
+    }
 }

@@ -38,6 +38,17 @@ public class Hex_to_Decimal {
 
         return Integer.toHexString(Float.floatToIntBits(b)).toUpperCase();
     }
+
+    /**
+     * 将整形转换为16进制的2个字节的字符串
+     * @param b
+     * @return
+     */
+    public static String intFourHex16(int b) {
+
+        return String.format("%08x", b).toUpperCase();
+    }
+
     /**
      * 将整形转换为16进制的2个字节的字符串
      * @param b

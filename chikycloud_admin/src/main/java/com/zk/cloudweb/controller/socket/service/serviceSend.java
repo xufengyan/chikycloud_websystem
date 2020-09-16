@@ -139,7 +139,7 @@ public class serviceSend {
         lenghtHexStr = Hex_to_Decimal.towHex16ToSmall(Hex_to_Decimal.intToHex16(183));
 
         //IP地址
-        host = Hex_to_Decimal.strToHexStr(host).replaceAll(" ","");
+        host = Hex_to_Decimal.strToHexStr(host+":"+port).replaceAll(" ","");
         int hlen = 92 - host.length();
         if (host.length()<=92){
             if(host.length()<92){
