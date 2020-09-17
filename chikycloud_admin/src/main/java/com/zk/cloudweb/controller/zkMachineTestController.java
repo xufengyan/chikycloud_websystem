@@ -55,6 +55,8 @@ public class zkMachineTestController {
     public Result testMachineSendLogin(String host,Integer port){
         Result result = new Result(ResultEnum.OK,true);
 
+
+
         return result;
     }
 
