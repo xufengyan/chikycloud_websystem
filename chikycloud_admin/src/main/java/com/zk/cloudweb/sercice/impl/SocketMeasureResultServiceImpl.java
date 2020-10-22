@@ -6,6 +6,7 @@ import com.zk.cloudweb.entity.socketLink.SocketGPSDataPackage;
 import com.zk.cloudweb.entity.socketLink.SocketMeasurResult;
 import com.zk.cloudweb.sercice.ISocketMeasureResultService;
 import com.zk.cloudweb.util.Tool;
+import com.zk.cloudweb.util.dateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +58,8 @@ public class SocketMeasureResultServiceImpl implements ISocketMeasureResultServi
 
     @Override
     public List<SocketMeasurResult> selectSocketMeasurResultList(SocketMeasurResult socketMeasurResult) {
+        String endTimeStr = dateFormat.Date_yearStr(socketMeasurResult.getEndTime());
+        socketMeasurResult.setEndTime(dateFormat.Date_yearStrToDate(endTimeStr+" 23:59:59"));
         return socketMeasureResultDao.selectSocketMeasurResultList(socketMeasurResult);
     }
 

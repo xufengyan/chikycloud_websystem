@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>ChikyCloud</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="../js/commonCSS.js" charset="utf-8"></script>
+
+    <style id="layuimini-bg-color">
+    </style>
+    <style>
+        .layuimini-container .table-search-fieldset{
+            padding: 0px !important;
+        }
+        .welcome .layui-card {border:1px solid #f2f2f2;border-radius:5px;}
+        .welcome .layuimini-qiuck-module a i {display:inline-block;width:100%;height:60px;line-height:60px;text-align:center;border-radius:2px;font-size:30px;background-color:#F8F8F8;color:#333;transition:all .3s;-webkit-transition:all .3s;}
+        .welcome .layuimini-qiuck-module a cite {position:relative;top:2px;display:block;color:#666;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;font-size:14px;}
+        .welcome .main_btn > p {height:40px;}
+
+        .layuimini-main{padding: 0px;border:1px solid #ffffff;}
+        .layui-card-body{
+            padding: 0px;
+        }
+        .layuimini-main{
+            margin: 0px;
+        }
+        @media screen and (max-width: 1024px){
+            .layuimini-site-mobile1 {
+                display: block !important;
+                position: absolute;
+                z-index: 222;
+                top: 12px;
+                left: 18px;
+                width: 40px;
+                height: 40px;
+                line-height: 40px;
+                border-radius: 2px;
+                text-align: center;
+                background-color: rgba(0, 0, 0, .7);
+                color: #fff;
+
+            }
+            .measure{
+                height: 100%;width: 100%;background-color: rgba(0 , 0, 0, .3);position: absolute;z-index: 223;
+            }
+            .measure-left{
+                overflow: hidden;
+                height: 100%;width: 60%;background-color: rgba(0 , 0, 0, .7);position: absolute;z-index: 224;
+                -webkit-transform: translate3d(-100%,0,0);
+                transform: translate3d(-100%,0,0);
+                -webkit-transition: -webkit-transform 0.4s;
+                transition: transform 0.4s;
+                -webkit-transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+                transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+            }
+            .measure-left-top{
+                line-height: 60px;
+                width: 100%;
+                background-color: black;
+                height: 60px;
+                font-size: 20px;
+                color: aliceblue;
+                text-align: center;
+                /*-webkit-transform: translate3d(0,100%,0);*/
+                /*transform: translate3d(0,100%,0);*/
+            }
+            .measure-left-list{
+                overflow-y: scroll;
+                width: 100%;
+                height: 500px;
+                color: #bfbbbb;
+                /*-webkit-transform: translate3d(0,100%,0);*/
+                /*transform: translate3d(0,100%,0);*/
+            }
+            .measure-left-list table{
+                width: 100%;
+                /*-webkit-transform: translate3d(0,500px,0);*/
+                /*transform: translate3d(0,500px,0);*/
+            }
+            /*.measure-left-list table:nth-child(2) {*/
+            /*    -webkit-transform: translate3d(0,1000px,0);*/
+            /*    transform: translate3d(0,1000px,0);*/
+            /*}*/
+
+            /*.measure-left-list table:nth-child(3) {*/
+            /*    -webkit-transform: translate3d(0,1500px,0);*/
+            /*    transform: translate3d(0,1500px,0);*/
+            /*}*/
+
+            /*.measure-left-list table:nth-child(4) {*/
+            /*    -webkit-transform: translate3d(0,2000px,0);*/
+            /*    transform: translate3d(0,2000px,0);*/
+            /*}*/
+
+            /*.measure-left-list table:nth-child(5) {*/
+            /*    -webkit-transform: translate3d(0,2500px,0);*/
+            /*    transform: translate3d(0,2500px,0);*/
+            /*}*/
+
+            /*.measure-left-list table:nth-child(6) {*/
+            /*    -webkit-transform: translate3d(0,3000px,0);*/
+            /*    transform: translate3d(0,3000px,0);*/
+            /*}*/
+            .measure-left-list table tr{
+                /*width: 100%;*/
+                height: 30px;
+            }
+            .measure-left-list table tr td{
+                /*border: 1px solid #e1e1e1;*/
+                padding-left: 10px;
+                padding-right: 5px;
+            }
+            .measure-left-list table tr:hover{
+                background-color: #f5efef;
+            }
+
+            /* Shown menu */
+
+            .show-menu .measure-left {
+                -webkit-transform: translate3d(0,0,0);
+                transform: translate3d(0,0,0);
+                -webkit-transition: -webkit-transform 0.8s;
+                transition: transform 0.8s;
+                -webkit-transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+                transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+            }
+
+            /*.show-menu .measure-left-list .measure-left-top,*/
+            /*.show-menu .measure-left-list table {*/
+            /*    -webkit-transform: translate3d(0,0,0);*/
+            /*    transform: translate3d(0,0,0);*/
+            /*    -webkit-transition: -webkit-transform 0.8s;*/
+            /*    transition: transform 0.8s;*/
+            /*    -webkit-transition-timing-function: cubic-bezier(0.7,0,0.3,1);*/
+            /*    transition-timing-function: cubic-bezier(0.7,0,0.3,1);*/
+            /*}*/
+
+            /*.show-menu .measure-left-list table {*/
+            /*    -webkit-transition-duration: 0.9s;*/
+            /*    transition-duration: 0.9s;*/
+            /*}*/
+
+            /*.show-menu .measure-left-list::before {*/
+            /*    opacity: 1;*/
+            /*    -webkit-transition: opacity 0.8s;*/
+            /*    transition: opacity 0.8s;*/
+            /*    -webkit-transition-timing-function: cubic-bezier(0.7,0,0.3,1);*/
+            /*    transition-timing-function: cubic-bezier(0.7,0,0.3,1);*/
+            /*    -webkit-transform: translate3d(0,0,0);*/
+            /*    transform: translate3d(0,0,0);*/
+            /*}*/
+        }
+        body, html,#resultmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+    </style>
+</head>
+<body class="layui-layout-body layuimini-multi-module layuimini-all">
+<div class="layui-layout layui-layout-admin" style="overflow: hidden">
+
+    <div class="measure layui-hide"></div>
+
+    <div class="measure-left">
+        <div class="measure-left-top">
+            测量结果列表
+        </div>
+        <div class="measure-left-list" id="measure-left-list">
+            <table id="measureTable">
+<!--                <tr>-->
+<!--                    <td>2020-09-18 17:52:16</td>-->
+<!--                    <td>35.26亩</td>-->
+<!--                </tr>-->
+            </table>
+
+        </div>
+    </div>
+    <div class="layuimini-container layuimini-page-anim">
+        <div class="layuimini-main">
+
+            <fieldset class="table-search-fieldset">
+
+                <div class="layuimini-site-mobile1" id="open-button"><i class="layui-icon"></i></div>
+
+                <!--                <legend>机器列表</legend>-->
+                <div style="margin: 10px 10px 10px 60px">
+                    <form class="layui-form layui-form-pane" lay-filter="secondarymenu"  onsubmit="return false;">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">测量时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="hidden" name = "machineNum" id="machineNum">
+                                    <input type="text"  id="startTime" name="startTime" autocomplete="off" class="layui-input"  >
+                                    <input type="text"  id="endTime" name="endTime" autocomplete="off" class="layui-input"  >
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <button id="searchBtn" class="layui-btn layui-btn-primary" lay-submit="" lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+
+            <div class="layuimini-main welcome">
+                <div class="layui-card">
+
+                        <div class="layui-tab layui-tab-brief" lay-filter="measureTabBrief">
+                            <ul class="layui-tab-title">
+                                <li class="layui-this">地图展示</li>
+                                <li>图形展示</li>
+                                <li>测量数据</li>
+                            </ul>
+                            <div class="layui-tab-content" >
+                                <div class="layui-tab-item layui-show">
+                                    <div class="layui-card-body layui-text" style="overflow:scroll !important;height: 450px;" id = "layui-card-body-text">
+                                        <div style="width: 100%;height:100%;">
+                                            <div id="resultmap" ></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-tab-item" >
+                                    <div class="zkfont-size" style="font-family: 仿宋">全自动高精度北斗GPS面积测量仪</div>
+                                    <div style="width: 100%;height:400px;border: 1px solid #ccc; overflow:hidden;" id="graphic">
+                                        <canvas id="myCanvas" height="400">测量图形</canvas>
+                                    </div>
+                                </div>
+                                <div class="layui-tab-item">
+                                    <div style="border: 1px solid #ccc;height:95%;width: 100%">
+                                        <span class="zkfont-size" >测量计算结果：</span>
+                                        <div class="zkfont-size" style="font-family: 仿宋" id="measure_result">
+                                            <p>时间：</p>
+                                            <p>面积：平方米</p>
+                                            <p>&nbsp;   &nbsp;   &nbsp; 亩</p>
+                                            <p>曲线：</p>
+                                            <p>直线：</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+</div>
+
+<script src="../js/commonJS.js" charset="utf-8"></script>
+<script src="../js/H5/main.js" charset="utf-8"></script>
+<script src="../js/H5/classie.js" charset="utf-8"></script>
+
+<script >
+    // bdiduMap([{"id":"93b2fa051db94926a735ea87f3d68313","limit":null,"count":null,"page":null,"createTime":null,"delType":null,"dataNum":null,"longitude":113.86534,"latitude":22.590261,"rate":0.435,"course":0.0,"measureTime":"2020-06-16T12:05:36.000+0000","measureResId":"c26ee19ea7ed4c6bb40361349029959c","machineNum":"869467040604671","gpstype":null},{"id":"39efbb2cf9484a4e85194f2be592c0b6","limit":null,"count":null,"page":null,"createTime":null,"delType":null,"dataNum":null,"longitude":113.86534,"latitude":22.590261,"rate":0.2,"course":0.0,"measureTime":"2020-06-16T12:05:37.000+0000","measureResId":"c26ee19ea7ed4c6bb40361349029959c","machineNum":"869467040604671","gpstype":null},{"id":"e1c64976b54a4517891dd55da20fc9e2","limit":null,"count":null,"page":null,"createTime":null,"delType":null,"dataNum":null,"longitude":113.86535,"latitude":22.590265,"rate":0.215,"course":0.0,"measureTime":"2020-06-16T12:05:38.000+0000","measureResId":"c26ee19ea7ed4c6bb40361349029959c","machineNum":"869467040604671","gpstype":null},{"id":"f532ec8e6fba4639b8210ab69f5c5379","limit":null,"count":null,"page":null,"createTime":null,"delType":null,"dataNum":null,"longitude":113.86535,"latitude":22.590267,"rate":0.058,"course":0.0,"measureTime":"2020-06-16T12:05:39.000+0000","measureResId":"c26ee19ea7ed4c6bb40361349029959c","machineNum":"869467040604671","gpstype":null},{"id":"60deaae3d6b0403b970b9cd54f3abfb0","limit":null,"count":null,"page":null,"createTime":null,"delType":null,"dataNum":null,"longitude":113.86533,"latitude":22.590277,"rate":2.628,"course":76.76,"measureTime":"2020-06-16T12:05:40.000+0000","measureResId":"c26ee19ea7ed4c6bb40361349029959c","machineNum":"869467040604671","gpstype":null}]);
+    bdiduMap([])
+    function bdiduMap(measureds) {
+        if (measureds.length > 0) {
+            var list = [];
+            for (var i = 0; i < measureds.length; i++) {
+                list.push({Long: measureds[i].longitude, Lat: measureds[i].latitude});
+            }
+            var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+            var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+            var top_right_navigation = new BMap.NavigationControl({
+                anchor: BMAP_ANCHOR_TOP_RIGHT,
+                type: BMAP_NAVIGATION_CONTROL_SMALL
+            });
+            var listLast = list.length - 1;
+            // 百度地图API功能
+            var map = new BMap.Map("resultmap");    // 创建Map实例
+            map.centerAndZoom(new BMap.Point(list[parseInt(list.length / 6)].Long, list[parseInt(list.length / 4)].Lat), 13);  // 初始化地图,设置中心点坐标和地图级别
+            map.addControl(top_left_control);
+            map.addControl(top_left_navigation);
+            map.addControl(top_right_navigation);
+            map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+            map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+            // map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+            setTimeout(drawIcon, 500);
+
+
+            var pointArray = new Array();
+            for (var i = 0; i < measureds.length; i++) {
+                pointArray.push(new BMap.Point(measureds[i].longitude, measureds[i].latitude))
+            }
+
+            var viewPort = map.getViewport(pointArray)
+            map.centerAndZoom(viewPort.center, viewPort.zoom);
+
+            var carMk;
+
+            function drawGreenLine(i) {
+                var polyline = new BMap.Polyline([
+                    new BMap.Point(list[i].Long, list[i].Lat),//起始点的经纬度
+                    new BMap.Point(list[i + 1].Long, list[i + 1].Lat)//终点的经纬度
+                ], {
+                    strokeColor: "red",//设置颜色
+                    strokeWeight: 4, //宽度
+                    strokeOpacity: 1
+                });//透明度
+                map.addOverlay(polyline);
+            }
+
+            //设置起点和终点坐标
+            function drawIcon() {
+                if (carMk) {
+                    map.removeOverlay(carMk);
+                }
+                carMk2 = new BMap.Marker(
+                    new BMap.Point(list[0].Long, list[0].Lat)//起始点的经纬度
+                );
+                map.addOverlay(carMk2);
+
+                carMk = new BMap.Marker(
+                    new BMap.Point(list[listLast].Long, list[listLast].Lat)//终点的经纬度
+                );
+                map.addOverlay(carMk);
+
+                for (var i = 0; i < list.length - 1; i++) {
+                    drawGreenLine(i);
+                }
+            }
+        } else {
+            // var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+            // var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+            // var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL});
+            var map = new BMap.Map("resultmap");    // 创建Map实例
+            map.centerAndZoom(new BMap.Point(103.404, 34.915),5);
+            // map.addControl(new BMap.MapTypeControl({
+            //     mapTypes:[
+            //         BMAP_NORMAL_MAP,
+            //         BMAP_HYBRID_MAP
+            //     ]}));
+            // map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+            map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+            // map.addControl(new BMapGL.MapTypeControl());   //添加地图类型控件
+            // map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+            // map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+            // map.enableContinuousZoom();
+            // map.addControl(top_left_control);
+            // map.addControl(top_left_navigation);
+        }
+    }
+
+    /**
+     * 测量图形进行赋值画线
+     * @param measureds
+     * @constructor
+     */
+    function MeasurementPatten(measureds) {
+        var points=[];
+        for (var i=0;i<measureds.length;i++){
+            var point = {};
+            // point.Name = 'pt'+i;
+            point.L = measureds[i].longitude;
+            point.B = measureds[i].latitude;
+            points.push(point);
+        }
+        //画图
+        draw(points)
+    }
+    //初始化调用
+    getMeasure();
+    /**
+     * 点击切换地图图形
+     */
+    var zk_zid="";
+    var measureData = null;
+    function trClick(resultId,n) {
+        if (resultId!=zk_zid){
+            zk_zid=resultId;
+            var trs = $(".table_s table tr").parent().find('tr');
+            if (trs.hasClass('on_tr')){
+                trs.removeClass('on_tr');
+            }
+            $(trs[n+1]).addClass('on_tr');
+
+            var obj = new Object();
+            obj['id'] = resultId;
+            obj['machineNum'] = $("#machineNum").val();
+            $("#measureResultId").val(resultId);
+            ajaxResult("ZkScoketGPSDataPackage/getMachineMeasureGPSData",obj,function (res) {
+                var coordinate = res.data;
+                var coordinate2 = res.data2;
+                if (res.code==0){
+                    console.log("成功")
+                    bdiduMap(res.data);
+                    measureData = res.data;
+                    // MeasurementPatten(res.data);
+                }else {
+                    alert(res.msg);
+                }
+
+                var mea = "<p>时间："+date(coordinate2.startTime)+"</p>\n" +
+                    "                <p>面积："+coordinate2.measureArea+"亩</p>\n" +
+                    // "                <p>&nbsp;   &nbsp;   &nbsp; "+coordinate[0].meas_munum+"亩</p>\n" +
+                    "                <p>路程："+coordinate2.measureJourney+"米</p>\n" +
+                    // "                <p>直线："+coordinate[0].line+"米</p>";
+                    "                <p>深松深度："+coordinate2.totalWeight+"cm</p>"
+                $("#measure_result").html(mea);
+
+            },true)
+
+        }else {
+            return;
+        }
+    }
+
+    layui.use(['form', 'table'  ,'element', 'laydate'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            laydate = layui.laydate,
+            table = layui.table,
+            element = layui.element;
+
+        element.on('tab(measureTabBrief)', function(data){
+            if(data.index==1){
+                if(measureData!=null&&measureData!=''){
+                    MeasurementPatten(measureData)
+                }
+                // MeasurementPatten([{"id":"93b2fa051db94926a735ea87f3d68313","limit":null,"count":null,"page":null,"createTime":null,"delType":null,"dataNum":null,"longitude":113.86534,"latitude":22.590261,"rate":0.435,"course":0.0,"measureTime":"2020-06-16T12:05:36.000+0000","measureResId":"c26ee19ea7ed4c6bb40361349029959c","machineNum":"869467040604671","gpstype":null},{"id":"39efbb2cf9484a4e85194f2be592c0b6","limit":null,"count":null,"page":null,"createTime":null,"delType":null,"dataNum":null,"longitude":113.86534,"latitude":22.590261,"rate":0.2,"course":0.0,"measureTime":"2020-06-16T12:05:37.000+0000","measureResId":"c26ee19ea7ed4c6bb40361349029959c","machineNum":"869467040604671","gpstype":null},{"id":"e1c64976b54a4517891dd55da20fc9e2","limit":null,"count":null,"page":null,"createTime":null,"delType":null,"dataNum":null,"longitude":113.86535,"latitude":22.590265,"rate":0.215,"course":0.0,"measureTime":"2020-06-16T12:05:38.000+0000","measureResId":"c26ee19ea7ed4c6bb40361349029959c","machineNum":"869467040604671","gpstype":null},{"id":"f532ec8e6fba4639b8210ab69f5c5379","limit":null,"count":null,"page":null,"createTime":null,"delType":null,"dataNum":null,"longitude":113.86535,"latitude":22.590267,"rate":0.058,"course":0.0,"measureTime":"2020-06-16T12:05:39.000+0000","measureResId":"c26ee19ea7ed4c6bb40361349029959c","machineNum":"869467040604671","gpstype":null},{"id":"60deaae3d6b0403b970b9cd54f3abfb0","limit":null,"count":null,"page":null,"createTime":null,"delType":null,"dataNum":null,"longitude":113.86533,"latitude":22.590277,"rate":2.628,"course":76.76,"measureTime":"2020-06-16T12:05:40.000+0000","measureResId":"c26ee19ea7ed4c6bb40361349029959c","machineNum":"869467040604671","gpstype":null}]);
+            }
+
+        });
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        //日期
+        laydate.render({
+            elem: '#startTime',
+            value : getBeforeDate(3)
+        });
+        laydate.render({
+            elem: '#endTime',
+            value: new Date()
+        });
+
+        function getBeforeDate(n) {
+            var n = n;
+            var d = new Date();
+            var year = d.getFullYear();
+            var mon = d.getMonth() + 1;
+            var day = d.getDate();
+            if(day <= n) {
+                if(mon > 1) {
+                    mon = mon - 1;
+                } else {
+                    year = year - 1;
+                    mon = 12;
+                }
+            }
+            d.setDate(d.getDate() - n);
+            year = d.getFullYear();
+            mon = d.getMonth() + 1;
+            day = d.getDate();
+            s = year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
+            return s;
+        }
+        //搜索
+        form.on('submit(data-search-btn)', function (data) {
+            getMeasure(data);
+        })
+
+    });
+
+
+    function getMeasure(data) {
+        if (undefined==data||null == data){
+            data = new Object()
+            data['field'] = null;
+        }else {
+            data.field.machineNum = "[[${machineNum}]]";
+            $("#machineNum").val("[[${machineNum}]]")
+            if(data.field.startTime!=null&&data.field.startTime!=""){
+                data.field.startTime = new Date(Date.parse(data.field.startTime.replace(/-/g,"/")));
+            }else {
+                delete data.field.startTime;
+            }
+            if(data.field.endTime!=null&&data.field.endTime!=""){
+                data.field.endTime = new Date(Date.parse(data.field.endTime.replace(/-/g,"/")));
+            }else {
+                delete data.field.endTime;
+            }
+        }
+
+        // data.field.startTime = new Date(Date.parse(data.field.startTime.replace(/-/g,"/")));
+        // data.field.endTime = new Date(Date.parse(data.field.endTime.replace(/-/g,"/")));
+        ajaxLayuiFromParamMax("ZKSocketMeasureResult/getSocketMeasureResultList",data,function (res) {
+            console.log(res);
+            var html = "";
+            res.data.forEach((item,i) =>{
+                html+="<tr id='remtr_"+i+"' onclick='trClick(\"" + item.id + "\","+i+")'>\n" +
+                    "                    <td>"+date(item.startTime)+"</td>\n" +
+                    "                    <td>"+item.measureArea+"亩</td>\n" +
+                    "                </tr>"
+                $("#measureTable").html(html);
+            })
+        },true);
+    }
+</script>
+</body>
+</html>

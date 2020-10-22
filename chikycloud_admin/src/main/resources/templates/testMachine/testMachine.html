@@ -32,7 +32,8 @@
                     <div class="layui-inline " >
                         <label class="layui-form-label">IP：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="fileName" lay-verify="required" autocomplete="off" class="layui-input"  >
+<!--                            <input type="text" value="192.168.161.1" name="host" lay-verify="required" autocomplete="off" class="layui-input"  >-->
+                                <input type="text" value="39.96.7.233" name="host" lay-verify="required" autocomplete="off" class="layui-input"  >
                         </div>
                     </div>
                 </div>
@@ -41,24 +42,30 @@
                     <div class="layui-inline " >
                         <label class="layui-form-label">端口：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="fileVersion" lay-verify="required" autocomplete="off" class="layui-input"  >
+                            <input id = "socketKey" name="socketKey" type="hidden">
+                            <input type="text" value="8899" name="port" lay-verify="required" autocomplete="off" class="layui-input"  >
                         </div>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="updateBtn">确认连接</button>
+                        <button class="layui-btn" lay-submit="" lay-filter="connectBtn">确认连接</button>
                     </div>
                 </div>
 
 
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <button class="layui-btn" lay-submit="" lay-filter="updateBtn">发送登录包</button>
-                        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="updateBtn">心跳包</button>
-                        <button class="layui-btn layui-btn-warm" lay-submit="" lay-filter="updateBtn">发送测量数据包</button>
-                        <button class="layui-btn layui-btn-danger" lay-submit="" lay-filter="updateBtn">发送测量结果包</button>
+                        <button class="layui-btn" lay-submit="" lay-filter="loginBtn">发送登录包</button>
+                        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="heartBeatBtn">心跳包</button>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+
+                        <button class="layui-btn layui-btn-warm" lay-submit="" lay-filter="measureBtn">发送测量数据包</button>
+                        <button class="layui-btn layui-btn-danger" lay-submit="" lay-filter="measureResultBtn">发送测量结果包</button>
                     </div>
                 </div>
             </form>
@@ -66,8 +73,11 @@
         </div>
 <!--        信息展示-->
         <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 showMap"
-             style="height: 500px;background-color: black">
+             style="height: 500px;background-color: black;">
+            <div style="width: 100%;height: 100%; margin-left: 20px;color: #ffffff;font-size: 16px;overflow: scroll;" id="message">
+                   <p>设备Id：0861111111111111</p>
 
+            </div>
         </div>
 
     </div>
@@ -76,6 +86,122 @@
 
 <script src="../js/commonJS.js" charset="utf-8"></script>
 <script>
+    var websocket = null;
+    var append = $("#message");
+    // var li = document.createElement('li');
+    layui.use(['form', 'layedit', 'laydate','upload'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate
+            , $ = layui.jquery
+            , upload = layui.upload;
+        form.on('submit(connectBtn)', function (data) {
+            if(data.field.host!==''&&data.field.port!==null&&data.field.port!==''&&data.field.host!==null){
+                ajaxLayuiFromParamMax("machineTest/testMachineConnect",data,function (res) {
+                    if(res.success){
+
+                        $("#socketKey").val(res.data2)
+                        append.append("<p>"+res.data+"</p>")
+                        document.getElementById('message').scrollTop=document.getElementById('message').scrollHeight;
+                        toolMsgAndClose();
+                        //浏览器是否支持
+                        if ('WebSocket' in window) {
+                            // 上面我们给webSocket定位的路径
+                            websocket = new WebSocket('ws://localhost:8060/webSocketConConcurrent/'+res.data2);
+                            // websocket = new WebSocket('ws://www.chiky.cn:8060/webSocketConConcurrent/'+res.data2);
+                        } else {
+                            alert('该浏览器不支持websocket!');
+                        }
+                        //建立连接
+                        websocket.onopen = function (event) {
+                            console.log('建立连接');
+                        }
+                        //关闭连接
+                        websocket.onclose = function (event) {
+                            $("#socketKey").val("");
+                            console.log('连接关闭');
+                        }
+                        //消息来的时候的事件
+                        websocket.onmessage = function (event) {
+                            // 这里event.data就是我们从后台推送过来的消息
+                            append.append("<p>"+event.data+"</p>")
+                            document.getElementById('message').scrollTop=document.getElementById('message').scrollHeight;
+                            console.log('收到消息:' + event.data);
+                        }
+
+                        //发生错误时
+                        websocket.onerror = function () {
+                            alert('websocket通信发生错误！');
+                        }
+                        //窗口关闭时，Websocket关闭
+                        window.onbeforeunload = function () {
+                            websocket.close();
+                        }
+
+                    }else {
+                        toolMsgAndDefeatedClose()
+                    }
+
+                    return false;
+                })
+            }
+            append.scrollTop=append.scrollHeight;
+            return false;
+        });
+
+        form.on('submit(loginBtn)', function (data) {
+            if (data.field.socketKey!=''&&data.field.socketKey!=null){
+                ajaxLayuiFromParamMax("machineTest/testMachineSendLogin",data,function (res) {
+                    if(res.success){
+                        // $("#message").append("<p>发送登录包信息：</br>"+res.data+"</p>");
+                    }
+                });
+
+            }else {
+                toolMsgAndDefeatedClose("连接成功后才可以发送数据包")
+            }
+        });
+
+        form.on('submit(heartBeatBtn)', function (data) {
+            if (data.field.socketKey!=''&&data.field.socketKey!=null){
+                ajaxLayuiFromParamMax("machineTest/testMachineSendHeartbeat",data,function (res) {
+                    if(res.success){
+                        // $("#message").append("<p>发送心跳包信息：</br>"+res.data+"</p>");
+                    }
+                });
+            }else {
+                toolMsgAndDefeatedClose("连接成功后才可以发送数据包")
+            }
+        });
+
+        form.on('submit(measureBtn)', function (data) {
+            if (data.field.socketKey!=''&&data.field.socketKey!=null){
+                ajaxLayuiFromParamMax("machineTest/testMachineSendMeasure",data,function (res) {
+                    if(res.success){
+                        // $("#message").append("<p>发送测量数据包信息：</br>"+res.data+"</p>");
+                    }
+                });
+            }else {
+                toolMsgAndDefeatedClose("连接成功后才可以发送数据包")
+            }
+        });
+
+        form.on('submit(measureResultBtn)', function (data) {
+            if (data.field.socketKey!=''&&data.field.socketKey!=null){
+                ajaxLayuiFromParamMax("machineTest/testMachineSendMeasureResult",data,function (res) {
+                    if(res.success){
+                        // $("#message").append("<p>发送测量数据包信息：</br>"+res.data+"</p>");
+                    }
+                });
+            }else {
+                toolMsgAndDefeatedClose("连接成功后才可以发送数据包")
+            }
+        });
+
+
+    })
+
 
 </script>
 </body>

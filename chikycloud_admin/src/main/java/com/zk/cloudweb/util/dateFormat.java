@@ -36,6 +36,16 @@ public class dateFormat {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(date);
     }
+    /**
+     * 将时间格式转换为字符串时间格式
+     * @param date
+     * @return
+     */
+    public static String Date_yearStr(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
+    }
+
 
     /**
      * 将字符串时间转换为时间格式
@@ -53,6 +63,21 @@ public class dateFormat {
         return date;
     }
 
+    /**
+     * 将字符串时间转换为时间格式
+     * @param dateStr
+     * @return
+     */
+    public static Date Date_yearStrToDate(String dateStr){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = sdf.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
     /**
      * 将时间转换为秒
      * @param date

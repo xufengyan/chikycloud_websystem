@@ -16,7 +16,7 @@
     <style id="layuimini-bg-color">
     </style>
 </head>
-<body class="layui-layout-body layuimini-all">
+<body class="layuimini-all">
     <div class="layui-layout layui-layout-admin">
         <div class="layuimini-container layuimini-page-anim">
             <div class="layuimini-main">
@@ -121,7 +121,7 @@
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'addUserMachine') {   // 监听添加操作
-                layuiWindowsOpenSublevel("绑定设备","../zkMachine/addZkMachineHtml");
+                layuiWindowsOpenSublevel("绑定设备","zkMachine/addZkMachineHtml");
 
             }
 

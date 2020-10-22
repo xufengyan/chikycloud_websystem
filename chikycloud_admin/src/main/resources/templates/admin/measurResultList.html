@@ -16,7 +16,7 @@
     <style id="layuimini-bg-color">
     </style>
 </head>
-<body class="layui-layout-body layuimini-all">
+<body class="layuimini-all">
 <div class="layui-layout layui-layout-admin">
     <div class="layuimini-container layuimini-page-anim">
         <div class="container">
@@ -241,7 +241,7 @@
             var obj = new Object();
             obj['id'] = resultId;
             obj['machineNum'] = $("#machineNum").val();
-            debugger
+
             ajaxResult("ZkScoketGPSDataPackage/getMachineMeasureGPSData",obj,function (res) {
                 var coordinate = res.data;
                 var coordinate2 = res.data2;

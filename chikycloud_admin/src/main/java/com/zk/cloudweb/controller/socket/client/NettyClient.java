@@ -38,7 +38,11 @@ public class NettyClient {
     //结束测量时间
     private Date endTime;
     //单利对象
-    private static NettyClient nettyClient =null;
+    private static NettyClient nettyClient = null;
+    public static void setNettyClient(NettyClient nettyClient) {
+        NettyClient.nettyClient = nettyClient;
+    }
+
     //创建当前对象
     public static NettyClient getNettyClient(String host, int port,String UserHost){
         if (null == nettyClient){
@@ -55,6 +59,9 @@ public class NettyClient {
     public NettyClient(){
 
     }
+
+
+
     /**
      * 客户端连接
      * @param host
@@ -76,25 +83,28 @@ public class NettyClient {
         client.handler(new ChannelInitializer<NioSocketChannel>() {  //通道是NioSocketChannel
             @Override
             protected void initChannel(NioSocketChannel ch) throws Exception {
+                ch.pipeline().addLast(new ClientDecoderHandler());
                 //字符串编码器，一定要加在SimpleClientHandler 的上面
                 ch.pipeline().addLast(new StringEncoder());
                 ch.pipeline().addLast(new DelimiterBasedFrameDecoder(
                         Integer.MAX_VALUE, Delimiters.lineDelimiter()[0]));
                 //找到他的管道 增加他的handler
                 ch.pipeline().addLast(new SimpleClientHandler());
+
             }
         });
+
 
         //连接服务器
         ChannelFuture future = client.connect(host, port).sync();
 
         if (future.isSuccess()){
-            this.channelMap.put(host+""+port+"-"+UserHost,future.channel());
+            this.channelMap.put(host+":"+port+"-"+UserHost,future.channel());
             logger.info("模拟器连接成功");
         }else {
             logger.info("模拟器连接失败");
         }
-        this.channelMap.put(host+":"+port+"-"+UserHost,future.channel());
+
         //发送数据给服务器
 //        User user = new User();
 //        user.setAge(12);

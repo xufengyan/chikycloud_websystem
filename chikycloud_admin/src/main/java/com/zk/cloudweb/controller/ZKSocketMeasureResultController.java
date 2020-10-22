@@ -11,6 +11,7 @@ import com.zk.cloudweb.util.excel.CommonExcel;
 import com.zk.cloudweb.util.export.ZipBacthExport;
 import com.zk.cloudweb.util.export.exportCAD;
 import com.zk.cloudweb.util.export.exportKML;
+import com.zk.cloudweb.util.libgeodesy_ct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -72,11 +74,18 @@ public class ZKSocketMeasureResultController {
     @RequestMapping("/getSocketMeasureResultList")
     @ResponseBody
     public Result getSocketMeasureResultList(SocketMeasurResult socketMeasurResult){
-
+        DecimalFormat df = new DecimalFormat("#.0000000");
         List<SocketMeasurResult> socketMeasurResults = socketMeasureResultService.selectSocketMeasurResultList(socketMeasurResult);
-
         if (socketMeasurResults.size()>0){
             List<SocketGPSDataPackage> socketGPSDataPackages  = socketGPSDataPackageService.selectSocketGPSDataPackageList(socketMeasurResults.get(0));
+            libgeodesy_ct libgeodesy_ct = new libgeodesy_ct();
+            for (SocketGPSDataPackage socketGPSDataPackage : socketGPSDataPackages) {
+                if (socketGPSDataPackage.getLatitude()!=0&&socketGPSDataPackage.getLongitude()!=0) {
+                    libgeodesy_ct.libgeodesy_wgs84_to_mars(Double.parseDouble(""+socketGPSDataPackage.getLatitude()), Double.parseDouble(""+socketGPSDataPackage.getLongitude()));
+                    socketGPSDataPackage.setLatitude(Float.parseFloat(df.format(libgeodesy_ct.getBd09_lat())));
+                    socketGPSDataPackage.setLongitude(Float.parseFloat(df.format(libgeodesy_ct.getBd09_lon())));
+                }
+            }
             socketMeasurResults.get(0).setSocketGPSDataPackages(socketGPSDataPackages);
         }
         Result result = new Result(ResultEnum.OK,socketMeasurResults,true);

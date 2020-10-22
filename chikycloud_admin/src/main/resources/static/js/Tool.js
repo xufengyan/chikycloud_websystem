@@ -73,8 +73,8 @@ function ajaxResult(url,data,callback) {
         success : function(res) {
             callback(res)
         },
-        error:function () {
-            alert("数据传递错误，请刷新页面");
+        error:function (error) {
+            alert(error);
         }
     });
 
@@ -86,7 +86,7 @@ function ajaxResult(url,data,callback) {
  * @param data
  * @param callback
  */
-function ajaxNOParam(url,callback) {
+function ajaxNOParam(url,callback,h5Bool) {
     $.ajax({
         url:ctx+"/"+url,
         type:'post',
@@ -96,8 +96,12 @@ function ajaxNOParam(url,callback) {
         success : function(res) {
             callback(res)
         },
-        error:function () {
-            alert("数据传递错误，请刷新页面");
+        error:function (XMLHttpRequest, textStatus, errorThrown) {
+            if(XMLHttpRequest.status == 200 && h5Bool){
+                alert('未登录或登录超时。请重新登录');
+                parent.window.location="/zkcloud/measure/login.html"
+            }
+
         }
     });
 
@@ -111,7 +115,7 @@ function ajaxNOParam(url,callback) {
  * @param data
  * @param callback
  */
-function ajaxLayuiFrom(url,data,callback) {
+function ajaxLayuiFrom(url,data,callback,h5Bool) {
     $.ajax({
         url: ctx+ "/" + url,
         type: 'post',
@@ -126,8 +130,11 @@ function ajaxLayuiFrom(url,data,callback) {
             toolMsgAndClose();
             // window.parent.brush();
         },
-        error: function () {
-            alert("数据传递错误，请刷新页面");
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            if(XMLHttpRequest.status == 200 && h5Bool){
+                alert('未登录或登录超时。请重新登录');
+                parent.window.location="/zkcloud/measure/login.html"
+            }
         }
     });
 }
@@ -136,7 +143,7 @@ function ajaxLayuiFrom(url,data,callback) {
  * 当传递的参数有大写字母的时候用ajaxLayuiFrom()方法后台无法接收到参数
  * 使用这个方法解决这个问题
  */
-function ajaxLayuiFromParamMax(url,data,callback) {
+function ajaxLayuiFromParamMax(url,data,callback,h5Bool) {
     $.ajax({
         url:ctx+"/"+url,
         type:'post',
@@ -146,9 +153,12 @@ function ajaxLayuiFromParamMax(url,data,callback) {
             //关闭弹框
             callback(data)
         },
-        error:function () {
-            alert("数据传递错误，请刷新页面");
-        }
+        error:function (XMLHttpRequest, textStatus, errorThrown) {
+            if(XMLHttpRequest.status == 200 && h5Bool){
+                alert('未登录或登录超时。请重新登录');
+                parent.window.location="/zkcloud/measure/login.html"
+            }
+        },
     })
 }
 

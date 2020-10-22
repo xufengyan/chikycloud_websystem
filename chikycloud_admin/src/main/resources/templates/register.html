@@ -53,7 +53,8 @@
                 <input type="text" name="authCode" placeholder="请输入验证码" autocomplete="off" class="layui-input admin-input admin-input-verify" value="">
                 <button id="admin-captcha" class="admin-captcha" lay-submit="" lay-filter="verify">发送验证码</button>
             </div>
-<!--            <div style="margin-top: 10px"><strong style="color: white">账号还没注册？<a href="../signUp/getSignUpHtml">立即注册</a></strong></div>-->
+            <div style="margin-top: 10px;margin-right: 10px"><strong style="color: white"><a style="color: #ff8d00f0" href="../zkcloud/login">返回登录</a></strong></div>
+            <!--            <div style="margin-top: 10px"><strong style="color: white">账号还没注册？<a href="../signUp/getSignUpHtml">立即注册</a></strong></div>-->
             <button class="layui-btn admin-button" lay-submit="" lay-filter="login">注 册</button>
         </form>
     </div>
@@ -72,7 +73,7 @@
             var obj = new Object();
             obj["uName"] = data.field.uName
             ajaxResult("sendAuthCode",obj,function (res) {
-                debugger
+
                 if (res.success){
                     layer.msg('验证码已发送');
                     var second = 60;

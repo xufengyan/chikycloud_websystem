@@ -254,7 +254,7 @@
             obj['id'] = resultId;
             obj['machineNum'] = $("#machineNum").val();
             $("#measureResultId").val(resultId);
-            debugger
+
             ajaxResult("ZkScoketGPSDataPackage/getMachineMeasureGPSData",obj,function (res) {
                 var coordinate = res.data;
                 var coordinate2 = res.data2;

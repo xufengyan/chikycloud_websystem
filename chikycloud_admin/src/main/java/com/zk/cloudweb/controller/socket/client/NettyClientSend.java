@@ -6,12 +6,15 @@ import com.zk.cloudweb.entity.socketDate.measured;
 import com.zk.cloudweb.entity.socketDate.measuredGPS;
 import com.zk.cloudweb.entity.socketLink.SocketGPSDataPackage;
 import com.zk.cloudweb.util.dateFormat;
+import com.zk.cloudweb.util.webSocket.Util.WebSocketConcurrent;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import lombok.extern.log4j.Log4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.crypto.Data;
-import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +32,18 @@ public class NettyClientSend {
     private static String num = "00 00";//序列号
 
     private static List<SocketGPSDataPackage> socketGPSDataPackageList = new ArrayList<>();
+
+    public static void unifySend(String hexStr, Channel channel,String head){
+        WebSocketConcurrent.AppointSending(channel,dateFormat.Date_DateStr(new Date())+head+"：</br>"+hexStr.toString(),true);
+        hexStr = hexStr.replaceAll("</br>","").replaceAll(" ","");
+        byte [] setBytes = Hex_to_Decimal.hex2Bytes(hexStr);
+        ByteBuf bufff = Unpooled.buffer();
+        bufff.writeBytes(setBytes);
+        channel.write(bufff);
+        channel.flush();
+    }
+
+
     //模拟发送登录包
     public static String  sendLoginData(){
         String dataType = "00";//数据包类型
@@ -86,7 +101,7 @@ public class NettyClientSend {
                     String course = Hex_to_Decimal.threeHex16ToSmall(Hex_to_Decimal.floatThreeHex16(socketGPSDataPackageList.get(j).getCourse()));
                     String rate = Hex_to_Decimal.threeHex16ToSmall(Hex_to_Decimal.floatThreeHex16(socketGPSDataPackageList.get(j).getRate()));
                     String measureTime = Hex_to_Decimal.threeHex16ToSmall(Hex_to_Decimal.intFourHex16(Math.toIntExact(dateFormat.dateToGMT(socketGPSDataPackageList.get(j).getMeasureTime()))));
-                    data+=" 01 "+lon+" "+lat+" "+course+" "+rate+" "+measureTime;
+                    data+=" 01 "+lat+" "+lon+" "+course+" "+rate+" "+measureTime;
                 }
 //                for (SocketGPSDataPackage socketGPSDataPackage : socketGPSDataPackageList) {
 //
@@ -108,7 +123,7 @@ public class NettyClientSend {
                     String course = Hex_to_Decimal.threeHex16ToSmall(Hex_to_Decimal.floatThreeHex16(socketGPSDataPackageList.get(j).getCourse()));
                     String rate = Hex_to_Decimal.threeHex16ToSmall(Hex_to_Decimal.floatThreeHex16(socketGPSDataPackageList.get(j).getRate()));
                     String measureTime = Hex_to_Decimal.threeHex16ToSmall(Hex_to_Decimal.intFourHex16(Math.toIntExact(dateFormat.dateToGMT(socketGPSDataPackageList.get(j).getMeasureTime()))));
-                    data+=" 01 "+lon+" "+lat+" "+course+" "+rate+" "+measureTime;
+                    data+=" 01 "+lat+" "+lon+" "+course+" "+rate+" "+measureTime;
                 }
 
                 data = data+" 00 00 00 00";

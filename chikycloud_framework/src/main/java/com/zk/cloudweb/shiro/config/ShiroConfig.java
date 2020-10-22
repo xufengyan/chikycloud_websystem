@@ -6,12 +6,14 @@ import com.zk.cloudweb.shiro.realm.UserRealm;
 import com.zk.cloudweb.util.captcha.CaptchaValidateFilter;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.apache.shiro.mgt.SecurityManager;
 
 import javax.servlet.Filter;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -67,26 +69,6 @@ public class ShiroConfig {
     @Value("${shiro.user.unauthorizedUrl}")
     private String unauthorizedUrl;
 
-//    @Bean(name = "shiroFilterFactoryBean")
-//    public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("defaultWebSecurityManager")DefaultWebSecurityManager defaultWebSecurityManager){
-//        ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
-//        shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
-//        Map<String,String> fMap=new HashMap<>();
-//        //拦截页面
-//        fMap.put("/album/index","authc");
-//        fMap.put("/one","authc");
-//        //拦截未授权
-//        fMap.put("/album/index","perms[user:all]");
-//        fMap.put("/one","perms[user:one]");
-//        //被拦截返回登录页面
-//        shiroFilterFactoryBean.setLoginUrl("/login");
-//        //授权拦截返回页面
-//        shiroFilterFactoryBean.setUnauthorizedUrl("/permission");
-//        shiroFilterFactoryBean.setFilterChainDefinitionMap(fMap);
-//        return shiroFilterFactoryBean;
-//    }
-
-
     /**
      * Shiro过滤器配置
      */
@@ -116,6 +98,9 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/logout", "logout");
         // 不需要拦截的访问
         //测试机器页面不拦截
+        filterChainDefinitionMap.put("/measure/**","anon");
+        filterChainDefinitionMap.put("/zkFile/uploadFile","anon");
+        filterChainDefinitionMap.put("/webSocketConConcurrent/**","anon");
         filterChainDefinitionMap.put("/machineTest/**","anon");
         filterChainDefinitionMap.put("/sendAuthCode", "anon");
         filterChainDefinitionMap.put("/addUser", "anon");

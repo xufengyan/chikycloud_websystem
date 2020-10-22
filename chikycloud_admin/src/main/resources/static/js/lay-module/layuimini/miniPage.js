@@ -196,7 +196,7 @@ layui.define(["element", "jquery"], function (exports) {
             console.log(d)
             var clienWidth = $(".layui-body").width();
             var clientHeight = $(".layui-body").height();
-            debugger
+
             var offsetLeft = $(".layui-body").offset().left;
             var offsetTop = $(".layui-body").offset().top;
             return [clienWidth, clientHeight, offsetTop, offsetLeft];

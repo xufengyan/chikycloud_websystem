@@ -16,7 +16,7 @@
     <style id="layuimini-bg-color">
     </style>
 </head>
-<body class="layui-layout-body layuimini-all">
+<body class="layuimini-all">
     <div class="layui-layout layui-layout-admin">
         <div class="layuimini-container layuimini-page-anim">
             <div class="layuimini-main">
@@ -106,7 +106,7 @@
                     var resDate = new Object();
                     resDate["menuIdarr"] =""+menuId;
                     resDate["roleId"] = "[[${roleId}]]";
-                    debugger
+
                     ajaxResult("roleMenu/addRoleMenuByArr",resDate,function (res) {
                             toolMsgAndClose();
                             window.parent.brush();
