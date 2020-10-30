@@ -58,8 +58,10 @@ public class SocketMeasureResultServiceImpl implements ISocketMeasureResultServi
 
     @Override
     public List<SocketMeasurResult> selectSocketMeasurResultList(SocketMeasurResult socketMeasurResult) {
-        String endTimeStr = dateFormat.Date_yearStr(socketMeasurResult.getEndTime());
-        socketMeasurResult.setEndTime(dateFormat.Date_yearStrToDate(endTimeStr+" 23:59:59"));
+        if(socketMeasurResult.getEndTime()!=null){
+            String endTimeStr = dateFormat.Date_yearStr(socketMeasurResult.getEndTime());
+            socketMeasurResult.setEndTime(dateFormat.Date_yearStrToDate(endTimeStr+" 23:59:59"));
+        }
         return socketMeasureResultDao.selectSocketMeasurResultList(socketMeasurResult);
     }
 

@@ -3,6 +3,8 @@ package com.zk.cloudweb.util.export;
 
 
 
+import com.jsevy.jdxf.DXFDocument;
+import com.jsevy.jdxf.DXFGraphics;
 import com.zk.cloudweb.entity.socketLink.SocketGPSDataPackage;
 import com.zk.cloudweb.util.dxfType.DxfLwPolyLine;
 import com.zk.cloudweb.util.dxfType.LineWidth;
@@ -24,6 +26,131 @@ import java.util.UUID;
  * @date 2020/4/1 11:00
  */
 public class exportCAD {
+
+    /**
+     * 导出单个CAD文件
+     * @param measureds
+     * @param fileName
+     * @param response
+     * @param basePath
+     * @throws IOException
+     */
+    public static void AutoCADExport(List<SocketGPSDataPackage> measureds, String fileName, HttpServletResponse response, String basePath) throws IOException {
+        DXFDocument dxfDocument = new
+                DXFDocument("Example");
+        DXFGraphics dxfGraphics =
+                dxfDocument.getGraphics();
+        fileName = UUID.randomUUID().toString().replace("-", "");
+        String newfilePathOnly = basePath+"/webCAD/";
+        //判断地址是否存在
+        File fileUIS = new File(newfilePathOnly);
+        //如果不存在文件夹创建文件夹
+        if (!fileUIS.exists()) {
+            fileUIS.mkdirs();
+        }
+        String generateNewDxf = newfilePathOnly+fileName+".dxf";
+        Graphics2D graphics2D = dxfGraphics;
+
+        graphics2D.setColor(Color.RED);
+        graphics2D.setStroke(new BasicStroke(0.3f));
+        List<Double> longitude = new ArrayList<>();
+        List<Double> latitude = new ArrayList<>();
+
+        for (int i = 0;i<measureds.size();i++ ){
+            longitude.add(Double.parseDouble(""+measureds.get(i).getLongitude()));
+            latitude.add(Double.parseDouble(""+measureds.get(i).getLatitude()));
+        }
+
+        /**
+         * 将经纬度坐标转换为像素坐标
+         */
+        List<List<Integer>> Lxy = wgs84_px.returnXY(longitude,latitude);
+        //通过Graphics2D写入图形
+        for (int i = 0; i < Lxy.get(0).size()-1; i++) {
+            graphics2D.drawLine(Lxy.get(0).get(i),Lxy.get(1).get(i),Lxy.get(0).get(i+1),Lxy.get(1).get(i+1));
+        }
+        //生成dxf文本
+        String dxfText = dxfDocument.toDXFString();
+
+        FileWriter fileWriter = new FileWriter(generateNewDxf);
+        fileWriter.write(dxfText);
+        fileWriter.flush();
+        fileWriter.close();
+        //导出
+        try{
+            OutputStream out = response.getOutputStream();
+            // inputStream：读文件，前提是这个文件必须存在，要不就会报错
+            String filename =new String(fileName.getBytes("GBK"), "iso8859-1");
+            response.addHeader("content-disposition", "attachment;filename="
+                    + java.net.URLEncoder.encode(filename+".dxf", "utf-8"));
+            response.setContentType("application/x-cmx");
+            response.setHeader("Content-disposition", "attachment;filename="+filename+".dxf");
+            InputStream is = new FileInputStream(generateNewDxf);
+//            ServletOutputStream out = response.getOutputStream();
+            byte[] b = new byte[4096];
+            int size = is.read(b);
+            while (size > 0) {
+                out.write(b, 0, size);
+                size = is.read(b);
+            }
+            out.close();
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    /**
+     * 批量导出CAD文件
+     * @param measureds
+     * @param fileName
+     * @param response
+     * @return 返回文件地址
+     */
+    public static String  batchAutoCAD(List<SocketGPSDataPackage> measureds, String fileName, HttpServletResponse response, String basePath) throws IOException {
+        DXFDocument dxfDocument = new
+                DXFDocument("Example");
+        DXFGraphics dxfGraphics =
+                dxfDocument.getGraphics();
+        fileName = UUID.randomUUID().toString().replace("-", "");
+        String newfilePathOnly = basePath+"/webCAD/";
+        //判断地址是否存在
+        File fileUIS = new File(newfilePathOnly);
+        //如果不存在文件夹创建文件夹
+        if (!fileUIS.exists()) {
+            fileUIS.mkdirs();
+        }
+        String generateNewDxf = newfilePathOnly+fileName+".dxf";
+        Graphics2D graphics2D = dxfGraphics;
+
+        graphics2D.setColor(Color.RED);
+        graphics2D.setStroke(new BasicStroke(0.3f));
+        List<Double> longitude = new ArrayList<>();
+        List<Double> latitude = new ArrayList<>();
+
+        for (int i = 0;i<measureds.size();i++ ){
+            longitude.add(Double.parseDouble(""+measureds.get(i).getLongitude()));
+            latitude.add(Double.parseDouble(""+measureds.get(i).getLatitude()));
+        }
+
+        /**
+         * 将经纬度坐标转换为像素坐标
+         */
+        List<List<Integer>> Lxy = wgs84_px.returnXY(longitude,latitude);
+        //通过Graphics2D写入图形
+        for (int i = 0; i < Lxy.get(0).size()-1; i++) {
+            graphics2D.drawLine(Lxy.get(0).get(i),Lxy.get(1).get(i),Lxy.get(0).get(i+1),Lxy.get(1).get(i+1));
+        }
+        //生成dxf文本
+        String dxfText = dxfDocument.toDXFString();
+
+        FileWriter fileWriter = new FileWriter(generateNewDxf);
+        fileWriter.write(dxfText);
+        fileWriter.flush();
+        fileWriter.close();
+
+        return generateNewDxf;
+    }
 
 
     public static void generateCAD(List<SocketGPSDataPackage> measureds, String fileName, HttpServletRequest request, HttpServletResponse response, String basePath){

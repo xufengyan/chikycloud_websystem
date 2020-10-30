@@ -115,11 +115,11 @@ public class ZKSocketMeasureResultController {
      * @param socketMeasurResult
      */
     @RequestMapping("/exportMeasureResultCAD")
-    public void exportMeasureResultCAD(SocketMeasurResult socketMeasurResult, HttpServletResponse response , HttpServletRequest request){
+    public void exportMeasureResultCAD(SocketMeasurResult socketMeasurResult, HttpServletResponse response , HttpServletRequest request) throws IOException {
         //查询对应测量结果的测量数据
         List<SocketGPSDataPackage> socketGPSDataPackages = socketGPSDataPackageService.selectSocketGPSDataPackageList(socketMeasurResult);
         //下载CAD文件
-        exportCAD.generateCAD(socketGPSDataPackages,"CAD工程文件",request,response,basePath);
+        exportCAD.AutoCADExport(socketGPSDataPackages,"CAD工程文件",response,basePath);
     }
 
     /**
@@ -130,7 +130,7 @@ public class ZKSocketMeasureResultController {
      */
     @RequestMapping("/exportBatchMeasureResultCAD")
     public void exportBatchMeasureResultCAD(String  machineNum,String startTime,String endTime,
-                                            HttpServletResponse response,HttpServletRequest request){
+                                            HttpServletResponse response,HttpServletRequest request) throws IOException {
 
         SocketMeasurResult socketMeasurResult = new SocketMeasurResult();
         socketMeasurResult.setMachineNum(machineNum);
@@ -143,7 +143,7 @@ public class ZKSocketMeasureResultController {
             for (SocketMeasurResult measurResult : socketMeasurResults) {
                 List<SocketGPSDataPackage> socketGPSDataPackages = socketGPSDataPackageService.selectSocketGPSDataPackageList(measurResult);
                 if(null!=socketGPSDataPackages&&socketGPSDataPackages.size()>0) {
-                    pathArr.add(exportCAD.batchGenerateCAD(socketGPSDataPackages,"工程文件",request,response,basePath));
+                    pathArr.add(exportCAD.batchAutoCAD(socketGPSDataPackages,"工程文件",response,basePath));
                 }
             }
         }
