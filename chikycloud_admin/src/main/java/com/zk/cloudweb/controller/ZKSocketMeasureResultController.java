@@ -6,6 +6,7 @@ import com.zk.cloudweb.sercice.ISocketGPSDataPackageService;
 import com.zk.cloudweb.sercice.ISocketMeasureResultService;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
+import com.zk.cloudweb.util.StringUtils;
 import com.zk.cloudweb.util.dateFormat;
 import com.zk.cloudweb.util.excel.CommonExcel;
 import com.zk.cloudweb.util.export.ZipBacthExport;
@@ -75,21 +76,27 @@ public class ZKSocketMeasureResultController {
     @ResponseBody
     public Result getSocketMeasureResultList(SocketMeasurResult socketMeasurResult){
         DecimalFormat df = new DecimalFormat("#.0000000");
-        List<SocketMeasurResult> socketMeasurResults = socketMeasureResultService.selectSocketMeasurResultList(socketMeasurResult);
-        if (socketMeasurResults.size()>0){
-            List<SocketGPSDataPackage> socketGPSDataPackages  = socketGPSDataPackageService.selectSocketGPSDataPackageList(socketMeasurResults.get(0));
-            libgeodesy_ct libgeodesy_ct = new libgeodesy_ct();
-            for (SocketGPSDataPackage socketGPSDataPackage : socketGPSDataPackages) {
-                if (socketGPSDataPackage.getLatitude()!=0&&socketGPSDataPackage.getLongitude()!=0) {
-                    libgeodesy_ct.libgeodesy_wgs84_to_mars(Double.parseDouble(""+socketGPSDataPackage.getLatitude()), Double.parseDouble(""+socketGPSDataPackage.getLongitude()));
-                    socketGPSDataPackage.setLatitude(Float.parseFloat(df.format(libgeodesy_ct.getBd09_lat())));
-                    socketGPSDataPackage.setLongitude(Float.parseFloat(df.format(libgeodesy_ct.getBd09_lon())));
+        System.out.println(socketMeasurResult.getMachineNum());
+        if(!StringUtils.isEmpty(socketMeasurResult.getMachineNum())){
+            List<SocketMeasurResult> socketMeasurResults = socketMeasureResultService.selectSocketMeasurResultList(socketMeasurResult);
+            if (socketMeasurResults.size()>0){
+                List<SocketGPSDataPackage> socketGPSDataPackages  = socketGPSDataPackageService.selectSocketGPSDataPackageList(socketMeasurResults.get(0));
+                libgeodesy_ct libgeodesy_ct = new libgeodesy_ct();
+                for (SocketGPSDataPackage socketGPSDataPackage : socketGPSDataPackages) {
+                    if (socketGPSDataPackage.getLatitude()!=0&&socketGPSDataPackage.getLongitude()!=0) {
+                        libgeodesy_ct.libgeodesy_wgs84_to_mars(Double.parseDouble(""+socketGPSDataPackage.getLatitude()), Double.parseDouble(""+socketGPSDataPackage.getLongitude()));
+                        socketGPSDataPackage.setLatitude(Float.parseFloat(df.format(libgeodesy_ct.getBd09_lat())));
+                        socketGPSDataPackage.setLongitude(Float.parseFloat(df.format(libgeodesy_ct.getBd09_lon())));
+                    }
                 }
+                socketMeasurResults.get(0).setSocketGPSDataPackages(socketGPSDataPackages);
             }
-            socketMeasurResults.get(0).setSocketGPSDataPackages(socketGPSDataPackages);
+            Result result = new Result(ResultEnum.OK,socketMeasurResults,true);
+            return result;
+        }else {
+            Result result = new Result(ResultEnum.PARAMETER_ERROR,false);
+            return result;
         }
-        Result result = new Result(ResultEnum.OK,socketMeasurResults,true);
-        return result;
     }
 
 
@@ -124,7 +131,6 @@ public class ZKSocketMeasureResultController {
 
     /**
      * 批量导出CAD文件
-     * @param socketMeasurResult
      * @param response
      * @param request
      */

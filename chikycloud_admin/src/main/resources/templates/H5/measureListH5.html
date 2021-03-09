@@ -500,15 +500,18 @@
         // data.field.startTime = new Date(Date.parse(data.field.startTime.replace(/-/g,"/")));
         // data.field.endTime = new Date(Date.parse(data.field.endTime.replace(/-/g,"/")));
         ajaxLayuiFromParamMax("ZKSocketMeasureResult/getSocketMeasureResultList",data,function (res) {
+            console.log(data);
             console.log(res);
             var html = "";
-            res.data.forEach((item,i) =>{
-                html+="<tr id='remtr_"+i+"' onclick='trClick(\"" + item.id + "\","+i+")'>\n" +
-                    "                    <td>"+date(item.startTime)+"</td>\n" +
-                    "                    <td>"+item.measureArea+"亩</td>\n" +
-                    "                </tr>"
-                $("#measureTable").html(html);
-            })
+            if(res.data!=null&&res.data.length>0){
+                res.data.forEach((item,i) =>{
+                    html+="<tr id='remtr_"+i+"' onclick='trClick(\"" + item.id + "\","+i+")'>\n" +
+                        "                    <td>"+date(item.startTime)+"</td>\n" +
+                        "                    <td>"+item.measureArea+"亩</td>\n" +
+                        "                </tr>"
+                    $("#measureTable").html(html);
+                })
+            }
         },true);
     }
 </script>

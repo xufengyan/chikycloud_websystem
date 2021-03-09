@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zk.cloudweb.dao.ZkFileDao">
-    
+
     <resultMap type="com.zk.cloudweb.entity.ZkFile" id="ZkFileResult">
         <result property="id"    column="id"    />
         <result property="fileName"    column="file_name"    />
@@ -15,15 +15,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="fileAdmin"    column="file_admin"    />
         <result property="fileUpgradeType"    column="file_upgrade_type"    />
         <result property="createTime"    column="create_time"    />
+        <result property="imageBinPath" column="image_bin_path"/>
     </resultMap>
 
     <sql id="selectZkFileVo">
-        select id, file_name, file_path,file_version,file_account,file_crc32,file_type,file_admin,file_upgrade_type, create_time from zk_file
+        select id, file_name, file_path,file_version,file_account,file_crc32,file_type,file_admin,file_upgrade_type, create_time , image_bin_path from zk_file
     </sql>
 
     <select id="selectZkFileListByEntity" parameterType="com.zk.cloudweb.entity.ZkFile" resultMap="ZkFileResult">
         <include refid="selectZkFileVo"/>
-        <where>  
+        <where>
             <if test="id != null  and id != ''"> and id = #{id}</if>
             <if test="fileName != null  and fileName != ''"> and file_name = #{fileName}</if>
             <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
@@ -33,6 +34,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileType != null"> and file_type = #{fileType}</if>
             <if test="fileAdmin != null  and fileAdmin != ''"> and file_admin = #{fileAdmin}</if>
             <if test="fileUpgradeType != null  and fileUpgradeType != ''"> and file_upgrade_type = #{fileUpgradeType}</if>
+            <if test="imageBinPath != null  and imageBinPath != ''"> and image_bin_path = #{imageBinPath}</if>
+
         </where>
         order by create_time,file_version
     </select>
@@ -49,6 +52,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileType != null"> and file_type = #{fileType}</if>
             <if test="fileAdmin != null  and fileAdmin != ''"> and file_admin = #{fileAdmin}</if>
             <if test="fileUpgradeType != null  and fileUpgradeType != ''"> and file_upgrade_type = #{fileUpgradeType}</if>
+            <if test="imageBinPath != null  and imageBinPath != ''"> and image_bin_path = #{imageBinPath}</if>
+
         </where>
         order by create_time,file_version
         <if test="limit !=null">
@@ -67,6 +72,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileType != null"> and file_type = #{fileType}</if>
             <if test="fileAdmin != null  and fileAdmin != ''"> and file_admin = #{fileAdmin}</if>
             <if test="fileUpgradeType != null  and fileUpgradeType != ''"> and file_upgrade_type = #{fileUpgradeType}</if>
+            <if test="imageBinPath != null  and imageBinPath != ''"> and image_bin_path = #{imageBinPath}</if>
+
         </where>
     </select>
 
@@ -89,7 +96,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileAdmin != null  and fileAdmin != ''">file_admin,</if>
             <if test="fileUpgradeType != null  and fileUpgradeType != ''">file_upgrade_type,</if>
             <if test="createTime != null ">create_time,</if>
-         </trim>
+            <if test="imageBinPath != null  and imageBinPath != ''">  image_bin_path, </if>
+
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null  and id != ''">#{id},</if>
             <if test="fileName != null  and fileName != ''">#{fileName},</if>
@@ -101,12 +110,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileAdmin != null  and fileAdmin != ''">#{fileAdmin},</if>
             <if test="fileUpgradeType != null  and fileUpgradeType != ''">#{fileUpgradeType},</if>
             <if test="createTime != null ">#{createTime},</if>
-         </trim>
+            <if test="imageBinPath != null  and imageBinPath != ''"> , #{imageBinPath}</if>
+
+        </trim>
     </insert>
+
+    <update id="updateZkFileByEntity" parameterType="com.zk.cloudweb.entity.ZkFile">
+        update zk_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">  file_name = #{fileName},</if>
+            <if test="filePath != null  and filePath != ''">  file_path = #{filePath},</if>
+            <if test="fileVersion != null  and fileVersion != ''">  file_version = #{fileVersion},</if>
+            <if test="fileAccount != null  and fileAccount != ''">  file_account = #{fileAccount},</if>
+            <if test="fileType != null">  file_type = #{fileType},</if>
+            <if test="fileAdmin != null  and fileAdmin != ''">  file_admin = #{fileAdmin},</if>
+            <if test="fileUpgradeType != null  and fileUpgradeType != ''">  file_upgrade_type = #{fileUpgradeType,</if>
+            <if test="imageBinPath != null  and imageBinPath != ''">  image_bin_path = #{imageBinPath},</if>
+        </trim>
+        where id = #{id}
+
+    </update>
 
     <delete id="deleteZkFileById" parameterType="String">
         delete from zk_file where id = #{id}
     </delete>
 
-    
+
 </mapper>

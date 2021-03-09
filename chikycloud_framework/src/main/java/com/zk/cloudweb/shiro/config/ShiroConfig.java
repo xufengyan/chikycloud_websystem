@@ -98,6 +98,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/logout", "logout");
         // 不需要拦截的访问
         //测试机器页面不拦截
+        filterChainDefinitionMap.put("/getMachineConnect.html/**","anon");
+        filterChainDefinitionMap.put("/WXAirkiss/**","anon");
         filterChainDefinitionMap.put("/measure/**","anon");
         filterChainDefinitionMap.put("/zkFile/uploadFile","anon");
         filterChainDefinitionMap.put("/webSocketConConcurrent/**","anon");

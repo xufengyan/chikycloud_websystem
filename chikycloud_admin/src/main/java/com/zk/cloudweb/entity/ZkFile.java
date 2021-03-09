@@ -33,7 +33,7 @@ public class ZkFile extends BaseEntity{
      */
     private String fileCRC32;
     /**
-     * 文件类型（0为设备升级文件）
+     * 文件类型（0为设备升级文件,1为图片文件）
      */
     private Integer fileType;
     /**
@@ -45,4 +45,9 @@ public class ZkFile extends BaseEntity{
      * 升级包类型（针对不同的机型）
      */
     private String fileUpgradeType;
+
+    /**
+     * imageBin文件地址
+     */
+    private String imageBinPath;
 }

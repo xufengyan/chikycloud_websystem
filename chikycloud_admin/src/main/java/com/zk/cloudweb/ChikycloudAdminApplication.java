@@ -11,7 +11,6 @@ import javax.annotation.PreDestroy;
 
 @SpringBootApplication
 @MapperScan(basePackages = "com.zk.cloudweb.dao")
-
 public class ChikycloudAdminApplication implements CommandLineRunner {
 
     @Autowired
@@ -27,6 +26,7 @@ public class ChikycloudAdminApplication implements CommandLineRunner {
      */
     @Override
     public void run(String... args) throws Exception {
+        //开启netty线程
         nettyServer.start();
     }
 

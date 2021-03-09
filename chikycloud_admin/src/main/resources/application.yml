@@ -17,12 +17,12 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/chikycloudweb?&allowMultiQueries=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&serverTimezone=GMT%2B8
     username: root
-#    password: root
-    password: chikytech2018cavin
+    password: root
+#    password: chikytech2018cavin
   #------redis
   redis:
-#    host: 192.168.161.131
-    host: 39.96.7.233
+    host: 192.168.161.131
+#    host: 47.96.253.45
     port: 6379
     password: 123456
     database: 0
@@ -31,7 +31,7 @@ spring:
 ftp:
   upload:
     #ftp服务器地址
-    host: 39.96.7.233
+    host: 47.96.253.45
     # 端口
     port: 21
     #用户名
@@ -105,9 +105,10 @@ com:
       #服务器文件存储路径
       #服务器ip
       #文件存储路径
-      ftpFileUploadPath: /zkfile/home/fileNmea/
+#      ftpFileUploadPath: /zkfile/home/fileNmea/
       #本地地址
-#      ftpFileUploadPath: D:\\home/fileNmea/
+      ftpFileUploadPath: D:\\home/fileNmea/
+      fileImageUploadPath: D:\\home/image/
 
 netty:
   port: 8899

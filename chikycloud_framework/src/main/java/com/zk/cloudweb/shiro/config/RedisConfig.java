@@ -1,12 +1,13 @@
 package com.zk.cloudweb.shiro.config;
 
 import com.zk.cloudweb.util.RedisUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RedisConf {
+public class RedisConfig {
     //读取配置文件中的redis的ip地址
     @Value("${spring.redis.host:disabled}")
     private String host = "127.0.0.1";
@@ -16,13 +17,13 @@ public class RedisConf {
     private int database;
     @Value("${spring.redis.password:disabled}")
     private String password="123456";
-        @Bean
-        public RedisUtil getRedisUtil(){
-            if(host.equals("disabled")){
-                return null;
-            }
-            RedisUtil redisUtil=new RedisUtil();
-            redisUtil.initPool(host,port,database,password);
-            return redisUtil;
+    @Bean
+    public RedisUtil getRedisUtil(){
+        if(host.equals("disabled")){
+            return null;
         }
+        RedisUtil redisUtil=new RedisUtil();
+        redisUtil.initPool(host,port,database,password);
+        return redisUtil;
+    }
 }

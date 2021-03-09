@@ -27,6 +27,10 @@ public class dateFormat {
         return date;
     }
 
+    public static void main(String[] args) {
+        System.out.println(miaoToDate(1615021834));
+    }
+
     /**
      * 将时间格式转换为字符串时间格式
      * @param date
