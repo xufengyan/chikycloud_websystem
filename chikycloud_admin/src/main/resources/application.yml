@@ -112,4 +112,9 @@ com:
 
 netty:
   port: 8899
-
+# PageHelper分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

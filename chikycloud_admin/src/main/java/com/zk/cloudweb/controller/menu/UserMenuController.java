@@ -1,9 +1,11 @@
 package com.zk.cloudweb.controller.menu;
 
+import com.github.pagehelper.PageHelper;
 import com.zk.cloudweb.entity.UserMenu;
 import com.zk.cloudweb.service.IUserMenuService;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
+import com.zk.cloudweb.util.page.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,10 +75,11 @@ public class UserMenuController {
     @RequestMapping("/getMenuList")
     @ResponseBody
     public Result getMenuList(UserMenu menu){
-      List list = userMenuService.selectALlMenuList(menu);
-      Result result = new Result(ResultEnum.OK,list,true);
-      result.setCount(userMenuService.selectALlMenuListCount(menu));
-      return result;
+        PageHelper.startPage(menu.getPage(),menu.getLimit());
+        List list = userMenuService.selectALlMenuList(menu);
+//        Result result = new Result(ResultEnum.OK,list,true);
+//        result.setCount(userMenuService.selectALlMenuListCount(menu));
+        return PageUtil.setpage(list);
     }
 
 

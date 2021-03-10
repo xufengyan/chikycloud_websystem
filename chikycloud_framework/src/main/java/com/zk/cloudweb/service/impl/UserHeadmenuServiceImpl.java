@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * 头部菜单Service业务层处理
- * 
+ *
  * @author xf
  * @date 2020-05-21
  */
@@ -25,7 +25,7 @@ public class UserHeadmenuServiceImpl implements IUserHeadmenuService
 
     /**
      * 查询头部菜单
-     * 
+     *
      * @param id 头部菜单ID
      * @return 头部菜单
      */
@@ -37,24 +37,24 @@ public class UserHeadmenuServiceImpl implements IUserHeadmenuService
 
     /**
      * 查询头部菜单列表
-     * 
+     *
      * @param userHeadmenu 头部菜单
      * @return 头部菜单
      */
     @Override
     public List<UserHeadmenu> selectUserHeadmenuList(UserHeadmenu userHeadmenu)
     {
-        if(null!=userHeadmenu.getLimit()){
-            Integer limit = userHeadmenu.getLimit();
-            userHeadmenu.setLimit(userHeadmenu.getLimit()*(userHeadmenu.getPage()-1));
-            userHeadmenu.setCount(limit*userHeadmenu.getPage());
-        }
+//        if(null!=userHeadmenu.getLimit()){
+//            Integer limit = userHeadmenu.getLimit();
+//            userHeadmenu.setLimit(userHeadmenu.getLimit()*(userHeadmenu.getPage()-1));
+//            userHeadmenu.setCount(limit*userHeadmenu.getPage());
+//        }
         return userHeadmenuMapper.selectUserHeadmenuList(userHeadmenu);
     }
 
     /**
      * 新增头部菜单
-     * 
+     *
      * @param userHeadmenu 头部菜单
      * @return 结果
      */
@@ -68,7 +68,7 @@ public class UserHeadmenuServiceImpl implements IUserHeadmenuService
 
     /**
      * 修改头部菜单
-     * 
+     *
      * @param userHeadmenu 头部菜单
      * @return 结果
      */
@@ -80,7 +80,7 @@ public class UserHeadmenuServiceImpl implements IUserHeadmenuService
 
     /**
      * 删除头部菜单对象
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -92,7 +92,7 @@ public class UserHeadmenuServiceImpl implements IUserHeadmenuService
 
     /**
      * 删除头部菜单信息
-     * 
+     *
      * @param id 头部菜单ID
      * @return 结果
      */

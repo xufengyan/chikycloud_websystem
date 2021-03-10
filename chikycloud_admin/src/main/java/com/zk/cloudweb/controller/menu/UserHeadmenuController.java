@@ -2,6 +2,7 @@ package com.zk.cloudweb.controller.menu;
 
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
 import com.zk.cloudweb.entity.*;
 import com.zk.cloudweb.entity.index.homeInfo;
 import com.zk.cloudweb.entity.index.logoInfo;
@@ -12,6 +13,7 @@ import com.zk.cloudweb.service.IUserRoleMenuService;
 import com.zk.cloudweb.service.IUserSecondarymemuService;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
+import com.zk.cloudweb.util.page.PageUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,7 @@ import java.util.*;
 
 /**
  * 头部菜单Controller
- * 
+ *
  * @author xf
  * @date 2020-05-21
  */
@@ -83,13 +85,9 @@ public class UserHeadmenuController
     @RequestMapping("/getHeadmenuList")
     @ResponseBody
     public Result getHeadmenuList(UserHeadmenu userHeadmenu){
-
+        PageHelper.startPage(userHeadmenu.getPage(),userHeadmenu.getLimit());
         List<UserHeadmenu> userHeadmenus = userHeadmenuService.selectUserHeadmenuList(userHeadmenu);
-
-        Result result = new Result(ResultEnum.OK,userHeadmenus,true);
-
-        result.setCount(userHeadmenuService.selectUserHeadmenuListCount(userHeadmenu));
-        return result;
+        return PageUtil.setpage(userHeadmenus);
     }
 
 
@@ -170,7 +168,7 @@ public class UserHeadmenuController
         for (UserHeadmenu userHeadmenu : userHeadmenus) {
             headTitleSet.add(userHeadmenu.getTitle());
         }
-        
+
         for (String s : headTitleSet) {
             Set<String> secondarySet = new HashSet<>();
             for (UserHeadmenu userHeadmenu : userHeadmenus) {

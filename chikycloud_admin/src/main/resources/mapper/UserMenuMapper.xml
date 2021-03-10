@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zk.cloudweb.dao.UserMenuMapper">
-    
+
     <resultMap type="com.zk.cloudweb.entity.UserMenu" id="UserMenuResult">
         <result property="id"    column="id"    />
         <result property="title"    column="title"    />
@@ -33,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <collection property="child" resultMap="UserMenuResult"/>
     </resultMap>
 
-    
+
     <sql id="selectUserMenuVo">
         select id, title, href , icon, target, sercondarymenu_id from user_menu
     </sql>
@@ -64,9 +64,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sercondarymenuId != null  and sercondarymenuId != ''"> and m.sercondarymenu_id like concat('%', #{sercondarymenuId}, '%')</if>
         </where>
         order by htitle
-        <if test="limit !=null">
-            limit #{limit},#{count}
-        </if>
 
     </select>
 
@@ -96,12 +93,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sercondarymenuId != null  and sercondarymenuId != ''"> and sercondarymenu_id like concat('%', #{sercondarymenuId}, '%')</if>
         </where>
     </select>
-    
+
     <select id="selectUserMenuById" parameterType="String" resultMap="UserMenuResult">
         <include refid="selectUserMenuVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertUserMenu" parameterType="com.zk.cloudweb.entity.UserMenu">
         insert into user_menu
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -143,10 +140,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteUserMenuByIds" parameterType="String">
-        delete from user_menu where id in 
+        delete from user_menu where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>

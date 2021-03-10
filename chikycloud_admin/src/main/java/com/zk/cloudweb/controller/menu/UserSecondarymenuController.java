@@ -1,9 +1,11 @@
 package com.zk.cloudweb.controller.menu;
 
+import com.github.pagehelper.PageHelper;
 import com.zk.cloudweb.entity.UserSecondarymemu;
 import com.zk.cloudweb.service.IUserSecondarymemuService;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
+import com.zk.cloudweb.util.page.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,12 +66,10 @@ public class UserSecondarymenuController {
     @ResponseBody
     public Result getSecondarymenuList(UserSecondarymemu userSecondarymenu){
 
+        PageHelper.startPage(userSecondarymenu.getPage(),userSecondarymenu.getLimit());
         List userSecondarymemus = userSecondarymemuService.selectHeadSecondaryList(userSecondarymenu);
 
-        Result result = new Result(ResultEnum.OK,userSecondarymemus,true);
-
-        result.setCount(userSecondarymemuService.selectHeadSecondaryListCount(userSecondarymenu));
-        return result;
+        return PageUtil.setpage(userSecondarymemus);
     }
 
 

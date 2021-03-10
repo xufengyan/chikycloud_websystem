@@ -1,5 +1,6 @@
 package com.zk.cloudweb.controller;
 
+import com.github.pagehelper.PageHelper;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.zk.cloudweb.controller.socket.service.serviceSend;
 import com.zk.cloudweb.entity.*;
@@ -7,6 +8,7 @@ import com.zk.cloudweb.sercice.*;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
 import com.zk.cloudweb.util.getShiroUser;
+import com.zk.cloudweb.util.page.PageUtil;
 import com.zk.cloudweb.util.socketChannel.channelSingle;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.epoll.EpollServerChannelConfig;
@@ -140,10 +142,9 @@ public class ZkMachineController {
         zkUserMachine.setUmUserId(user.getId());
         zkUserMachine.setLimit(zkMachine.getLimit());
         zkUserMachine.setPage(zkMachine.getPage());
+        PageHelper.startPage(zkMachine.getPage(),zkMachine.getLimit());
         List<ZkMachine> restZkMachine = zkUserMachineService.selectZkUserMachineByPage(zkUserMachine);
-        Result result = new Result(ResultEnum.OK,restZkMachine,true);
-        result.setCount(zkUserMachineService.selectZkUserMachineByPageCount(zkUserMachine));
-        return result;
+        return PageUtil.setpage(restZkMachine);
     }
 
 
@@ -155,20 +156,20 @@ public class ZkMachineController {
     @RequestMapping("/getOnLineZkMachineLoginList")
     @ResponseBody
     public Result getOnLineZkMachineLoginList(ZkUserMachine zkUserMachine){
-
         //查询当前登录的用户
         User user = getShiroUser.getUser();
         zkUserMachine.setUmUserId(user.getId());
         //查询当前用户的在线设备
-       List<ZkSocketLogin> zkSocketLogin = socketLoginService.selectOnLineZkSocketLogin(zkUserMachine);
-       int count = socketLoginService.selectOnLineZkSocketLoginCount(zkUserMachine);
-
-        Result result = new Result(ResultEnum.OK,zkSocketLogin,true);
-        result.setCount(count);
-        return result;
+        PageHelper.startPage(zkUserMachine.getPage(),zkUserMachine.getLimit());
+        List<ZkSocketLogin> zkSocketLogin = socketLoginService.selectOnLineZkSocketLogin(zkUserMachine);
+        return PageUtil.setpage(zkSocketLogin);
     }
 
 
+    /**
+     * 查询设备登录记录
+     * @return
+     */
     @RequestMapping("/getMachineLoginHistory")
     @ResponseBody
     public Result getMachineLoginHistory(){

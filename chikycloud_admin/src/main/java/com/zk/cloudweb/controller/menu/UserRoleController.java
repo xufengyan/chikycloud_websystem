@@ -1,9 +1,11 @@
 package com.zk.cloudweb.controller.menu;
 
+import com.github.pagehelper.PageHelper;
 import com.zk.cloudweb.entity.UserRole;
 import com.zk.cloudweb.service.IUserRoleService;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
+import com.zk.cloudweb.util.page.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,9 +52,9 @@ public class UserRoleController {
     @RequestMapping("/getRoleLsit")
     @ResponseBody
     public Result getRoleLsit(UserRole role){
+        PageHelper.startPage(role.getPage(),role.getLimit());
         List<UserRole> userRoles = userRoleService.selectUserRoleList(role);
-        Result result = new Result(ResultEnum.OK,userRoles,true);
-        return result;
+        return PageUtil.setpage(userRoles);
     }
 
 

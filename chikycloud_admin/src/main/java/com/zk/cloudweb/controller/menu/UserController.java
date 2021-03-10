@@ -1,9 +1,11 @@
 package com.zk.cloudweb.controller.menu;
 
+import com.github.pagehelper.PageHelper;
 import com.zk.cloudweb.entity.User;
 import com.zk.cloudweb.service.IUserService;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
+import com.zk.cloudweb.util.page.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,10 +48,9 @@ public class UserController {
     @RequestMapping("/getUserList")
     @ResponseBody
     public Result getUserList(User user){
+        PageHelper.startPage(user.getPage(),user.getLimit());
         List<User> users = userService.selectUserList(user);
-        Result result =new Result(ResultEnum.OK,users,true);
-        result.setCount(userService.selectUserListCount(user));
-        return result;
+        return PageUtil.setpage(users);
     }
 
 

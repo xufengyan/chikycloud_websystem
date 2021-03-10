@@ -8,6 +8,7 @@ class ChikycloudAdminApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zk.cloudweb.dao.UserMapper">
-    
+
     <resultMap type="com.zk.cloudweb.entity.User" id="UserResult">
         <result property="id"    column="id"    />
         <result property="uName"    column="u_name"    />
@@ -26,9 +26,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="uPassword != null  and uPassword != ''"> and u_password = #{uPassword}</if>
             <if test="roleId != null  and roleId != ''"> and role_id = #{roleId}</if>
         </where>
-        <if test="limit!=null">
-            limit #{limit},#{count}
-        </if>
     </select>
     <select id="selectUserListCount" parameterType="com.zk.cloudweb.entity.User" resultType="int">
         select count(*) from zk_user
@@ -55,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectUserVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertUser" parameterType="com.zk.cloudweb.entity.User">
         insert into zk_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -104,10 +101,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteUserByIds" parameterType="String">
-        delete from zk_user where id in 
+        delete from zk_user where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>

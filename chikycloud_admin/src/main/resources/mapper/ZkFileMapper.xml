@@ -56,9 +56,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
         </where>
         order by create_time,file_version
-        <if test="limit !=null">
-            limit #{limit},#{count}
-        </if>
     </select>
 
     <select id="selectZkFileByEntity" parameterType="com.zk.cloudweb.entity.ZkFile" resultMap="ZkFileResult">

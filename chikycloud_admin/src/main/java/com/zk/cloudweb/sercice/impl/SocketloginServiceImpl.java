@@ -105,11 +105,6 @@ public class SocketloginServiceImpl implements ISocketloginService {
      */
     @Override
     public List<ZkSocketLogin> selectOnLineZkSocketLogin(ZkUserMachine zkUserMachine) {
-        if(null!=zkUserMachine.getLimit()){
-            Integer limit = zkUserMachine.getLimit();
-            zkUserMachine.setLimit(zkUserMachine.getLimit()*(zkUserMachine.getPage()-1));
-            zkUserMachine.setCount(limit*zkUserMachine.getPage());
-        }
         return zkSocketLoginDao.selectOnLineZkSocketLogin(zkUserMachine);
     }
 

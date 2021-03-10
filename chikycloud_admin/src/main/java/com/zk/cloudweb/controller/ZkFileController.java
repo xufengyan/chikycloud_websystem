@@ -1,8 +1,13 @@
 package com.zk.cloudweb.controller;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zk.cloudweb.controller.socket.util.Hex_to_Decimal;
 import com.zk.cloudweb.entity.ZkFile;
+import com.zk.cloudweb.entity.ZkImageDw;
 import com.zk.cloudweb.sercice.IZkFileService;
+import com.zk.cloudweb.sercice.IZkImageDwService;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
 import com.zk.cloudweb.util.StringUtils;
@@ -11,6 +16,7 @@ import com.zk.cloudweb.util.export.ImageFile;
 import com.zk.cloudweb.util.ftpFile.FTPUtil;
 import com.zk.cloudweb.util.ftpFile.FileCRC32;
 import com.zk.cloudweb.util.getShiroUser;
+import com.zk.cloudweb.util.page.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -63,7 +69,8 @@ public class ZkFileController {
 
     @Autowired
     private IZkFileService zkFileService;
-
+    @Autowired
+    private IZkImageDwService zkImageDwService;
     /**
      * 跳转到升级包文件列表页面
      */
@@ -88,7 +95,14 @@ public class ZkFileController {
     public String uploadImageToRgb565Html(){
         return "image/logImage";
     }
-
+    /**
+     * 跳转图片文件下载页面
+     * @return
+     */
+    @RequestMapping("/imageDwListHtml")
+    public String imageDwListHtml(){
+        return "image/imageDw";
+    }
     /**
      * 调转到在线设备升级页面
      * @param id
@@ -113,10 +127,9 @@ public class ZkFileController {
     @ResponseBody
     public Result getZkFileList(ZkFile zkFile){
         zkFile.setFileType(0);
+        PageHelper.startPage(zkFile.getPage(),zkFile.getLimit());
         List<ZkFile> zkFiles = zkFileService.selectListByEntity(zkFile);
-        Result result = new Result(ResultEnum.OK,zkFiles,true);
-        result.setCount(zkFileService.selectZkFileListByEntityCount(zkFile));
-        return result;
+        return PageUtil.setpage(zkFiles);
     }
 
 
@@ -166,25 +179,31 @@ public class ZkFileController {
     @RequestMapping("/UploadImage")
     @ResponseBody
     public Result UploadImage(MultipartFile file) throws IOException {
-        String path = fileImageUploadPath +"logIamge/"+ dateFormat.Date_yearStr(new Date())+"/";
-        File fileUrl = new File(path);
-        //判断当前文件夹是否存在
-        if(!fileUrl.exists()){
-            fileUrl.mkdirs();
+        BufferedImage bi = ImageIO.read(file.getInputStream());
+        Result result = null;
+        if((bi.getHeight()==272&&bi.getWidth()==480)||(bi.getHeight()==800&&bi.getWidth()==480)){
+            String path = fileImageUploadPath +"logIamge/"+ dateFormat.Date_yearStr(new Date())+"/";
+            File fileUrl = new File(path);
+            //判断当前文件夹是否存在
+            if(!fileUrl.exists()){
+                fileUrl.mkdirs();
+            }
+            String newFileName = UUID.randomUUID().toString().replace("-", "")+"."+file.getOriginalFilename().split("\\.")[1];
+            path = path + newFileName;
+            file.getInputStream();
+            File dest = new File(path);
+            file.transferTo(dest);
+            String crc32 = FileCRC32.getCRC32(file.getInputStream());
+            ZkFile zkFile = new ZkFile();
+            zkFile.setFileCRC32(crc32);
+            zkFile.setFileName(file.getOriginalFilename());
+            zkFile.setFilePath(path);
+            zkFile.setFileType(1);
+            zkFileService.insertByEntity(zkFile);
+            result = new Result(ResultEnum.OK,true);
+        }else {
+            result = new Result(ResultEnum.PARAMETER_ERROR,"上传图片像素错误:参照（272x480或800x480）",false);
         }
-        String newFileName = UUID.randomUUID().toString().replace("-", "")+"."+file.getOriginalFilename().split("\\.")[1];
-        path = path + newFileName;
-        file.getInputStream();
-        File dest = new File(path);
-        file.transferTo(dest);
-        String crc32 = FileCRC32.getCRC32(file.getInputStream());
-        ZkFile zkFile = new ZkFile();
-        zkFile.setFileCRC32(crc32);
-        zkFile.setFileName(file.getName());
-        zkFile.setFilePath(path);
-        zkFile.setFileType(1);
-        zkFileService.insertByEntity(zkFile);
-        Result result = new Result(ResultEnum.OK,true);
         return result;
     }
 
@@ -197,11 +216,13 @@ public class ZkFileController {
     public Result getImageFileList(ZkFile zkFile) {
         zkFile.setFileAdmin(getShiroUser.getUser().getUName());
         zkFile.setFileType(1);
+        PageHelper.startPage(zkFile.getPage(),zkFile.getLimit());
         List<ZkFile> zkFiles = zkFileService.selectListByEntity(zkFile);
-        Result result = new Result(ResultEnum.OK,zkFiles,true);
-        result.setCount(zkFileService.selectZkFileListByEntityCount(zkFile));
-        return result;
+        return PageUtil.setpage(zkFiles);
     }
+
+
+
 
     /**
      * 下载bin升级文件
@@ -277,10 +298,27 @@ public class ZkFileController {
             while ((len = inStream.read(b)) > 0)
                 response.getOutputStream().write(b, 0, len);
             inStream.close();
+
+            //下载文件后记录下载记录
+            ZkImageDw zkImageDw = new ZkImageDw();
+            zkImageDw.setFileName(zkFile.getFileName());
+            zkImageDwService.insertZkImageDw(zkImageDw);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * 查询图片文件下载列表
+     * 当前用户
+     */
+    @RequestMapping("/getImageDwList")
+    @ResponseBody
+    public Result getImageDwList(ZkImageDw zkImageDw){
+        zkImageDw.setuName(getShiroUser.getUser().getUName());
+        PageHelper.startPage(zkImageDw.getPage(),zkImageDw.getLimit());
+        List<ZkImageDw> zkImageDws = zkImageDwService.selectZkImageDwList(zkImageDw);
+        return  PageUtil.setpage(zkImageDws);
     }
 
 }

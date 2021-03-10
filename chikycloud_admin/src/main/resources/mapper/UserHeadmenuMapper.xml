@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zk.cloudweb.dao.UserHeadmenuMapper">
-    
+
     <resultMap type="com.zk.cloudweb.entity.UserHeadmenu" id="UserHeadmenuResult">
         <result property="id"    column="id"    />
         <result property="title"    column="title"    />
@@ -19,14 +19,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectUserHeadmenuList" parameterType="com.zk.cloudweb.entity.UserHeadmenu" resultMap="UserHeadmenuResult">
         <include refid="selectUserHeadmenuVo"/>
-        <where>  
+        <where>
             <if test="title != null  and title != ''"> and title = #{title}</if>
             <if test="href != null  and href != ''"> and href = #{href}</if>
             <if test="target != null  and target != ''"> and target = #{target}</if>
         </where>
-        <if test="limit !=null">
-            limit #{limit},#{count}
-        </if>
     </select>
 
     <select id="selectUserHeadmenuListCount" parameterType="com.zk.cloudweb.entity.UserHeadmenu" resultType="int">
@@ -43,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectUserHeadmenuVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertUserHeadmenu" parameterType="com.zk.cloudweb.entity.UserHeadmenu">
         insert into user_headmenu
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -77,10 +74,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteUserHeadmenuByIds" parameterType="String">
-        delete from user_headmenu where id in 
+        delete from user_headmenu where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>

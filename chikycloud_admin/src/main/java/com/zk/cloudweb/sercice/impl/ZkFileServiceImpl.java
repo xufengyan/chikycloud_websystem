@@ -52,11 +52,6 @@ public class ZkFileServiceImpl implements IZkFileService {
 
     @Override
     public int selectZkFileListByEntityCount(ZkFile zkFile) {
-        if(null!=zkFile.getLimit()){
-            Integer limit = zkFile.getLimit();
-            zkFile.setLimit(zkFile.getLimit()*(zkFile.getPage()-1));
-            zkFile.setCount(limit*zkFile.getPage());
-        }
         return zkFileDao.selectZkFileListByEntityCount(zkFile);
     }
 }

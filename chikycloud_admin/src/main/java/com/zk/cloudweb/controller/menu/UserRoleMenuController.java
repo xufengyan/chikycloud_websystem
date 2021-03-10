@@ -1,11 +1,13 @@
 package com.zk.cloudweb.controller.menu;
 
+import com.github.pagehelper.PageHelper;
 import com.zk.cloudweb.entity.UserMenu;
 import com.zk.cloudweb.entity.UserRoleMenu;
 import com.zk.cloudweb.service.IUserMenuService;
 import com.zk.cloudweb.service.IUserRoleMenuService;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
+import com.zk.cloudweb.util.page.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +50,7 @@ public class UserRoleMenuController {
     @RequestMapping("/getRoleMenuList")
     @ResponseBody
     public Result getRoleMenuList(UserRoleMenu roleMenu){
+        PageHelper.startPage(roleMenu.getPage(),roleMenu.getLimit());
         List<UserRoleMenu> roleMenus = userRoleMenuService.selectUserRoleMenuList(roleMenu);
         List<UserMenu> userMenus = new ArrayList<>();
         if (roleMenus.size()>0){
@@ -56,8 +59,7 @@ public class UserRoleMenuController {
                 userMenus.add(resMenu);
             }
         }
-        Result result = new Result(ResultEnum.OK,userMenus,true);
-        return result;
+        return PageUtil.setpage(roleMenus);
     }
 
     /**
@@ -69,7 +71,6 @@ public class UserRoleMenuController {
     @ResponseBody
     public Result getNORoleMenuList(UserRoleMenu roleMenu){
         List<UserRoleMenu> userRoleMenus = userRoleMenuService.selectUserRoleMenuList(roleMenu);
-
         List<UserMenu> UserMenus = userMenuService.selectUserMenuList(new UserMenu());
         List<UserMenu> userMenus = new ArrayList<>();
         boolean b = true;

@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * 用户对应机器Service业务层处理
- * 
+ *
  * @author xf
  * @date 2020-06-11
  */
@@ -34,7 +34,7 @@ public class ZkUserMachineServiceImpl implements IZkUserMachineService
     SocketMeasureResultDao socketMeasureResultDao;
     /**
      * 查询用户对应机器
-     * 
+     *
      * @param id 用户对应机器ID
      * @return 用户对应机器
      */
@@ -46,7 +46,7 @@ public class ZkUserMachineServiceImpl implements IZkUserMachineService
 
     /**
      * 查询用户对应机器列表
-     * 
+     *
      * @param zkUserMachine 用户对应机器
      * @return 用户对应机器
      */
@@ -58,7 +58,7 @@ public class ZkUserMachineServiceImpl implements IZkUserMachineService
 
     /**
      * 新增用户对应机器
-     * 
+     *
      * @param zkUserMachine 用户对应机器
      * @return 结果
      */
@@ -72,7 +72,7 @@ public class ZkUserMachineServiceImpl implements IZkUserMachineService
 
     /**
      * 修改用户对应机器
-     * 
+     *
      * @param zkUserMachine 用户对应机器
      * @return 结果
      */
@@ -84,7 +84,7 @@ public class ZkUserMachineServiceImpl implements IZkUserMachineService
 
     /**
      * 删除用户对应机器对象
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -96,7 +96,7 @@ public class ZkUserMachineServiceImpl implements IZkUserMachineService
 
     /**
      * 删除用户对应机器信息
-     * 
+     *
      * @param id 用户对应机器ID
      * @return 结果
      */
@@ -113,11 +113,7 @@ public class ZkUserMachineServiceImpl implements IZkUserMachineService
      */
     @Override
     public List<ZkMachine> selectZkUserMachineByPage(ZkUserMachine zkUserMachine) {
-        if(null!=zkUserMachine.getLimit()){
-            Integer limit = zkUserMachine.getLimit();
-            zkUserMachine.setLimit(zkUserMachine.getLimit()*(zkUserMachine.getPage()-1));
-            zkUserMachine.setCount(limit*zkUserMachine.getPage());
-        }
+
         return zkUserMachineDao.selectZkUserMachineByPage(zkUserMachine);
     }
 

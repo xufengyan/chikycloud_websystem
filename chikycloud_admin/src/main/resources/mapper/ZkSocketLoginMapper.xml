@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zk.cloudweb.dao.ZkSocketLoginDao">
-    
+
     <resultMap type="com.zk.cloudweb.entity.ZkSocketLogin" id="ZkSocketLoginResult">
         <result property="machineName"    column="machine_name"    />
         <result property="machineNum"    column="machine_num"    />
@@ -53,15 +53,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectMachineLoginHistiryList" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultMap="ZkSocketLoginResult">
 
-        select sl.machine_num,sl.id,max(sl.create_time) create_time,sl.machine_name from zk_socket_login_history sl
+        select sl.machine_num,max(sl.create_time) create_time,sl.machine_name from zk_socket_login_history sl
         left join zk_machine m on m.m_number = sl.machine_num
         left join zk_user_machine um on m.id = um.um_machine_id
         where
          um.um_user_id = #{umUserId}
          AND
 		sl.login_type = 0
-        GROUP BY sl.machine_num
-
+        GROUP BY sl.machine_num,sl.machine_name
     </select>
 
     <select id="selectOnLineZkSocketLogin" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultMap="ZkSocketLoginResult">
@@ -69,9 +68,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join zk_machine m on m.m_number = sl.machine_num
         left join zk_user_machine um on m.id = um.um_machine_id
         where um.um_user_id = #{umUserId}
-        <if test="limit !=null">
-            limit #{limit},#{count}
-        </if>
     </select>
     <select id="selectOnLineZkSocketLoginCount" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultType="int">
         select count(0) from zk_socket_login sl
@@ -84,7 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!--        <include refid="selectZkSocketLoginVo"/>-->
 <!--        where id = #{id}-->
 <!--    </select>-->
-        
+
     <insert id="insertZkSocketLogin" parameterType="com.zk.cloudweb.entity.ZkSocketLogin">
         insert into zk_socket_login
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -148,5 +144,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!--            #{id}-->
 <!--        </foreach>-->
 <!--    </delete>-->
-    
+
 </mapper>

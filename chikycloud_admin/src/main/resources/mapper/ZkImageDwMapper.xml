@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.ZkImageDwDao">
+
+    <resultMap type="com.zk.cloudweb.entity.ZkImageDw" id="ZkImageDwResult">
+        <result property="zId"    column="z_id"    />
+        <result property="uName"    column="u_name"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectZkImageDwVo">
+        select z_id, u_name, file_name, create_time from zk_image_dw
+    </sql>
+
+    <select id="selectZkImageDwList" parameterType="com.zk.cloudweb.entity.ZkImageDw" resultMap="ZkImageDwResult">
+        <include refid="selectZkImageDwVo"/>
+        <where>
+            <if test="uName != null  and uName != ''"> and u_name like concat('%', #{uName}, '%')</if>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectZkImageDwById" parameterType="Long" resultMap="ZkImageDwResult">
+        <include refid="selectZkImageDwVo"/>
+        where z_id = #{zId}
+    </select>
+
+    <insert id="insertZkImageDw" parameterType="com.zk.cloudweb.entity.ZkImageDw" useGeneratedKeys="true" keyProperty="zId">
+        insert into zk_image_dw
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uName != null  and uName != ''">u_name,</if>
+            <if test="fileName != null  and fileName != ''">file_name,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uName != null  and uName != ''">#{uName},</if>
+            <if test="fileName != null  and fileName != ''">#{fileName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZkImageDw" parameterType="com.zk.cloudweb.entity.ZkImageDw">
+        update zk_image_dw
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uName != null  and uName != ''">u_name = #{uName},</if>
+            <if test="fileName != null  and fileName != ''">file_name = #{fileName},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where z_id = #{zId}
+    </update>
+
+    <delete id="deleteZkImageDwById" parameterType="Long">
+        delete from zk_image_dw where z_id = #{zId}
+    </delete>
+
+    <delete id="deleteZkImageDwByIds" parameterType="String">
+        delete from zk_image_dw where z_id in
+        <foreach item="zId" collection="array" open="(" separator="," close=")">
+            #{zId}
+        </foreach>
+    </delete>
+
+</mapper>

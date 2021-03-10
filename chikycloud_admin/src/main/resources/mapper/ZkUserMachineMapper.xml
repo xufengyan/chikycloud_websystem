@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zk.cloudweb.dao.ZkUserMachineDao">
-    
+
     <resultMap type="com.zk.cloudweb.entity.ZkUserMachine" id="ZkUserMachineResult">
         <result property="id"    column="id"    />
         <result property="umUserId"    column="um_user_id"    />
@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectZkUserMachineList" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultMap="ZkUserMachineResult">
         <include refid="selectZkUserMachineVo"/>
-        <where>  
+        <where>
             <if test="umUserId != null  and umUserId != ''"> and um_user_id = #{umUserId}</if>
             <if test="umMachineId != null  and umMachineId != ''"> and um_machine_id = #{umMachineId}</if>
         </where>
@@ -40,9 +40,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                and um.um_machine_id = #{umMachineId}
             </if>
         </where>
-        <if test="limit !=null">
-            limit #{limit},#{count}
-        </if>
     </select>
 
     <select id="selectZkUserMachineByPageCount" parameterType="com.zk.cloudweb.entity.ZkUserMachine" resultType="int">
@@ -76,7 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectZkUserMachineVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertZkUserMachine" parameterType="com.zk.cloudweb.entity.ZkUserMachine">
         insert into zk_user_machine
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -108,10 +105,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteZkUserMachineByIds" parameterType="String">
-        delete from zk_user_machine where id in 
+        delete from zk_user_machine where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>
