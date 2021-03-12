@@ -10,6 +10,7 @@ import com.zk.cloudweb.util.Convert;
 import com.zk.cloudweb.util.getShiroUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -55,6 +56,7 @@ public class ZkImageDwServiceImpl implements IZkImageDwService
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int insertZkImageDw(ZkImageDw zkImageDw)
     {
         zkImageDw.setuName(getShiroUser.getUser().getUName());
@@ -69,6 +71,7 @@ public class ZkImageDwServiceImpl implements IZkImageDwService
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateZkImageDw(ZkImageDw zkImageDw)
     {
         return zkImageDwMapper.updateZkImageDw(zkImageDw);
@@ -81,6 +84,7 @@ public class ZkImageDwServiceImpl implements IZkImageDwService
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteZkImageDwByIds(String ids)
     {
         return zkImageDwMapper.deleteZkImageDwByIds(Convert.toStrArray(ids));

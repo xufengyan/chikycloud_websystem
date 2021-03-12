@@ -59,7 +59,7 @@ public class UserRoleMenuController {
                 userMenus.add(resMenu);
             }
         }
-        return PageUtil.setpage(roleMenus);
+        return PageUtil.setpage(userMenus);
     }
 
     /**

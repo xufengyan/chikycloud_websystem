@@ -10,6 +10,7 @@ import com.zk.cloudweb.util.RedisUtil;
 import com.zk.cloudweb.util.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
 
 import java.util.*;
@@ -34,6 +35,7 @@ public class SocketGPSDataPackageServiceImpl implements ISocketGPSDataPackageSer
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int insertSocketGPSDataPackageList(List<SocketGPSDataPackage> socketGPSDataPackages) {
         for (SocketGPSDataPackage socketGPSDataPackage : socketGPSDataPackages) {
             if (!"00".equals(socketGPSDataPackage.getGPSType())){
@@ -49,6 +51,7 @@ public class SocketGPSDataPackageServiceImpl implements ISocketGPSDataPackageSer
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateSocketGPSDataPackageList(List<SocketGPSDataPackage> socketGPSDataPackages) {
         return socketGPSDataPackageDao.updateSocketGPSDataPackageList(socketGPSDataPackages);
     }

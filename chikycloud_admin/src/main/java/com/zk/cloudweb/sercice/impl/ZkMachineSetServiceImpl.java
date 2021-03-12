@@ -6,6 +6,7 @@ import com.zk.cloudweb.sercice.IZkMachineSetService;
 import com.zk.cloudweb.util.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,7 @@ public class ZkMachineSetServiceImpl implements IZkMachineSetService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int insertZkMachineSet(ZkMachineSet zkMachineSet) {
 
         zkMachineSet.setId(Tool.CreateID());
@@ -41,6 +43,7 @@ public class ZkMachineSetServiceImpl implements IZkMachineSetService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateZkMachineSet(ZkMachineSet zkMachineSet) {
         zkMachineSet.setSendTime(new Date());
         zkMachineSet.setSendType(1);

@@ -12,6 +12,7 @@ import com.zk.cloudweb.util.Tool;
 import com.zk.cloudweb.util.getShiroUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -63,6 +64,7 @@ public class ZkUserMachineServiceImpl implements IZkUserMachineService
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int insertZkUserMachine(ZkUserMachine zkUserMachine)
     {
         zkUserMachine.setId(Tool.CreateID());
@@ -77,6 +79,7 @@ public class ZkUserMachineServiceImpl implements IZkUserMachineService
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateZkUserMachine(ZkUserMachine zkUserMachine)
     {
         return zkUserMachineDao.updateZkUserMachine(zkUserMachine);
@@ -89,6 +92,7 @@ public class ZkUserMachineServiceImpl implements IZkUserMachineService
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteZkUserMachineByIds(String ids)
     {
         return zkUserMachineDao.deleteZkUserMachineById(ids);
@@ -101,6 +105,7 @@ public class ZkUserMachineServiceImpl implements IZkUserMachineService
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteZkUserMachineById(String id)
     {
         return zkUserMachineDao.deleteZkUserMachineById(id);

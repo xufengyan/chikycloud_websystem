@@ -9,6 +9,7 @@ import com.zk.cloudweb.util.Tool;
 import com.zk.cloudweb.util.dateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class SocketMeasureResultServiceImpl implements ISocketMeasureResultServi
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int insertSocketMeasureResult(SocketMeasurResult socketMeasurResult){
 
         Integer num = 0;
@@ -71,11 +73,13 @@ public class SocketMeasureResultServiceImpl implements ISocketMeasureResultServi
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteSocketMeasurById(String id) {
         return socketMeasureResultDao.deleteSocketMeasurById(id);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateSocketMeasurResult(SocketMeasurResult socketMeasurResult) {
         return socketMeasureResultDao.updateSocketMeasurResult(socketMeasurResult);
     }

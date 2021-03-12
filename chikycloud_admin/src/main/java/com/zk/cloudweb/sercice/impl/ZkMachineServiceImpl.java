@@ -7,6 +7,7 @@ import com.zk.cloudweb.sercice.IZkMachineService;
 import com.zk.cloudweb.util.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -29,12 +30,14 @@ public class ZkMachineServiceImpl implements IZkMachineService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int insertZkMachine(ZkMachine zkMachine) {
         zkMachine.setId(Tool.CreateID());
         zkMachine.setCreateTime(new Date());
         return zkMachineDao.insertZkMachine(zkMachine);
     }
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateZkMachine(ZkMachine zkMachine) {
         return zkMachineDao.updateZkMachine(zkMachine);
     }

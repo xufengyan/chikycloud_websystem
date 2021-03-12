@@ -7,6 +7,7 @@ import com.zk.cloudweb.util.Tool;
 import com.zk.cloudweb.util.getShiroUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -33,11 +34,13 @@ public class ZkFileServiceImpl implements IZkFileService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateByEntity(ZkFile zkFile) {
         return zkFileDao.updateZkFileByEntity(zkFile);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int insertByEntity(ZkFile zkFile) {
         zkFile.setFileAdmin(getShiroUser.getUser().getUName());
         zkFile.setId(Tool.CreateID());
@@ -46,6 +49,7 @@ public class ZkFileServiceImpl implements IZkFileService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteById(String id) {
         return zkFileDao.deleteZkFileById(id);
     }

@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,7 @@ public class SocketloginServiceImpl implements ISocketloginService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String insertSocketlogin(SocketPackage socketPackage, Socketlogin socketlogin) {
         ZkMachine zkMachine = new ZkMachine();
         zkMachine.setMNumber(socketlogin.getTerminalID().replaceAll(" ",""));
@@ -74,6 +76,7 @@ public class SocketloginServiceImpl implements ISocketloginService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void insertSocketlogout(SocketPackage socketPackage, Socketlogin socketlogin) {
         //添加登录信息
         ZkSocketLogin zkSocketLogin = new ZkSocketLogin();
@@ -94,6 +97,7 @@ public class SocketloginServiceImpl implements ISocketloginService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int delZkSocketLoginById(Socketlogin socketlogin) {
         return zkSocketLoginDao.delZkSocketLoginById(socketlogin.getId());
     }
