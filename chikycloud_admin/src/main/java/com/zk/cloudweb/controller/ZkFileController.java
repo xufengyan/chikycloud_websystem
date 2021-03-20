@@ -179,6 +179,7 @@ public class ZkFileController {
     @RequestMapping("/UploadImage")
     @ResponseBody
     public Result UploadImage(MultipartFile file) throws IOException {
+        InputStream inputStream = file.getInputStream();
         BufferedImage bi = ImageIO.read(file.getInputStream());
         Result result = null;
         if((bi.getHeight()==272&&bi.getWidth()==480)||(bi.getHeight()==800&&bi.getWidth()==480)){
@@ -193,7 +194,7 @@ public class ZkFileController {
             file.getInputStream();
             File dest = new File(path);
             file.transferTo(dest);
-            String crc32 = FileCRC32.getCRC32(file.getInputStream());
+            String crc32 = FileCRC32.getCRC32(inputStream);
             ZkFile zkFile = new ZkFile();
             zkFile.setFileCRC32(crc32);
             zkFile.setFileName(file.getOriginalFilename());
@@ -237,12 +238,17 @@ public class ZkFileController {
         zkFile.setId(id);
         zkFile = zkFileService.selectEntityByEntity(zkFile);
         String imageBinPath = zkFile.getImageBinPath();
+        String fileName = "ZK-INKJET-UI.bin";
+
         if(StringUtils.isEmpty(zkFile.getImageBinPath())) {
             File file = new File(zkFile.getFilePath());
             BufferedImage bi = ImageIO.read(file);
             // 获取当前图片的高,宽,ARGB
             int h = bi.getHeight();//800x480 272x480
             int w = bi.getWidth();
+            if(800==h&&480==w){
+                fileName = "ZK-TIJSPS-800x480-UI.bin";
+            }
             int[] rgbarr = new int[3];
             String binPath = fileImageUploadPath+"/bin/"+dateFormat.Date_yearStr(new Date())+"/"+UUID.randomUUID().toString().replace("-", "")+".bin";
             File target = new File(binPath);
@@ -284,7 +290,8 @@ public class ZkFileController {
         }
 
         // 下载本地文件
-        String fileName = "ZK-INKJET-UI.bin"; // 文件的默认保存名
+
+         // 文件的默认保存名
         // 读到流中
         InputStream inStream = new FileInputStream(zkFile.getImageBinPath());// 文件的存放路径
         // 设置输出的格式

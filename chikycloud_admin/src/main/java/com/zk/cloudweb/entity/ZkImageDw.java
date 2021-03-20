@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * 【请填写功能名称】对象 zk_image_dw
  *
- * @author ruoyi
+ * @author xf
  * @date 2021-03-10
  */
 public class ZkImageDw extends BaseEntity

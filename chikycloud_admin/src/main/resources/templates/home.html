@@ -100,21 +100,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--                                        <div class="layui-col-xs6">-->
-                            <!--                                            <div class="panel layui-bg-number">-->
-                            <!--                                                <div class="panel-body">-->
-                            <!--                                                    <div class="panel-title">-->
-                            <!--                                                        <span class="label pull-right layui-bg-green">实时</span>-->
-                            <!--                                                        <h5>订单统计</h5>-->
-                            <!--                                                    </div>-->
-                            <!--                                                    <div class="panel-content">-->
-                            <!--                                                        <h1 class="no-margins-h1 no-margins">1234</h1>-->
-                            <!--                                                        -->
-                            <!--                                                        <p style="margin: 0 0 0"><small>当前分类总记录数</small></p>-->
-                            <!--                                                    </div>-->
-                            <!--                                                </div>-->
-                            <!--                                            </div>-->
-                            <!--                                        </div>-->
+                            <div class="layui-col-xs6" id="linkingNumType" style="display: none">
+                                <div class="panel layui-bg-number">
+                                    <div class="panel-body">
+                                        <div class="panel-title">
+                                            <span class="label pull-right layui-bg-green">实时</span>
+                                            <h5>总机器在线数</h5>
+                                        </div>
+                                        <div class="panel-content">
+                                            <h1 class="no-margins-h1 no-margins-linkingSum">0</h1>
+
+                                            <p style="margin: 0 0 0"><small class="onLineNum">历史最高连接数:0</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -163,7 +163,7 @@
 
         //查询统计信息
         ajaxNOParam("zkMachine/getMachineDataStatistics",function (data) {
-            var loop1, loop2, loop3, time = 30, i1 = 0,i2 = 0, i3 = 0, number;
+            var loop1, loop2, loop3,loop4, time = 30, i1 = 0,i2 = 0, i3 = 0,i4=0, number;
             loop3 = setInterval(function () {
                 if (i1 > 60) {
                     clearInterval(loop3);
@@ -192,6 +192,19 @@
                 }
             }, time);
 
+            if(undefined!=data.data.linkingNum){
+                $("#linkingNumType").show();
+                loop4 = setInterval(function () {
+                    if (i4 > 60) {
+                        clearInterval(loop4);
+                        $(".no-margins-linkingSum").html(data.data.linkingNum);
+                        $(".onLineNum").html("历史最高连接数:"+data.data.onLinegNum);
+                    } else {
+                        $(".no-margins-linkingSum").html(randomNum(99,10)+"."+randomNum(99,10));
+                        i4++;
+                    }
+                }, time);
+            }
 
 
         });

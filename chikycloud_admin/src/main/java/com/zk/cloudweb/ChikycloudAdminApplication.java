@@ -40,6 +40,7 @@ public class ChikycloudAdminApplication implements CommandLineRunner {
      */
     @PreDestroy
     public void destory() throws Exception{
+
         System.out.println("项目关闭的时候执行");
     }
 }

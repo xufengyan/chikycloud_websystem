@@ -2,6 +2,7 @@ package com.zk.cloudweb.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.sun.org.apache.xpath.internal.operations.Mod;
+import com.zk.cloudweb.controller.socket.ServerHandler;
 import com.zk.cloudweb.controller.socket.service.serviceSend;
 import com.zk.cloudweb.entity.*;
 import com.zk.cloudweb.sercice.*;
@@ -288,6 +289,12 @@ public class ZkMachineController {
     @ResponseBody
     public Result getMachineDataStatistics(){
         Map<String,Object> map = zkUserMachineService.selectMachineDataStatistics();
+        //获取到在线机器数量
+        if("zk0000".equals(getShiroUser.getUser().getRoleId())){
+            map.put("linkingNum", ServerHandler.linkingNum);
+            map.put("onLinegNum", ServerHandler.onLine);
+
+        }
         Result result = new Result(ResultEnum.OK,map,true);
         return result;
     }

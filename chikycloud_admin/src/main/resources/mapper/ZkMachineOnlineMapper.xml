@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.cloudweb.dao.ZkMachineOnlineDao">
+
+    <resultMap type="com.zk.cloudweb.entity.ZkMachineOnline" id="ZkMachineOnlineResult">
+        <result property="id"    column="id"    />
+        <result property="num"    column="num"    />
+        <result property="lineTime"    column="line_time"    />
+    </resultMap>
+
+    <sql id="selectZkMachineOnlineVo">
+        select id, num, line_time from zk_machine_online
+    </sql>
+
+    <select id="selectZkMachineOnlineList" parameterType="com.zk.cloudweb.entity.ZkMachineOnline" resultMap="ZkMachineOnlineResult">
+        <include refid="selectZkMachineOnlineVo"/>
+        <where>
+            <if test="num != null "> and num = #{num}</if>
+            <if test="lineTime != null "> and line_time = #{lineTime}</if>
+        </where>
+    </select>
+
+    <select id="selectZkMachineOnlineById" parameterType="int" resultMap="ZkMachineOnlineResult">
+         select MAX(num) num from zk_machine_online Limit 1
+    </select>
+
+    <insert id="insertZkMachineOnline" parameterType="com.zk.cloudweb.entity.ZkMachineOnline" useGeneratedKeys="true" keyProperty="id">
+        insert into zk_machine_online
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="num != null ">num,</if>
+            <if test="lineTime != null ">line_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="num != null ">#{num},</if>
+            <if test="lineTime != null ">#{lineTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZkMachineOnline" parameterType="com.zk.cloudweb.entity.ZkMachineOnline">
+        update zk_machine_online
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="num != null ">num = #{num},</if>
+            <if test="lineTime != null ">line_time = #{lineTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteZkMachineOnlineById" parameterType="int">
+        delete from zk_machine_online where id = #{id}
+    </delete>
+
+    <delete id="deleteZkMachineOnlineByIds" parameterType="String">
+        delete from zk_machine_online where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,5 +1,7 @@
 package com.zk.cloudweb.controller.socket;
 
+import com.zk.cloudweb.entity.ZkMachineOnline;
+import com.zk.cloudweb.sercice.IZkMachineOnlineService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -20,23 +22,24 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class NettyServer {
- 
+
     private static Logger logger = LoggerFactory.getLogger(ServerHandler.class);
- 
+
     @Value("${netty.port}")
     private int port;
- 
+
     public static ServerSocketChannel serverSocketChannel;
     @Autowired
     private ServerHandler serverHandler;
-    
- 
+    @Autowired
+    private IZkMachineOnlineService zkMachineOnlineService;
+
     public void start() throws Exception {
         // 连接处理group
         EventLoopGroup boss = new NioEventLoopGroup();
         // 事件处理group
         EventLoopGroup worker = new NioEventLoopGroup();
- 
+
         ServerBootstrap bootstrap = new ServerBootstrap();//1.创建ServerBootStrap实例
         // 绑定处理group
         bootstrap.group(boss, worker)//2.设置并绑定Reactor线程池：EventLoopGroup，EventLoop就是处理所有注册到本线程的Selector上面的Channel
@@ -65,7 +68,7 @@ public class NettyServer {
                                 serverHandler);
                     }
                 });
- 
+
         // 绑定端口，同步等待成功
         ChannelFuture future;
         try {
@@ -73,6 +76,8 @@ public class NettyServer {
             future = bootstrap.bind(port).sync();//真正让netty跑起来的重点
             if (future.isSuccess()) {
                 serverSocketChannel = (ServerSocketChannel) future.channel();
+                ZkMachineOnline zkMachineOnline = zkMachineOnlineService.selectZkMachineOnlineById(1);
+                ServerHandler.onLine = zkMachineOnline.getNum();
                 logger.info("netty服务开启成功");
             } else {
                 logger.info("netty服务开启失败");

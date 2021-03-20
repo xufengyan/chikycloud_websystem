@@ -4,15 +4,13 @@ import com.zk.cloudweb.controller.socket.service.DeviceSession;
 import com.zk.cloudweb.controller.socket.service.serviceSend;
 import com.zk.cloudweb.controller.socket.util.Analysis;
 import com.zk.cloudweb.controller.socket.util.Hex_to_Decimal;
+import com.zk.cloudweb.entity.ZkMachineOnline;
 import com.zk.cloudweb.entity.ZkMachineSet;
 import com.zk.cloudweb.entity.socketLink.SocketGPSDataPackage;
 import com.zk.cloudweb.entity.socketLink.SocketMeasurResult;
 import com.zk.cloudweb.entity.socketLink.SocketPackage;
 import com.zk.cloudweb.entity.socketLink.Socketlogin;
-import com.zk.cloudweb.sercice.ISocketGPSDataPackageService;
-import com.zk.cloudweb.sercice.ISocketMeasureResultService;
-import com.zk.cloudweb.sercice.ISocketloginService;
-import com.zk.cloudweb.sercice.IZkMachineSetService;
+import com.zk.cloudweb.sercice.*;
 import com.zk.cloudweb.util.socketChannel.channelSingle;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -34,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 自定义服务端处理器
@@ -51,6 +50,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     //转换时间的工具
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    //记录当前连接数
+    public static AtomicInteger linkingNum = new AtomicInteger(0);
+    public static Integer onLine = 0;
+
     @Autowired
     private ISocketloginService socketloginService;
 
@@ -62,6 +65,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     @Autowired
     private IZkMachineSetService zkMachineSetService;
+
+    @Autowired
+
+    private IZkMachineOnlineService zkMachineOnlineService;
 
     private channelSingle single = channelSingle.getChannelUtil();
 
@@ -86,7 +93,14 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        logger.info("netty客户端与服务端连接开始...");
+        //计数加一
+        ServerHandler.linkingNum.incrementAndGet();
+        if(ServerHandler.linkingNum.get() > ServerHandler.onLine){
+            ZkMachineOnline zkMachineOnline = new ZkMachineOnline();
+            zkMachineOnline.setNum(ServerHandler.linkingNum.get());
+            zkMachineOnlineService.insertZkMachineOnline(zkMachineOnline);
+        }
+        logger.info("netty客户端与服务端连接开始...当前机器在线数："+ServerHandler.linkingNum.get());
     }
 
     /**
@@ -203,7 +217,9 @@ public void channelInactive(ChannelHandlerContext ctx) throws Exception {
             socketloginService.insertSocketlogout(deviceSession.getSocketPackage(),deviceSession.getSocketlogin());
         }
     }
-    logger.info("netty客户端与服务端连接关闭...");
+    //计数减一
+    ServerHandler.linkingNum.decrementAndGet();
+    logger.info("netty客户端与服务端连接关闭...当前机器在线数："+ServerHandler.linkingNum.get());
 }
 
     /**

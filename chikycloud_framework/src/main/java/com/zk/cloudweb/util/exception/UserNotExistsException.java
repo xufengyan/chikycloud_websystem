@@ -2,8 +2,8 @@ package com.zk.cloudweb.util.exception;
 
 /**
  * 用户不存在异常类
- * 
- * @author ruoyi
+ *
+ * @author xf
  */
 public class UserNotExistsException extends UserException
 {

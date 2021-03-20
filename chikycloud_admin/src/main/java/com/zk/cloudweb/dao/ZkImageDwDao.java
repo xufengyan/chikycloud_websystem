@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 【请填写功能名称】Mapper接口
  *
- * @author ruoyi
+ * @author xf
  * @date 2021-03-10
  */
 public interface ZkImageDwDao
