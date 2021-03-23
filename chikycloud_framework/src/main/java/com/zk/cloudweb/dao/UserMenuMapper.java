@@ -69,4 +69,6 @@ public interface UserMenuMapper
     List selectALlMenuList(UserMenu menu);
 
     Integer selectALlMenuListCount(UserMenu menu);
+
+    List<UserMenu> selectUserRoleMenuByRoleId(String roleId);
 }

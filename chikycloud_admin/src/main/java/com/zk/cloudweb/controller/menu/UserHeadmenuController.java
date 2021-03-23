@@ -87,6 +87,7 @@ public class UserHeadmenuController
     public Result getHeadmenuList(UserHeadmenu userHeadmenu){
         PageHelper.startPage(userHeadmenu.getPage(),userHeadmenu.getLimit());
         List<UserHeadmenu> userHeadmenus = userHeadmenuService.selectUserHeadmenuList(userHeadmenu);
+
         return PageUtil.setpage(userHeadmenus);
     }
 
@@ -150,10 +151,27 @@ public class UserHeadmenuController
          */
         Subject subject= SecurityUtils.getSubject();
         User user = (User) subject.getPrincipal();
+        //当用户拥有多个角色的时候
+        String [] uRole = user.getRoleId().split(",");
+        List<UserRoleMenu> userRoleMenus = new ArrayList<>();
+        for (String s : uRole) {
+            UserRoleMenu userRoleMenu = new UserRoleMenu();
+            userRoleMenu.setRoleId(s);
+            List<UserRoleMenu> rml =  userRoleMenuService.selectUserRoleMenuList(userRoleMenu);
+            for (UserRoleMenu roleMenu : rml) {
+                userRoleMenus.add(roleMenu);
+            }
+        }
 
-        UserRoleMenu userRoleMenu = new UserRoleMenu();
-        userRoleMenu.setRoleId(user.getRoleId());
-        List<UserRoleMenu> userRoleMenus =  userRoleMenuService.selectUserRoleMenuList(userRoleMenu);
+        for  ( int  i  =   0 ; i  <  userRoleMenus.size()  -   1 ; i ++ )  {
+            for  ( int  j  =  userRoleMenus.size()  -   1 ; j  >  i; j -- )  {
+                // 这里是对象的比较，如果去重条件不一样，在这里修改即可
+                if  (userRoleMenus.get(j).getMenuId().equals(userRoleMenus.get(i).getMenuId()))  {
+                    userRoleMenus.remove(j);
+                }
+            }
+        }
+
 
         List<UserHeadmenu> userHeadmenus = new ArrayList<>();
         List<UserSecondarymemu> userSecondarymemus = new ArrayList<>();

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>ChikyCloud</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="../js/commonCSS.js" charset="utf-8"></script>
+    <style id="layuimini-bg-color">
+    </style>
+</head>
+<body class="layuimini-all">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layuimini-container layuimini-page-anim">
+            <div class="layuimini-main">
+
+                <fieldset class="table-search-fieldset">
+                    <legend>角色列表</legend>
+                    <div style="margin: 10px 10px 10px 10px">
+<!--                        <form class="layui-form layui-form-pane" lay-filter="secondarymenu"  onsubmit="return false;">-->
+<!--                            <div class="layui-form-item">-->
+<!--                                <div class="layui-inline">-->
+<!--                                    <label class="layui-form-label">角色名称</label>-->
+<!--                                    <div class="layui-input-inline">-->
+<!--                                        <input type="text" name="roleName" autocomplete="off" class="layui-input">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                                <div class="layui-inline">-->
+<!--                                    <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </form>-->
+                    </div>
+                    <table id="munu-table" class="layui-table" lay-filter="munu-table"></table>
+
+                </fieldset>
+
+                <script type="text/html" id="toolbarDemo">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" id="userRoleAdd" lay-event="add"> 添加用户角色 </button>
+                        <!--                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
+                    </div>
+                </script>
+
+<!--                <table class="layui-hide" id="role" lay-filter="currentTableFilter"></table>-->
+
+                <script type="text/html" id="currentTableBar">
+                    <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="selectRoleMenu">查看权限</a>
+        <!--            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">添加权限</a>-->
+                </script>
+
+            </div>
+        </div>
+    </div>
+<script src="../js/commonJS.js" charset="utf-8"></script>
+<script >
+    layui.use(['form', 'table'  ,'element','treetable'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            treetable = layui.treetable;
+
+        layer.load(2);
+        treetable.render({
+            treeColIndex: 1,
+            treeSpid: -1,
+            treeIdName: 'authorityId',
+            treePidName: 'parentId',
+            elem: '#munu-table',
+            url: '../role/getUserRoleLsit',
+            page: true,
+            toolbar: '#toolbarDemo',
+            // open: false,
+            where: {'id':"[[${roleId}]]"},
+            cols: [
+                [
+                    {type: 'numbers'},
+                    {field: 'authorityName', minWidth:80, title: '权限名称'},
+                    // {field: 'authority', title: '权限标识'},
+                    // {field: 'menuUrl', title: '菜单url'},
+                    // {field: 'orderNumber', width: 80, align: 'center', title: '排序号'},
+                    {
+                        field: 'isMenu', width: 80, align: 'center', templet: function (d) {
+                            if (d.isMenu == 1) {
+                                return '<span class="layui-badge layui-bg-gray">权限</span>';
+                            }
+                            if (d.parentId == -1) {
+                                return '<span class="layui-badge layui-bg-blue">角色</span>';
+                            } else {
+                                return '<span class="layui-badge-rim">菜单</span>';
+                            }
+                        }, title: '类型'
+                    },
+                    {templet: '#auth-state', width: 120, align: 'center', title: '操作'}
+                ]
+            ],
+            done: function () {
+                layer.closeAll('loading');
+            }
+        });
+
+
+        //搜索
+        // var $ = layui.jquery, active = {
+        //     reload: function (data) {
+        //         var obj = new Object();
+        //         obj['id'] = "[[${roleId}]]";
+        //         treetable.reload('munu-table', {
+        //             method: 'post',
+        //             page: {
+        //                 curr: 1 //重新从第 1 页开始
+        //             },
+        //             where: obj
+        //         })
+        //     }
+        // }
+
+
+        /**
+         * toolbar事件监听
+         */
+        table.on('toolbar(munu-table)', function (obj) {
+            if (obj.event === 'add') {   // 查看角色拥有的权限
+                layuiWindowsOpenSublevel("添加角色",'role/userRoleAddHtml?uId='+"[[${uId}]]"+"&roleId="+"[[${roleId}]]");
+
+                console.log("添加角色管理");
+
+            } else if (obj.event === 'delete') {  // 监听删除操作
+                var checkStatus = table.checkStatus('currentTableId')
+                    , data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+        });
+        // $('#userRoleAdd').click(function () {
+        //     console.log("添加角色管理")
+        //     layuiWindowsOpenSublevel("添加角色",'role/addRoleHtml');
+        // })
+
+            //监听表格复选框选择
+        // table.on('checkbox(currentTableFilter)', function (obj) {
+        //     console.log(obj)
+        // });
+
+        table.on('tool(munu-table)', function (obj) {
+
+
+            var data = obj.data;
+            if (obj.event === 'selectRoleMenu') {
+
+                layuiWindowsOpenSublevel("查看权限",'roleMenu/getRoleMenuListHtml?roleId='+data.id+'&roleName='+data.roleName);
+
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            }
+        });
+
+    });
+
+
+    function brush() {
+        layui.use(['treetable'],function () {
+                var treetable = layui.treetable;
+            // treetable.render({})
+            layer.load(2)
+            // treetable.reload('munu-table', {})
+        })
+
+    }
+</script>
+</body>
+</html>

@@ -14,11 +14,11 @@ public class BaseEntity {
     //id
     private String id;
     //每页显示条数
-    private Integer limit;
+    private Integer limit=100;
     //条数
     private Integer count;
     //页数
-    private Integer page;
+    private Integer page = 100;
 
     //创建时间
     private Date createTime;

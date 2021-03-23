@@ -16,20 +16,20 @@
     <style id="layuimini-bg-color">
     </style>
 </head>
-<body class="layui-layout-body layuimini-all">
+<body class="layuimini-all">
     <div class="layui-layout layui-layout-admin">
         <div class="layuimini-container layuimini-page-anim">
             <div class="layuimini-main">
 
                 <fieldset class="table-search-fieldset">
-                    <legend>用户列表</legend>
+                    <legend>角色列表</legend>
                     <div style="margin: 10px 10px 10px 10px">
                         <form class="layui-form layui-form-pane" lay-filter="secondarymenu"  onsubmit="return false;">
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">用户名称</label>
+                                    <label class="layui-form-label">角色名称</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="uName" autocomplete="off" class="layui-input">
+                                        <input type="text" name="roleName" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
 
@@ -43,16 +43,16 @@
 
                 <script type="text/html" id="toolbarDemo">
                     <div class="layui-btn-container">
-                        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加用户 </button>
+<!--                        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加角色 </button>-->
                         <!--                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
                     </div>
                 </script>
 
-                <table class="layui-hide" id="user" lay-filter="currentTableFilter"></table>
+                <table class="layui-hide" id="role" lay-filter="currentTableFilter"></table>
 
                 <script type="text/html" id="currentTableBar">
-                    <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="selectRole">查看角色</a>
-        <!--            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">添加权限</a>-->
+                    <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="selectRoleMenu">查看</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="addUserRole">添加角色</a>
                 </script>
 
             </div>
@@ -60,29 +60,30 @@
     </div>
 <script src="../js/commonJS.js" charset="utf-8"></script>
 <script >
-
     layui.use(['form', 'table'  ,'element'], function () {
         var $ = layui.jquery,
             form = layui.form,
             table = layui.table;
 
+
         table.render({
-            elem: '#user',
-            id:'user',
-            url: '../user/getUserList',
+            elem: '#role',
+            id:'role',
+            url: '../role/getUserNoRoleLsit',
             toolbar: '#toolbarDemo',
-            title: '用户列表',
+            title: '角色列表',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
                 layEvent: 'LAYTABLE_TIPS',
                 icon: 'layui-icon-tips'
             }],
+            where:{id:"[[${roleId}]]"},
             cols: [
                 [
                     {type: "checkbox", width: 50},
                     {type: 'numbers', title: '序号', width: 50 ,totalRowText: '合计'},
-                    {field: 'uname', width: 120, title: '用户名'},
-                    {field: 'createTime', width: 180, title: '创建时间',templet:'<div>{{ layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss") }}</div>'},
+                    {field: 'roleName', width: 120, title: '角色名称'},
+                    {field: 'createTime', width: 120, title: '创建时间'},
                     {title: '操作', Width: 150, toolbar: '#currentTableBar'}
                 ]
             ],
@@ -97,7 +98,7 @@
             reload: function (data) {
                 var obj = new Object();
                 obj['title'] = data.title;
-                table.reload('user', {
+                table.reload('role', {
                     method: 'post',
                     page: {
                         curr: 1 //重新从第 1 页开始
@@ -112,8 +113,10 @@
          * toolbar事件监听
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
-            if (obj.event === 'add') {   // 添加用户
-                layuiWindowsOpenSublevel("添加用户",'user/addUserHtml');
+            if (obj.event === 'add') {   // 查看角色拥有的权限
+                layuiWindowsOpenSublevel("添加角色",'role/addRoleHtml');
+
+                console.log("添加角色管理");
 
             } else if (obj.event === 'delete') {  // 监听删除操作
                 var checkStatus = table.checkStatus('currentTableId')
@@ -128,17 +131,18 @@
         });
 
         table.on('tool(currentTableFilter)', function (obj) {
-
-
             var data = obj.data;
-            if (obj.event === 'selectRole') {
-                layuiWindowsOpenSublevel("查看角色",'user/getUserRoleListHtml?roleId='+data.roleId+"&uId="+data.id);
+            if (obj.event === 'selectRoleMenu') {
+
+                layuiWindowsOpenSublevel("查看权限",'roleMenu/getRoleMenuListHtml?roleId='+data.id+'&roleName='+data.roleName);
+
                 return false;
-            } else if (obj.event === 'delete') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
-                    layer.close(index);
-                });
+            } else if (obj.event === 'addUserRole') {//用户添加角色
+                ajaxResult('user/updateUser',{'roleId':data.id,'id':"[[${uId}]]"},function (res) {
+                    toolMsgAndClose();
+                    layer.closeAll();
+                    window.parent.brush();
+                })
             }
         });
 
@@ -148,7 +152,7 @@
     function brush() {
         layui.use(['table'],function () {
             var table = layui.table;
-            table.reload('user', {})
+            table.reload('role', {})
         })
 
     }

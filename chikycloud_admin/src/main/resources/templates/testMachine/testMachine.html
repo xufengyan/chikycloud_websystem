@@ -100,7 +100,6 @@
             if(data.field.host!==''&&data.field.port!==null&&data.field.port!==''&&data.field.host!==null){
                 ajaxLayuiFromParamMax("machineTest/testMachineConnect",data,function (res) {
                     if(res.success){
-
                         $("#socketKey").val(res.data2)
                         append.append("<p>"+res.data+"</p>")
                         document.getElementById('message').scrollTop=document.getElementById('message').scrollHeight;
@@ -108,8 +107,8 @@
                         //浏览器是否支持
                         if ('WebSocket' in window) {
                             // 上面我们给webSocket定位的路径
-                            websocket = new WebSocket('ws://localhost:8060/webSocketConConcurrent/'+res.data2);
-                            // websocket = new WebSocket('ws://www.chiky.cn:8060/webSocketConConcurrent/'+res.data2);
+                            // websocket = new WebSocket('ws://localhost:8060/webSocketConConcurrent/'+res.data2);
+                            websocket = new WebSocket('ws://www.chiky.cn:8060/webSocketConConcurrent/'+res.data2);
                         } else {
                             alert('该浏览器不支持websocket!');
                         }

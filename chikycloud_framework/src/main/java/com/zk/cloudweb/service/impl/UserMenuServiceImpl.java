@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * 菜单Service业务层处理
- * 
+ *
  * @author xf
  * @date 2020-05-20
  */
@@ -26,7 +26,7 @@ public class UserMenuServiceImpl implements IUserMenuService
 
     /**
      * 查询菜单
-     * 
+     *
      * @param id 菜单ID
      * @return 菜单
      */
@@ -38,7 +38,7 @@ public class UserMenuServiceImpl implements IUserMenuService
 
     /**
      * 查询菜单列表
-     * 
+     *
      * @param userMenu 菜单
      * @return 菜单
      */
@@ -50,7 +50,7 @@ public class UserMenuServiceImpl implements IUserMenuService
 
     /**
      * 新增菜单
-     * 
+     *
      * @param userMenu 菜单
      * @return 结果
      */
@@ -66,7 +66,7 @@ public class UserMenuServiceImpl implements IUserMenuService
 
     /**
      * 修改菜单
-     * 
+     *
      * @param userMenu 菜单
      * @return 结果
      */
@@ -78,7 +78,7 @@ public class UserMenuServiceImpl implements IUserMenuService
 
     /**
      * 删除菜单对象
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -90,7 +90,7 @@ public class UserMenuServiceImpl implements IUserMenuService
 
     /**
      * 删除菜单信息
-     * 
+     *
      * @param id 菜单ID
      * @return 结果
      */
@@ -120,5 +120,10 @@ public class UserMenuServiceImpl implements IUserMenuService
     @Override
     public Integer selectALlMenuListCount(UserMenu menu) {
         return userMenuMapper.selectALlMenuListCount(menu);
+    }
+
+    @Override
+    public List<UserMenu> selectUserRoleMenuByRoleId(String roleId) {
+        return userMenuMapper.selectUserRoleMenuByRoleId(roleId);
     }
 }

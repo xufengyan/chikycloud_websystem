@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zk.cloudweb.dao.UserRoleMapper">
-    
+
     <resultMap type="com.zk.cloudweb.entity.UserRole" id="UserRoleResult">
         <result property="id"    column="id"    />
         <result property="roleName"    column="role_name"    />
@@ -16,17 +16,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectUserRoleList" parameterType="com.zk.cloudweb.entity.UserRole" resultMap="UserRoleResult">
         <include refid="selectUserRoleVo"/>
-        <where>  
+        <where>
             <if test="roleName != null  and roleName != ''"> and role_name like concat('%', #{roleName}, '%')</if>
             <if test="rileKey != null  and rileKey != ''"> and rile_key = #{rileKey}</if>
         </where>
+        order by create_time
     </select>
-    
+
+    <select id="selectUserRoleListById"  resultMap="UserRoleResult">
+        <include refid="selectUserRoleVo"/>
+        where id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+        order by create_time
+    </select>
+
+
     <select id="selectUserRoleById" parameterType="String" resultMap="UserRoleResult">
         <include refid="selectUserRoleVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertUserRole" parameterType="com.zk.cloudweb.entity.UserRole">
         insert into user_role
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -55,10 +66,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteUserRoleByIds" parameterType="String">
-        delete from user_role where id in 
+        delete from user_role where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>

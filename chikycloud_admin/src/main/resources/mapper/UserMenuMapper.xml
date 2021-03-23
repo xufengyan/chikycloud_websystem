@@ -99,6 +99,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
+    <select id="selectUserRoleMenuByRoleId" parameterType="String" resultMap="UserMenuResult">
+            select m.id, m.title, m.href , m.icon, m.target, m.sercondarymenu_id
+            from user_menu m
+            LEFT JOIN user_role_menu r on r.menu_id = m.id
+            where  r.role_id = #{roleId}
+    </select>
+
+
     <insert id="insertUserMenu" parameterType="com.zk.cloudweb.entity.UserMenu">
         insert into user_menu
         <trim prefix="(" suffix=")" suffixOverrides=",">

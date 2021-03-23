@@ -10,6 +10,7 @@ import com.zk.cloudweb.util.Tool;
 import com.zk.cloudweb.util.constant.ShiroConstants;
 import com.zk.cloudweb.util.exception.CaptchaException;
 import com.zk.cloudweb.util.exception.UserNotExistsException;
+import com.zk.cloudweb.util.getShiroUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,7 +20,7 @@ import java.util.List;
 
 /**
  * 用户Service业务层处理
- * 
+ *
  * @author xf
  * @date 2020-05-19
  */
@@ -31,7 +32,7 @@ public class UserServiceImpl implements IUserService
 
     /**
      * 查询用户
-     * 
+     *
      * @param id 用户ID
      * @return 用户
      */
@@ -43,7 +44,7 @@ public class UserServiceImpl implements IUserService
 
     /**
      * 查询用户列表
-     * 
+     *
      * @param user 用户
      * @return 用户
      */
@@ -61,7 +62,7 @@ public class UserServiceImpl implements IUserService
 
     /**
      * 新增用户
-     * 
+     *
      * @param user 用户
      * @return 结果
      */
@@ -82,19 +83,20 @@ public class UserServiceImpl implements IUserService
 
     /**
      * 修改用户
-     * 
+     *
      * @param user 用户
      * @return 结果
      */
     @Override
     public int updateUser(User user)
     {
+//        user.setId(getShiroUser.getUser().getId());
         return userMapper.updateUser(user);
     }
 
     /**
      * 删除用户对象
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -106,7 +108,7 @@ public class UserServiceImpl implements IUserService
 
     /**
      * 删除用户信息
-     * 
+     *
      * @param id 用户ID
      * @return 结果
      */

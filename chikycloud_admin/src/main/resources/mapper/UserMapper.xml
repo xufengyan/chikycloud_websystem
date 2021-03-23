@@ -85,11 +85,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update zk_user
         <trim prefix="SET" suffixOverrides=",">
             <if test="uName != null  and uName != ''">u_name = #{uName},</if>
-            <if test="phone != null  and phone != ''">phone = #{phone},</if>
-            <if test="password != null  and password != ''">password = #{password},</if>
-            <if test="email != null  and email != ''">email = #{email},</if>
-            <if test="birthday != null ">birthday = #{birthday},</if>
-            <if test="image != null  and image != ''">image = #{image},</if>
+            <if test="uPassword != null  and uPassword != ''">u_password = #{uPassword},</if>
+<!--            <if test="email != null  and email != ''">email = #{email},</if>-->
+<!--            <if test="birthday != null ">birthday = #{birthday},</if>-->
+<!--            <if test="image != null  and image != ''">image = #{image},</if>-->
             <if test="roleId != null  and roleId != ''">role_id = #{roleId},</if>
 
         </trim>

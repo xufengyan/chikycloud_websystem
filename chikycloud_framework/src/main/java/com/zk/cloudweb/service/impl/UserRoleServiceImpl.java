@@ -4,6 +4,7 @@ package com.zk.cloudweb.service.impl;
 import com.zk.cloudweb.dao.UserRoleMapper;
 import com.zk.cloudweb.entity.UserRole;
 import com.zk.cloudweb.service.IUserRoleService;
+import com.zk.cloudweb.util.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 /**
  * 角色Service业务层处理
- * 
+ *
  * @author xf
  * @date 2020-05-20
  */
@@ -23,7 +24,7 @@ public class UserRoleServiceImpl implements IUserRoleService
 
     /**
      * 查询角色
-     * 
+     *
      * @param id 角色ID
      * @return 角色
      */
@@ -35,7 +36,7 @@ public class UserRoleServiceImpl implements IUserRoleService
 
     /**
      * 查询角色列表
-     * 
+     *
      * @param userRole 角色
      * @return 角色
      */
@@ -47,19 +48,20 @@ public class UserRoleServiceImpl implements IUserRoleService
 
     /**
      * 新增角色
-     * 
+     *
      * @param userRole 角色
      * @return 结果
      */
     @Override
     public int insertUserRole(UserRole userRole)
     {
+        userRole.setId(Tool.CreateID());
         return userRoleMapper.insertUserRole(userRole);
     }
 
     /**
      * 修改角色
-     * 
+     *
      * @param userRole 角色
      * @return 结果
      */
@@ -71,7 +73,7 @@ public class UserRoleServiceImpl implements IUserRoleService
 
     /**
      * 删除角色对象
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -83,7 +85,7 @@ public class UserRoleServiceImpl implements IUserRoleService
 
     /**
      * 删除角色信息
-     * 
+     *
      * @param id 角色ID
      * @return 结果
      */
@@ -91,5 +93,10 @@ public class UserRoleServiceImpl implements IUserRoleService
     public int deleteUserRoleById(String id)
     {
         return userRoleMapper.deleteUserRoleById(id);
+    }
+
+    @Override
+    public List<UserRole> selectUserRoleListById(String[] roleIdArr) {
+        return userRoleMapper.selectUserRoleListById(roleIdArr);
     }
 }

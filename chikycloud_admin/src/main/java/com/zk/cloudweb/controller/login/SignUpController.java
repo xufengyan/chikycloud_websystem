@@ -173,16 +173,16 @@ public class SignUpController {
 //            if ("math".equals(type))
 //            {
                     //计算验证码
-//                String capText = captchaProducerMath.createText();
-//                capStr = capText.substring(0, capText.lastIndexOf("@"));
-//                code = capText.substring(capText.lastIndexOf("@") + 1);
-//                bi = captchaProducerMath.createImage(capStr);
+                String capText = captchaProducerMath.createText();
+                capStr = capText.substring(0, capText.lastIndexOf("@"));
+                code = capText.substring(capText.lastIndexOf("@") + 1);
+                bi = captchaProducerMath.createImage(capStr);
 //            }
 //            else if ("char".equals(type))
 //            {
                 //纯字符验证码
-                capStr = code = captchaProducer.createText();
-                bi = captchaProducerMath.createImage(capStr);
+//                capStr = code = captchaProducer.createText();
+//                bi = captchaProducerMath.createImage(capStr);
 //            }
             session.setAttribute(Constants.KAPTCHA_SESSION_KEY, code);
             out = response.getOutputStream();

@@ -9,15 +9,15 @@ import java.util.List;
 
 /**
  * 菜单Service接口
- * 
+ *
  * @author xf
  * @date 2020-05-20
  */
-public interface IUserMenuService 
+public interface IUserMenuService
 {
     /**
      * 查询菜单
-     * 
+     *
      * @param id 菜单ID
      * @return 菜单
      */
@@ -25,7 +25,7 @@ public interface IUserMenuService
 
     /**
      * 查询菜单列表
-     * 
+     *
      * @param userMenu 菜单
      * @return 菜单集合
      */
@@ -33,7 +33,7 @@ public interface IUserMenuService
 
     /**
      * 新增菜单
-     * 
+     *
      * @param userMenu 菜单
      * @return 结果
      */
@@ -41,7 +41,7 @@ public interface IUserMenuService
 
     /**
      * 修改菜单
-     * 
+     *
      * @param userMenu 菜单
      * @return 结果
      */
@@ -49,7 +49,7 @@ public interface IUserMenuService
 
     /**
      * 批量删除菜单
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -57,7 +57,7 @@ public interface IUserMenuService
 
     /**
      * 删除菜单信息
-     * 
+     *
      * @param id 菜单ID
      * @return 结果
      */
@@ -68,4 +68,11 @@ public interface IUserMenuService
     List selectALlMenuList(UserMenu menu);
 
     Integer selectALlMenuListCount(UserMenu menu);
+
+    /**
+     * 根据roleId查询meun菜单列表
+     * @param id
+     * @return
+     */
+    List<UserMenu> selectUserRoleMenuByRoleId(String roleId);
 }

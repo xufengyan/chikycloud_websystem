@@ -43,7 +43,7 @@
 
                 <script type="text/html" id="toolbarDemo">
                     <div class="layui-btn-container">
-        <!--                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加头部菜单 </button>-->
+                        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加角色 </button>
                         <!--                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
                     </div>
                 </script>
@@ -112,9 +112,10 @@
          * toolbar事件监听
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
-            if (obj.event === 'selectRoleMenu') {   // 查看角色拥有的权限
-                layuiWindowsOpenSublevel("查看权限",'role/getRoleHtml?id = '+obj.id+'&roleName='+obj.roleName);
+            if (obj.event === 'add') {   // 查看角色拥有的权限
+                layuiWindowsOpenSublevel("添加角色",'role/addRoleHtml');
 
+                console.log("添加角色管理");
 
             } else if (obj.event === 'delete') {  // 监听删除操作
                 var checkStatus = table.checkStatus('currentTableId')

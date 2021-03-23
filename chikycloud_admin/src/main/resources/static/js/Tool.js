@@ -125,9 +125,10 @@ function ajaxLayuiFrom(url,data,callback,h5Bool) {
         contentType: 'application/json',
         // dataType : 'json',
         // contentType: 'application/json;charset=UTF-8',
-        success: function (data) {
+        success: function (res) {
+            callback(res)
             //关闭弹框
-            toolMsgAndClose();
+            // toolMsgAndClose();
             // window.parent.brush();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {

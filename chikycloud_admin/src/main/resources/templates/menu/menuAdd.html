@@ -126,8 +126,9 @@
         //监听提交
         form.on('submit(updateBtn)', function (data) {
             ajaxLayuiFrom("menu/addMenu",data,function (res) {
-                toolMsgAndClose();
                 window.parent.brush();
+                toolMsgAndClose();
+
                 return false;
             })
 

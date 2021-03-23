@@ -5,11 +5,13 @@ import com.zk.cloudweb.entity.User;
 import com.zk.cloudweb.service.IUserService;
 import com.zk.cloudweb.util.Enum.ResultEnum;
 import com.zk.cloudweb.util.Result;
+import com.zk.cloudweb.util.getShiroUser;
 import com.zk.cloudweb.util.page.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -40,6 +42,13 @@ public class UserController {
         return "user/userAdd";
     }
 
+    @RequestMapping("/getUserRoleListHtml")
+    public ModelAndView getUserRoleListHtml(String roleId,String uId,ModelAndView model){
+        model.addObject("roleId",roleId);
+        model.addObject("uId",uId);
+        model.setViewName("user/userRoleList");
+        return model;
+    }
 
     /**
      * 查询用户
@@ -80,7 +89,9 @@ public class UserController {
     @RequestMapping("/updateUser")
     @ResponseBody
     public Result updateUser(User user){
-
+        User su = userService.selectUserById(user.getId());
+        String roleId = su.getRoleId()+","+user.getRoleId();
+        user.setRoleId(roleId);
         int res = userService.updateUser(user);
         Result result =new Result(ResultEnum.OK,true);
         return result;
