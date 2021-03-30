@@ -290,7 +290,7 @@ public class ZkMachineController {
     public Result getMachineDataStatistics(){
         Map<String,Object> map = zkUserMachineService.selectMachineDataStatistics();
         //获取到在线机器数量
-        if("zk0000".equals(getShiroUser.getUser().getRoleId())){
+        if(getShiroUser.getUser().getRoleId().indexOf("zk0000")==0){
             map.put("linkingNum", ServerHandler.linkingNum);
             map.put("onLinegNum", ServerHandler.onLine);
 

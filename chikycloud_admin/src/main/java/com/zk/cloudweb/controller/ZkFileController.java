@@ -30,6 +30,7 @@ import sun.net.www.content.image.png;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -182,7 +183,7 @@ public class ZkFileController {
         InputStream inputStream = file.getInputStream();
         BufferedImage bi = ImageIO.read(file.getInputStream());
         Result result = null;
-        if((bi.getHeight()==272&&bi.getWidth()==480)||(bi.getHeight()==800&&bi.getWidth()==480)){
+        if((bi.getHeight()==272&&bi.getWidth()==480)||(bi.getWidth()==800&&bi.getHeight()==480)){
             String path = fileImageUploadPath +"logIamge/"+ dateFormat.Date_yearStr(new Date())+"/";
             File fileUrl = new File(path);
             //判断当前文件夹是否存在
@@ -191,9 +192,21 @@ public class ZkFileController {
             }
             String newFileName = UUID.randomUUID().toString().replace("-", "")+"."+file.getOriginalFilename().split("\\.")[1];
             path = path + newFileName;
-            file.getInputStream();
-            File dest = new File(path);
-            file.transferTo(dest);
+//            BufferedImage bufferedImage;
+//            bufferedImage = ImageIO.read(new File("c:\\java.png"));
+            // create a blank, RGB, same width and height, and a white
+            // background
+            BufferedImage newBufferedImage = new BufferedImage(
+                    bi.getWidth(), bi.getHeight(),
+                    BufferedImage.TYPE_INT_RGB);
+            // TYPE_INT_RGB:创建一个RBG图像，24位深度，成功将32位图转化成24位
+            newBufferedImage.createGraphics().drawImage(bi, 0, 0,
+                    Color.WHITE, null);
+            // write to jpeg file
+            ImageIO.write(newBufferedImage, "jpg", new File(path));
+//            file.getInputStream();
+//            File dest = new File(path);
+//            file.transferTo(dest);
             String crc32 = FileCRC32.getCRC32(inputStream);
             ZkFile zkFile = new ZkFile();
             zkFile.setFileCRC32(crc32);
@@ -240,15 +253,16 @@ public class ZkFileController {
         String imageBinPath = zkFile.getImageBinPath();
         String fileName = "ZK-INKJET-UI.bin";
 
+        File file = new File(zkFile.getFilePath());
+        BufferedImage bi = ImageIO.read(file);
+        // 获取当前图片的高,宽,ARGB
+        int h = bi.getHeight();//480x800 272x480
+        int w = bi.getWidth();
+        if(800==w&&480==h){
+            fileName = "ZK-TIJSPS-800x480-UI.bin";
+        }
         if(StringUtils.isEmpty(zkFile.getImageBinPath())) {
-            File file = new File(zkFile.getFilePath());
-            BufferedImage bi = ImageIO.read(file);
-            // 获取当前图片的高,宽,ARGB
-            int h = bi.getHeight();//800x480 272x480
-            int w = bi.getWidth();
-            if(800==h&&480==w){
-                fileName = "ZK-TIJSPS-800x480-UI.bin";
-            }
+
             int[] rgbarr = new int[3];
             String binPath = fileImageUploadPath+"/bin/"+dateFormat.Date_yearStr(new Date())+"/"+UUID.randomUUID().toString().replace("-", "")+".bin";
             File target = new File(binPath);
@@ -288,7 +302,6 @@ public class ZkFileController {
             zkFile.setImageBinPath(binPath);
             zkFileService.updateByEntity(zkFile);
         }
-
         // 下载本地文件
 
          // 文件的默认保存名
