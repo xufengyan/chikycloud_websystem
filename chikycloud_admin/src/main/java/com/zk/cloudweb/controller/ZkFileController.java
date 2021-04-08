@@ -67,7 +67,10 @@ public class ZkFileController {
     private String upgradeFile;
     @Value("${com.zk.file.fileImageUploadPath}")
     private String fileImageUploadPath;
-
+    @Value("${com.zk.file.servicePath}")
+    private String servicePath;
+    @Value("${com.zk.file.targetPath}")
+    private String targetPath;
     @Autowired
     private IZkFileService zkFileService;
     @Autowired
@@ -213,6 +216,9 @@ public class ZkFileController {
             zkFile.setFileName(file.getOriginalFilename());
             zkFile.setFilePath(path);
             zkFile.setFileType(1);
+            String [] pathArr = path.split("/");
+            targetPath = targetPath.replace("**","");
+            zkFile.setImagePerview(servicePath+targetPath+pathArr[pathArr.length-3]+"/"+pathArr[pathArr.length-2]+"/"+pathArr[pathArr.length-1]);
             zkFileService.insertByEntity(zkFile);
             result = new Result(ResultEnum.OK,true);
         }else {

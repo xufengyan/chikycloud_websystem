@@ -16,10 +16,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="fileUpgradeType"    column="file_upgrade_type"    />
         <result property="createTime"    column="create_time"    />
         <result property="imageBinPath" column="image_bin_path"/>
+        <result property="imagePerview" column="image_perview"/>
     </resultMap>
 
     <sql id="selectZkFileVo">
-        select id, file_name, file_path,file_version,file_account,file_crc32,file_type,file_admin,file_upgrade_type, create_time , image_bin_path from zk_file
+        select id, file_name, file_path,file_version,file_account,file_crc32,file_type,file_admin,file_upgrade_type, create_time , image_bin_path , image_perview from zk_file
     </sql>
 
     <select id="selectZkFileListByEntity" parameterType="com.zk.cloudweb.entity.ZkFile" resultMap="ZkFileResult">
@@ -94,6 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileUpgradeType != null  and fileUpgradeType != ''">file_upgrade_type,</if>
             <if test="createTime != null ">create_time,</if>
             <if test="imageBinPath != null  and imageBinPath != ''">  image_bin_path, </if>
+            <if test="imagePerview != null  and imagePerview != ''">  image_perview, </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -107,7 +109,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileAdmin != null  and fileAdmin != ''">#{fileAdmin},</if>
             <if test="fileUpgradeType != null  and fileUpgradeType != ''">#{fileUpgradeType},</if>
             <if test="createTime != null ">#{createTime},</if>
-            <if test="imageBinPath != null  and imageBinPath != ''"> , #{imageBinPath}</if>
+            <if test="imageBinPath != null  and imageBinPath != ''">  #{imageBinPath},</if>
+            <if test="imagePerview != null  and imagePerview != ''">  #{imagePerview},</if>
+
 
         </trim>
     </insert>
@@ -123,6 +127,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileAdmin != null  and fileAdmin != ''">  file_admin = #{fileAdmin},</if>
             <if test="fileUpgradeType != null  and fileUpgradeType != ''">  file_upgrade_type = #{fileUpgradeType,</if>
             <if test="imageBinPath != null  and imageBinPath != ''">  image_bin_path = #{imageBinPath},</if>
+            <if test="imagePerview != null  and imagePerview != ''">  image_perview = #{imagePerview},</if>
+
         </trim>
         where id = #{id}
 

@@ -50,4 +50,8 @@ public class ZkFile extends BaseEntity{
      * imageBin文件地址
      */
     private String imageBinPath;
+    /**
+     * 预览地址
+     */
+    private String imagePerview;
 }

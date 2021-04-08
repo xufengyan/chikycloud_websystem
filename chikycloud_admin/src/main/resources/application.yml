@@ -102,6 +102,11 @@ myemail:
 com:
   zk:
     file:
+#      sourcePath: file:/D:/home/image/
+      sourcePath: file:/zkfile/home/image/
+      targetPath: /monchrome/**
+#      servicePath: http://localhost/zkcloud
+      servicePath: http://www.chiky.cn/zkcloud
       #服务器文件存储路径
       #服务器ip
       #文件存储路径
