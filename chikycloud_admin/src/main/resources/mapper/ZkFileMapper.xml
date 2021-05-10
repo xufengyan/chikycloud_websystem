@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="imageBinPath != null  and imageBinPath != ''"> and image_bin_path = #{imageBinPath}</if>
 
         </where>
-        order by create_time,file_version
+        order by create_time desc
     </select>
 
     <select id="selectZkFileListByEntityCount" parameterType="com.zk.cloudweb.entity.ZkFile" resultType="int">
